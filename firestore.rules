@@ -1,0 +1,214 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: everything is denied unless a more specific match below allows it.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Hardcoded on purpose: Firestore rules cannot read env vars, and this lets
+    // the very first login bootstrap itself into an approved admin with zero
+    // Cloud Functions. Must be kept in sync with NEXT_PUBLIC_SUPER_ADMIN_EMAIL.
+    function isSuperAdmin() {
+      return isSignedIn() && request.auth.token.email.lower() == "REPLACE_WITH_SUPER_ADMIN_EMAIL@example.com";
+    }
+
+    // True if the caller is approved and holds the given module permission,
+    // or is the super admin (who implicitly holds every permission).
+    function hasModulePermission(moduleKey) {
+      return isSuperAdmin() || (
+        isSignedIn() &&
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.status == "approved" &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.permissions[moduleKey] == true
+      );
+    }
+
+    // Approved admin with the "users" permission (or the super admin) — the
+    // gate for approving accounts and reading the audit trail.
+    function isUserAdmin() {
+      return hasModulePermission('users');
+    }
+
+    function isValidUserDoc(data) {
+      return data.keys().hasAll(['uid', 'email', 'displayName', 'status', 'permissions', 'createdAt', 'updatedAt'])
+        && data.keys().size() <= 15
+        && data.uid is string && data.uid.size() <= 128
+        && data.email is string && data.email.size() <= 128
+        && data.displayName is string && data.displayName.size() <= 100
+        && data.status is string && data.status in ['pending', 'approved', 'rejected', 'suspended', 'revoked']
+        && data.permissions is map
+        && data.createdAt is string
+        && data.updatedAt is string;
+    }
+
+    // ---- Users & audit log ----
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && (request.auth.uid == userId || isUserAdmin());
+      allow list: if isUserAdmin();
+
+      // Lazy self-registration on first sign-in. Always starts pending.
+      allow create: if isSignedIn()
+        && request.auth.uid == userId
+        && isValidUserDoc(incoming())
+        && incoming().uid == request.auth.uid
+        && incoming().status == 'pending'
+        && incoming().createdAt == request.time.toString();
+
+      allow update: if isSignedIn() && isValidId(userId) && isValidUserDoc(incoming()) && (
+        isUserAdmin() ||
+        (
+          // Owners may only touch their own display name / photo, never their
+          // own status, permissions or expiry.
+          request.auth.uid == userId
+          && incoming().uid == existing().uid
+          && incoming().email == existing().email
+          && incoming().status == existing().status
+          && incoming().permissions == existing().permissions
+          && incoming().temporaryAccessExpiry == existing().temporaryAccessExpiry
+          && incoming().createdAt == existing().createdAt
+          && incoming().updatedAt == request.time.toString()
+          && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'updatedAt'])
+        )
+      );
+
+      allow delete: if isUserAdmin();
+    }
+
+    match /adminActivityLogs/{logId} {
+      allow read: if isUserAdmin();
+
+      allow create: if isUserAdmin()
+        && isValidId(logId)
+        && incoming().id is string
+        && incoming().adminUid == request.auth.uid
+        && incoming().adminEmail == request.auth.token.email
+        && incoming().createdAt == request.time.toString();
+
+      allow update, delete: if false; // append-only
+    }
+
+    // ---- Public content collections ----
+    // Public site pages read these directly (via ISR, not per-visitor), so
+    // reads stay open. Writes require the matching module permission.
+
+    match /news/{articleId} {
+      allow read: if true;
+      allow create, update: if hasModulePermission('blogs') && isValidId(articleId) && (
+        incoming().keys().hasAll(['title', 'slug', 'excerpt', 'content', 'category', 'date', 'author', 'image', 'featured', 'readTime'])
+        && incoming().title is string && incoming().title.size() <= 200
+        && incoming().slug is string && incoming().slug.matches('^[a-z0-9\\-]+$')
+        && incoming().excerpt is string
+        && incoming().content is string
+        && incoming().category is string
+        && incoming().date is string
+        && incoming().author is string
+        && incoming().image is string
+        && incoming().featured is bool
+        && incoming().readTime is string
+      );
+      allow delete: if hasModulePermission('blogs');
+    }
+
+    match /programs/{programId} {
+      allow read: if true;
+      allow create, update: if hasModulePermission('programs') && isValidId(programId) && (
+        incoming().keys().hasAll(['title', 'level', 'shortDescription', 'longDescription', 'curriculum', 'duration', 'admissionRequirements', 'feesPlaceholder', 'image', 'featured'])
+        && incoming().title is string
+        && incoming().level is string
+        && incoming().shortDescription is string
+        && incoming().longDescription is string
+        && incoming().curriculum is list
+        && incoming().duration is string
+        && incoming().admissionRequirements is list
+        && incoming().feesPlaceholder is string
+        && incoming().image is string
+        && incoming().featured is bool
+      );
+      allow delete: if hasModulePermission('programs');
+    }
+
+    match /gallery/{itemId} {
+      allow read: if true;
+      allow create, update: if hasModulePermission('gallery') && isValidId(itemId) && (
+        incoming().keys().hasAll(['title', 'description', 'category', 'image', 'date'])
+        && incoming().title is string
+        && incoming().description is string
+        && incoming().category is string
+        && incoming().image is string
+        && incoming().date is string
+      );
+      allow delete: if hasModulePermission('gallery');
+    }
+
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow create, update: if hasModulePermission('testimonials') && isValidId(testimonialId) && (
+        incoming().keys().hasAll(['name', 'role', 'quote', 'avatar', 'rating'])
+        && incoming().name is string
+        && incoming().role is string
+        && incoming().quote is string
+        && incoming().avatar is string
+        && incoming().rating is number
+      );
+      allow delete: if hasModulePermission('testimonials');
+    }
+
+    // Alumni directory: anyone can submit their own profile (always forced to
+    // pending, unfeatured — mirrors the approval workflow used for staff
+    // accounts). Only admins with the "alumni" permission can approve, edit or
+    // remove entries.
+    match /alumni/{profileId} {
+      allow read: if true;
+      allow create: if isValidId(profileId) && (
+        incoming().keys().hasAll(['fullName', 'graduationYear', 'profession', 'organization', 'country', 'city', 'phone', 'email', 'photo', 'bio', 'featured', 'status'])
+        && incoming().fullName is string
+        && incoming().graduationYear is number
+        && incoming().profession is string
+        && incoming().organization is string
+        && incoming().country is string
+        && incoming().city is string
+        && incoming().phone is string
+        && incoming().email is string
+        && incoming().photo is string
+        && incoming().bio is string
+        && incoming().featured == false
+        && incoming().status == 'pending'
+      );
+      allow update, delete: if hasModulePermission('alumni');
+    }
+
+    // Site-wide settings: hero content + trust statistics. Single well-known
+    // document IDs ("hero", "statistics"), no free-form doc creation.
+    match /siteSettings/{docId} {
+      allow read: if true;
+      allow write: if hasModulePermission('homepage') && docId in ['hero', 'statistics'];
+    }
+
+    // Admissions page copy (process/requirements/FAQs) — single doc, same
+    // pattern as siteSettings.
+    match /admissionsContent/{docId} {
+      allow read: if true;
+      allow write: if hasModulePermission('admissions') && docId == 'main';
+    }
+
+  }
+}

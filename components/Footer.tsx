@@ -1,0 +1,189 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { GraduationCap, Mail, Phone, MapPin, Facebook, MessageSquare, ShieldCheck, Heart } from "lucide-react";
+import logoImg from "@/src/assets/images/bugembe_islamic_institute_logo_1783765351760.jpg";
+
+export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="bg-[#0b1424] text-gray-300 border-t border-white/5 font-sans" id="footer-root">
+      {/* Top Footer Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+          {/* Column 1: Brand & Values */}
+          <div className="space-y-4">
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="w-10 h-10 rounded-lg bg-[#0b1c3c] border border-[#d4af37]/30 flex items-center justify-center shadow-md shadow-black/20 group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
+                <Image
+                  src={logoImg}
+                  alt="Bugembe Islamic Institute Logo"
+                  fill
+                  className="object-cover"
+                  sizes="40px"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+              <div>
+                <h3 className="text-white font-serif font-semibold text-base sm:text-lg">
+                  Bugembe Islamic Institute
+                </h3>
+                <p className="text-[#a0aec0] text-[10px] tracking-wider uppercase font-mono">
+                  Since 1974
+                </p>
+              </div>
+            </Link>
+            <p className="text-gray-400 text-sm leading-relaxed">
+              Nurturing faith, knowledge, and moral leadership. We offer a high-status dual curriculum, balancing top-tier UNEB academics with spiritual Islamic values.
+            </p>
+            <div className="flex items-center space-x-3 pt-2 text-xs text-[#d4af37]">
+              <ShieldCheck className="h-4 w-4" />
+              <span>Certified Ministry of Education & Sports (Uganda)</span>
+            </div>
+          </div>
+
+          {/* Column 2: Academics Directory */}
+          <div>
+            <h4 className="text-white font-serif text-sm font-semibold tracking-wider uppercase mb-5 border-l-2 border-[#d4af37] pl-3">
+              Academics
+            </h4>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="/academics" className="hover:text-[#d4af37] hover:underline transition-colors flex items-center">
+                  <span className="w-1 h-1 bg-[#d4af37] rounded-full mr-2"></span>
+                  Nursery School Foundation
+                </Link>
+              </li>
+              <li>
+                <Link href="/academics" className="hover:text-[#d4af37] hover:underline transition-colors flex items-center">
+                  <span className="w-1 h-1 bg-[#d4af37] rounded-full mr-2"></span>
+                  Primary School Program
+                </Link>
+              </li>
+              <li>
+                <Link href="/academics" className="hover:text-[#d4af37] hover:underline transition-colors flex items-center">
+                  <span className="w-1 h-1 bg-[#d4af37] rounded-full mr-2"></span>
+                  Ordinary Level (UCE)
+                </Link>
+              </li>
+              <li>
+                <Link href="/academics" className="hover:text-[#d4af37] hover:underline transition-colors flex items-center">
+                  <span className="w-1 h-1 bg-[#d4af37] rounded-full mr-2"></span>
+                  Advanced Level (UACE)
+                </Link>
+              </li>
+              <li>
+                <Link href="/academics" className="hover:text-[#d4af37] hover:underline transition-colors flex items-center">
+                  <span className="w-1 h-1 bg-[#d4af37] rounded-full mr-2"></span>
+                  Theological & Sharia Course
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Quick Portals */}
+          <div>
+            <h4 className="text-white font-serif text-sm font-semibold tracking-wider uppercase mb-5 border-l-2 border-[#d4af37] pl-3">
+              Quick Portals
+            </h4>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <Link href="/admissions" className="hover:text-[#d4af37] hover:underline transition-colors">
+                  Admissions Process
+                </Link>
+              </li>
+              <li>
+                <Link href="/news" className="hover:text-[#d4af37] hover:underline transition-colors">
+                  Latest News & Press
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-[#d4af37] hover:underline transition-colors">
+                  Media Gallery
+                </Link>
+              </li>
+              <li>
+                <Link href="/alumni" className="hover:text-[#d4af37] hover:underline transition-colors font-medium text-[#d4af37]">
+                  Alumni Network Hub
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-[#d4af37] hover:underline transition-colors">
+                  Support & Inquiries
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Contact Desk */}
+          <div className="space-y-4">
+            <h4 className="text-white font-serif text-sm font-semibold tracking-wider uppercase mb-5 border-l-2 border-[#d4af37] pl-3">
+              Contact Desk
+            </h4>
+            <ul className="space-y-3 text-sm">
+              <li className="flex items-start space-x-3">
+                <MapPin className="h-5 w-5 text-[#d4af37] shrink-0 mt-0.5" />
+                <span>Bugembe, Jinja City, Uganda (Near Jinja-Iganga Highway)</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Phone className="h-4 w-4 text-[#d4af37] shrink-0" />
+                <a href="tel:+256701000000" className="hover:text-[#d4af37] transition-colors">
+                  +256 701 000 000
+                </a>
+              </li>
+              <li className="flex items-center space-x-3">
+                <Mail className="h-4 w-4 text-[#d4af37] shrink-0" />
+                <a href="mailto:bugembeislamic1971@gmail.com" className="hover:text-[#d4af37] transition-colors">
+                  bugembeislamic1971@gmail.com
+                </a>
+              </li>
+            </ul>
+            {/* Social handles */}
+            <div className="flex items-center space-x-4 pt-3">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded bg-white/5 hover:bg-[#d4af37] hover:text-[#0b1424] flex items-center justify-center transition-all"
+                aria-label="Facebook Page"
+              >
+                <Facebook className="h-4 w-4" />
+              </a>
+              <a
+                href="https://wa.me/256701000000"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 rounded bg-white/5 hover:bg-[#d4af37] hover:text-[#0b1424] flex items-center justify-center transition-all"
+                aria-label="WhatsApp admissions"
+              >
+                <MessageSquare className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Legal Panel */}
+      <div className="bg-[#070d18] py-6 text-xs text-gray-500 border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+          <p>© {currentYear} Bugembe Islamic Institute. All Rights Reserved.</p>
+          <div className="flex items-center space-x-6">
+            <Link href="/admissions" className="hover:text-[#d4af37] transition-colors">
+              Admissions Policy
+            </Link>
+            <span>•</span>
+            <Link href="/alumni" className="hover:text-[#d4af37] transition-colors">
+              Alumni Guidelines
+            </Link>
+            <span>•</span>
+            <span className="font-mono flex items-center text-white/20">
+              CMS-Ready Architecture v1.0
+            </span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
