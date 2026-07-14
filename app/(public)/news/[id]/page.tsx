@@ -1,26 +1,28 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Clock, Calendar, User, Share2, MessageCircle } from "lucide-react";
-import { newsArticles } from "@/lib/data";
+import { ArrowLeft, Clock, Calendar, User, MessageCircle } from "lucide-react";
+import { newsRepository } from "@/lib/firebase/newsRepository";
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
+// Refresh from Firestore at most once an hour — keeps this off the
+// per-visitor read path so we stay well within the Spark (free) plan quota.
+export const revalidate = 3600;
+
 export default async function ArticlePage({ params }: PageProps) {
   const { id } = await params;
-  const article = newsArticles.find((a) => a.id === id);
+  const article = await newsRepository.get(id);
 
   if (!article) {
     notFound();
   }
 
   // Find 3 related articles (exclude the current one)
-  const relatedArticles = newsArticles
-    .filter((a) => a.id !== article.id)
-    .slice(0, 3);
+  const allArticles = await newsRepository.list();
+  const relatedArticles = allArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
   // WhatsApp share link generator
   const whatsappShareText = `Assalamu Alaikum. Check out this article from Bugembe Islamic Institute: ${article.title} - Read more at https://bugembe.edu/news/${article.id}`;
@@ -45,9 +47,7 @@ export default async function ArticlePage({ params }: PageProps) {
           <span className="inline-block bg-[#0c2340] text-[#d4af37] px-3 py-1 rounded text-[10px] font-mono font-bold uppercase tracking-wider">
             {article.category}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#0c2340] leading-snug tracking-tight">
-            {article.title}
-          </h1>
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#0c2340] leading-snug tracking-tight">{article.title}</h1>
 
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-gray-400 font-mono pt-2 border-b border-gray-100 pb-6">
             <span className="flex items-center">
@@ -94,9 +94,7 @@ export default async function ArticlePage({ params }: PageProps) {
           {/* Sharing Utilities Sidebar */}
           <aside className="lg:col-span-1 space-y-6" id="article-sidebar">
             <div className="border border-gray-100 bg-white rounded-xl p-6 shadow-sm sticky top-28 space-y-4 text-center">
-              <h4 className="font-serif font-bold text-sm text-[#0c2340] uppercase tracking-wider">
-                Share Article
-              </h4>
+              <h4 className="font-serif font-bold text-sm text-[#0c2340] uppercase tracking-wider">Share Article</h4>
               <p className="text-[10px] text-gray-400">Invite parents and family to read about Bugembe achievements.</p>
               <div className="space-y-3 pt-2">
                 <a
@@ -116,9 +114,7 @@ export default async function ArticlePage({ params }: PageProps) {
         {/* Related Articles segment */}
         {relatedArticles.length > 0 && (
           <section className="border-t border-gray-100 pt-16 mt-16" id="related-articles-section">
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0c2340] mb-8">
-              Related Dispatches
-            </h3>
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0c2340] mb-8">Related Dispatches</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedArticles.map((ra) => (
                 <div
@@ -137,9 +133,7 @@ export default async function ArticlePage({ params }: PageProps) {
                   </div>
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div>
-                      <span className="text-[9px] text-[#d4af37] font-mono font-bold uppercase tracking-wider">
-                        {ra.category}
-                      </span>
+                      <span className="text-[9px] text-[#d4af37] font-mono font-bold uppercase tracking-wider">{ra.category}</span>
                       <h4 className="text-sm font-serif font-bold text-[#0c2340] hover:text-[#d4af37] transition-colors mt-1 mb-2 line-clamp-2">
                         <Link href={`/news/${ra.id}`}>{ra.title}</Link>
                       </h4>
