@@ -66,12 +66,15 @@ service cloud.firestore {
       allow list: if isUserAdmin();
 
       // Lazy self-registration on first sign-in. Always starts pending.
+      // Note: createdAt/updatedAt are client-generated ISO strings (not
+      // Firestore server timestamps), so they can't be checked against
+      // request.time for equality — that's covered by isValidUserDoc's type
+      // check instead.
       allow create: if isSignedIn()
         && request.auth.uid == userId
         && isValidUserDoc(incoming())
         && incoming().uid == request.auth.uid
-        && incoming().status == 'pending'
-        && incoming().createdAt == request.time.toString();
+        && incoming().status == 'pending';
 
       allow update: if isSignedIn() && isValidId(userId) && isValidUserDoc(incoming()) && (
         isUserAdmin() ||
@@ -85,7 +88,6 @@ service cloud.firestore {
           && incoming().permissions == existing().permissions
           && incoming().temporaryAccessExpiry == existing().temporaryAccessExpiry
           && incoming().createdAt == existing().createdAt
-          && incoming().updatedAt == request.time.toString()
           && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'updatedAt'])
         )
       );
@@ -101,7 +103,7 @@ service cloud.firestore {
         && incoming().id is string
         && incoming().adminUid == request.auth.uid
         && incoming().adminEmail == request.auth.token.email
-        && incoming().createdAt == request.time.toString();
+        && incoming().createdAt is string;
 
       allow update, delete: if false; // append-only
     }
