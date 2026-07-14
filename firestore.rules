@@ -27,7 +27,7 @@ service cloud.firestore {
     // the very first login bootstrap itself into an approved admin with zero
     // Cloud Functions. Must be kept in sync with NEXT_PUBLIC_SUPER_ADMIN_EMAIL.
     function isSuperAdmin() {
-      return isSignedIn() && request.auth.token.email.lower() == "REPLACE_WITH_SUPER_ADMIN_EMAIL@example.com";
+      return isSignedIn() && request.auth.token.email.lower() == "bugembeislamic1971@gmail.com";
     }
 
     // True if the caller is approved and holds the given module permission,
