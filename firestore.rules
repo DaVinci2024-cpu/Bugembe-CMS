@@ -220,10 +220,18 @@ service cloud.firestore {
     }
 
     // Admissions page copy (process/requirements/FAQs) — single doc, same
-    // pattern as siteSettings.
+    // pattern as siteSettings. This is site settings, not postable content,
+    // so there's no draft/published status — saves go live immediately.
     match /admissionsContent/{docId} {
       allow read: if true;
-      allow write: if hasModulePermission('admissions') && docId == 'main';
+      allow write: if hasModulePermission('admissions') && docId == 'main' && (
+        incoming().keys().hasAll(['process', 'requirements', 'faqs'])
+        && incoming().process is list
+        && incoming().requirements is map
+        && incoming().requirements.general is list
+        && incoming().requirements.boardingList is list
+        && incoming().faqs is list
+      );
     }
 
   }

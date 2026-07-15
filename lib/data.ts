@@ -589,7 +589,16 @@ export const communityGroups: CommunityGroup[] = [
   }
 ];
 
-export const admissionsDetails = {
+export interface AdmissionsContent {
+  process: { step: number; title: string; description: string }[];
+  requirements: {
+    general: string[];
+    boardingList: string[];
+  };
+  faqs: { question: string; answer: string }[];
+}
+
+export const admissionsDetails: AdmissionsContent = {
   process: [
     {
       step: 1,
