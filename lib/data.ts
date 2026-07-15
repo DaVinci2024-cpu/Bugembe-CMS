@@ -57,6 +57,7 @@ export interface GalleryItem {
   category: "Campus" | "Islamic Activities" | "Academics" | "Sports" | "Events" | "Facilities";
   image: string;
   date: string;
+  status: "draft" | "published"; // Drafts are only visible in the admin panel
 }
 
 export interface Testimonial {
@@ -363,6 +364,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Academics",
     image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&q=80&w=800",
     date: "2026-06-10",
+    status: "published",
   },
   {
     id: "gal-2",
@@ -371,6 +373,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Islamic Activities",
     image: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=800",
     date: "2026-06-05",
+    status: "published",
   },
   {
     id: "gal-3",
@@ -379,6 +382,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Sports",
     image: "https://images.unsplash.com/photo-1575361204480-aadea25e6e68?auto=format&fit=crop&q=80&w=800",
     date: "2026-05-20",
+    status: "published",
   },
   {
     id: "gal-4",
@@ -387,6 +391,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Campus",
     image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&q=80&w=800",
     date: "2026-04-25",
+    status: "published",
   },
   {
     id: "gal-5",
@@ -395,6 +400,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Islamic Activities",
     image: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=800",
     date: "2026-05-15",
+    status: "published",
   },
   {
     id: "gal-6",
@@ -403,6 +409,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Academics",
     image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800",
     date: "2026-06-01",
+    status: "published",
   },
   {
     id: "gal-7",
@@ -411,6 +418,7 @@ export const galleryItems: GalleryItem[] = [
     category: "Events",
     image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=800",
     date: "2026-05-30",
+    status: "published",
   }
 ];
 

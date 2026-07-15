@@ -161,14 +161,16 @@ service cloud.firestore {
     }
 
     match /gallery/{itemId} {
-      allow read: if true;
+      // Same draft/published visibility as /news — see that block's comment.
+      allow get, list: if (!('status' in resource.data) || resource.data.status == 'published') || hasModulePermission('gallery');
       allow create, update: if hasModulePermission('gallery') && isValidId(itemId) && (
-        incoming().keys().hasAll(['title', 'description', 'category', 'image', 'date'])
+        incoming().keys().hasAll(['title', 'description', 'category', 'image', 'date', 'status'])
         && incoming().title is string
         && incoming().description is string
         && incoming().category is string
         && incoming().image is string
         && incoming().date is string
+        && incoming().status is string && incoming().status in ['draft', 'published']
       );
       allow delete: if hasModulePermission('gallery');
     }
