@@ -256,7 +256,7 @@ export default function AlumniPage() {
             viewport={{ once: true }}
             className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 sm:p-8 mb-8 space-y-4"
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {/* Search Name */}
               <div className="relative">
                 <Search className="absolute left-3 top-3 w-4.5 h-4.5 text-gray-400" />
