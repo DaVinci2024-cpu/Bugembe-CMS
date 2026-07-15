@@ -46,6 +46,7 @@ export interface NewsArticle {
   featured: boolean;
   readTime: string;
   videoUrl?: string; // Optional YouTube/Vimeo link, embedded on the article page
+  status: "draft" | "published"; // Drafts are only visible in the admin panel
 }
 
 export interface GalleryItem {
@@ -260,6 +261,7 @@ Applications for advanced-level scholarships are now open. We welcome all parent
     image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800",
     featured: true,
     readTime: "4 min read",
+    status: "published",
   },
   {
     id: "news-2",
@@ -281,6 +283,7 @@ We congratulate the parents of these students who supported them on this spiritu
     image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&q=80&w=800",
     featured: false,
     readTime: "3 min read",
+    status: "published",
   },
   {
     id: "news-3",
@@ -300,6 +303,7 @@ The building was funded through generous partnerships with alumni networks and i
     image: "https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&q=80&w=800",
     featured: false,
     readTime: "5 min read",
+    status: "published",
   },
   {
     id: "news-4",
@@ -321,6 +325,7 @@ To maintain our highly tailored student-to-teacher ratio, we will close applicat
     image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=800",
     featured: false,
     readTime: "3 min read",
+    status: "published",
   },
   {
     id: "news-5",
@@ -340,6 +345,7 @@ We congratulate the debate coach and the entire student delegation. You have rai
     image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800",
     featured: false,
     readTime: "3 min read",
+    status: "published",
   }
 ];
 

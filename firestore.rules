@@ -113,9 +113,17 @@ service cloud.firestore {
     // reads stay open. Writes require the matching module permission.
 
     match /news/{articleId} {
-      allow read: if true;
+      // Anyone can read a published article by ID; only admins with the
+      // "blogs" permission can read drafts. Docs written before the status
+      // field existed are treated as published too, so nothing already live
+      // disappears — every write from now on is required to set it (see
+      // the create/update rule below). "list" queries follow the same rule,
+      // which is why the public repository must explicitly filter
+      // where("status","==","published") — Firestore denies the whole
+      // query outright if it can't prove every possible result matches.
+      allow get, list: if (!('status' in resource.data) || resource.data.status == 'published') || hasModulePermission('blogs');
       allow create, update: if hasModulePermission('blogs') && isValidId(articleId) && (
-        incoming().keys().hasAll(['title', 'slug', 'excerpt', 'content', 'category', 'date', 'author', 'image', 'featured', 'readTime'])
+        incoming().keys().hasAll(['title', 'slug', 'excerpt', 'content', 'category', 'date', 'author', 'image', 'featured', 'readTime', 'status'])
         && incoming().title is string && incoming().title.size() <= 200
         && incoming().slug is string && incoming().slug.matches('^[a-z0-9\\-]+$')
         && incoming().excerpt is string
@@ -126,6 +134,7 @@ service cloud.firestore {
         && incoming().image is string
         && incoming().featured is bool
         && incoming().readTime is string
+        && incoming().status is string && incoming().status in ['draft', 'published']
         && (!('videoUrl' in incoming()) || incoming().videoUrl is string)
       );
       allow delete: if hasModulePermission('blogs');

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, Star, UploadCloud } from "lucide-react";
+import { Plus, Pencil, Trash2, Star, UploadCloud, Eye } from "lucide-react";
 import { ModuleGate } from "@/components/admin/module-gate";
 import { newsRepository } from "@/lib/firebase/newsRepository";
 import { newsArticles as staticNewsArticles, NewsArticle } from "@/lib/data";
@@ -101,6 +101,7 @@ function NewsList() {
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 uppercase font-bold tracking-wider text-slate-500 text-[10.5px]">
                 <th className="p-3">Title</th>
+                <th className="p-3">Status</th>
                 <th className="p-3">Category</th>
                 <th className="p-3">Date</th>
                 <th className="p-3"></th>
@@ -111,6 +112,17 @@ function NewsList() {
               {articles.map((article) => (
                 <tr key={article.id} className="hover:bg-slate-50/60">
                   <td className="p-3 font-bold text-slate-900 max-w-xs truncate">{article.title}</td>
+                  <td className="p-3">
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
+                        article.status === "published"
+                          ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+                          : "bg-amber-50 border-amber-200 text-amber-700"
+                      }`}
+                    >
+                      {article.status}
+                    </span>
+                  </td>
                   <td className="p-3 text-slate-500">{article.category}</td>
                   <td className="p-3 text-slate-500">{article.date}</td>
                   <td className="p-3">
@@ -118,6 +130,14 @@ function NewsList() {
                   </td>
                   <td className="p-3">
                     <div className="flex justify-end gap-2">
+                      <Link
+                        href={`/admin/news/${article.id}/preview`}
+                        target="_blank"
+                        className="p-1.5 rounded hover:bg-slate-100 text-slate-500"
+                        title="Preview"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                      </Link>
                       <Link
                         href={`/admin/news/${article.id}`}
                         className="p-1.5 rounded hover:bg-slate-100 text-slate-500"

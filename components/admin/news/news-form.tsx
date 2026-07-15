@@ -45,6 +45,7 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
   const [featured, setFeatured] = useState(existing?.featured ?? false);
   const [readTime, setReadTime] = useState(existing?.readTime ?? "3 min read");
   const [videoUrl, setVideoUrl] = useState(existing?.videoUrl ?? "");
+  const [status, setStatus] = useState<NewsArticle["status"]>(existing?.status ?? "draft");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,6 +75,7 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
         featured,
         readTime,
         videoUrl: videoUrl.trim(),
+        status,
       };
       if (isEdit) {
         await newsRepository.update(existing.id, fields);
@@ -92,6 +94,29 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5 max-w-3xl bg-white border border-slate-200 rounded-xl p-6 shadow-xs">
+      <div>
+        <label className={labelClass}>Status</label>
+        <div className="flex gap-2">
+          {(["draft", "published"] as const).map((s) => (
+            <button
+              key={s}
+              type="button"
+              onClick={() => setStatus(s)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border cursor-pointer ${
+                status === s
+                  ? s === "published"
+                    ? "bg-emerald-50 border-emerald-300 text-emerald-800"
+                    : "bg-amber-50 border-amber-300 text-amber-800"
+                  : "bg-white border-slate-200 text-slate-500 hover:bg-slate-50"
+              }`}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+        <p className="text-xs text-slate-400 mt-1">Drafts are only visible in this admin panel, never on the public site.</p>
+      </div>
+
       <div>
         <label className={labelClass}>Title</label>
         <input required className={inputClass} value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -189,6 +214,15 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
         >
           Cancel
         </Link>
+        {isEdit && (
+          <Link
+            href={`/admin/news/${existing.id}/preview`}
+            target="_blank"
+            className="px-5 py-2.5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold rounded-lg text-xs ml-auto"
+          >
+            Preview
+          </Link>
+        )}
       </div>
     </form>
   );

@@ -6,6 +6,6 @@ import { NewsBrowser } from "@/components/news/news-browser";
 export const revalidate = 3600;
 
 export default async function NewsPage() {
-  const articles = await newsRepository.list();
+  const articles = await newsRepository.listPublished();
   return <NewsBrowser articles={articles} />;
 }
