@@ -24,11 +24,13 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+const PAGE_SIZE = 12;
+
 export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProfile[] }) {
   const [alumniList, setAlumniList] = useState<AlumniProfile[]>(initialAlumni);
   const [searchName, setSearchName] = useState("");
   const [filterYear, setFilterYear] = useState("all");
-  const [filterProfession, setFilterProfession] = useState("all");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // Registration Form states
   const [fullName, setFullName] = useState("");
@@ -117,14 +119,30 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
     });
   };
 
-  const filteredAlumni = alumniList.filter((a) => {
-    const matchesSearch = a.fullName.toLowerCase().includes(searchName.toLowerCase());
-    const matchesYear = filterYear === "all" || String(a.graduationYear) === filterYear;
-    const matchesProfession =
-      filterProfession === "all" || a.profession.toLowerCase().includes(filterProfession.toLowerCase());
+  // Computed from the real dataset rather than a hardcoded list, so this
+  // keeps working correctly as the directory grows into the hundreds across
+  // many graduating cohorts.
+  const availableYears = [...new Set(alumniList.map((a) => a.graduationYear))].sort((a, b) => b - a);
 
-    return matchesSearch && matchesYear && matchesProfession;
-  });
+  const filteredAlumni = alumniList
+    .filter((a) => {
+      const query = searchName.trim().toLowerCase();
+      // One search box covers name, profession, and organization — a
+      // dropdown of exact profession values doesn't scale once hundreds of
+      // alumni have entered free-text job titles with countless variations.
+      const matchesSearch =
+        !query ||
+        a.fullName.toLowerCase().includes(query) ||
+        a.profession.toLowerCase().includes(query) ||
+        a.organization.toLowerCase().includes(query);
+      const matchesYear = filterYear === "all" || String(a.graduationYear) === filterYear;
+
+      return matchesSearch && matchesYear;
+    })
+    // Most recent cohort first, like flipping through a yearbook.
+    .sort((a, b) => b.graduationYear - a.graduationYear);
+
+  const visibleAlumni = filteredAlumni.slice(0, visibleCount);
 
   return (
     <div className="relative min-h-screen bg-[#fcfbf9] py-16 sm:py-24" id="alumni-page-root">
@@ -258,14 +276,17 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
             viewport={{ once: true }}
             className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 sm:p-8 mb-8 space-y-4"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-3 w-4.5 h-4.5 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search graduates by name..."
+                  placeholder="Search by name, profession, or organization..."
                   value={searchName}
-                  onChange={(e) => setSearchName(e.target.value)}
+                  onChange={(e) => {
+                    setSearchName(e.target.value);
+                    setVisibleCount(PAGE_SIZE);
+                  }}
                   className="w-full bg-gray-50 focus:bg-white text-xs sm:text-sm rounded-lg pl-10 pr-4 py-2.5 border border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all placeholder:text-gray-400 focus:ring-2 focus:ring-[#d4af37]/10"
                 />
               </div>
@@ -273,29 +294,18 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
               <div>
                 <select
                   value={filterYear}
-                  onChange={(e) => setFilterYear(e.target.value)}
+                  onChange={(e) => {
+                    setFilterYear(e.target.value);
+                    setVisibleCount(PAGE_SIZE);
+                  }}
                   className="w-full bg-gray-50 border border-gray-200 focus:border-[#d4af37] rounded-lg px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]/10 cursor-pointer"
                 >
                   <option value="all">All Cohorts (Any Year)</option>
-                  <option value="2004">Class of 2004</option>
-                  <option value="2012">Class of 2012</option>
-                  <option value="2016">Class of 2016</option>
-                  <option value="2018">Class of 2018</option>
-                  <option value="2019">Class of 2019</option>
-                </select>
-              </div>
-
-              <div>
-                <select
-                  value={filterProfession}
-                  onChange={(e) => setFilterProfession(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 focus:border-[#d4af37] rounded-lg px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]/10 cursor-pointer"
-                >
-                  <option value="all">All Industries (Any Profession)</option>
-                  <option value="technology">Technology & Coding</option>
-                  <option value="medical">Healthcare & Medicine</option>
-                  <option value="law">Law & Theology</option>
-                  <option value="engineer">Engineering</option>
+                  {availableYears.map((year) => (
+                    <option key={year} value={String(year)}>
+                      Class of {year}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -318,7 +328,7 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
               viewport={{ once: true, margin: "-50px" }}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              {filteredAlumni.map((alum) => (
+              {visibleAlumni.map((alum) => (
                 <motion.div
                   key={alum.id}
                   variants={{
@@ -364,6 +374,17 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
                 </motion.div>
               ))}
             </motion.div>
+          )}
+
+          {filteredAlumni.length > visibleCount && (
+            <div className="text-center mt-10">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
+                className="px-8 py-3 bg-white border border-gray-200 hover:border-[#d4af37] hover:bg-amber-50/40 text-[#0c2340] font-bold text-xs uppercase tracking-wider rounded-lg transition-all shadow-sm cursor-pointer"
+              >
+                Load More Graduates ({filteredAlumni.length - visibleCount} remaining)
+              </button>
+            </div>
           )}
         </section>
 

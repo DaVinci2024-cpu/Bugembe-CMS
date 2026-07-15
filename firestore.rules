@@ -193,8 +193,9 @@ service cloud.firestore {
 
     // Alumni directory: anyone can submit their own profile (always forced to
     // pending, unfeatured — mirrors the approval workflow used for staff
-    // accounts). Only admins with the "alumni" permission can approve, edit or
-    // remove entries.
+    // accounts). Admins with the "alumni" permission can additionally create
+    // a profile with any status/featured value directly (importing seed
+    // data, or adding an already-approved entry without a review step).
     match /alumni/{profileId} {
       allow read: if true;
       allow create: if isValidId(profileId) && (
@@ -209,8 +210,11 @@ service cloud.firestore {
         && incoming().email is string
         && incoming().photo is string
         && incoming().bio is string
-        && incoming().featured == false
-        && incoming().status == 'pending'
+        && incoming().status in ['pending', 'approved']
+        && (
+          hasModulePermission('alumni')
+          || (incoming().featured == false && incoming().status == 'pending')
+        )
       );
       allow update, delete: if hasModulePermission('alumni');
     }
