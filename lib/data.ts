@@ -714,30 +714,6 @@ export const aboutContent = {
 // CLIENT STATE ENGINE (LocalStorage DB Proxy)
 // ==========================================
 
-export function getLocalAlumni(): AlumniProfile[] {
-  if (typeof window === "undefined") return initialAlumniProfiles;
-  const stored = localStorage.getItem("bugembe_alumni");
-  if (!stored) {
-    localStorage.setItem("bugembe_alumni", JSON.stringify(initialAlumniProfiles));
-    return initialAlumniProfiles;
-  }
-  return JSON.parse(stored);
-}
-
-export function saveLocalAlumnus(profile: Omit<AlumniProfile, "id" | "status" | "featured">) {
-  if (typeof window === "undefined") return;
-  const current = getLocalAlumni();
-  const newProfile: AlumniProfile = {
-    ...profile,
-    id: `alum-${Date.now()}`,
-    status: "pending",
-    featured: false,
-  };
-  const updated = [...current, newProfile];
-  localStorage.setItem("bugembe_alumni", JSON.stringify(updated));
-  return newProfile;
-}
-
 export function getLocalMessages(): ContactMessage[] {
   if (typeof window === "undefined") return [];
   const stored = localStorage.getItem("bugembe_messages");
