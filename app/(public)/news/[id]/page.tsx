@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Calendar, User, MessageCircle } from "lucide-react";
 import { newsRepository } from "@/lib/firebase/newsRepository";
+import { getVideoEmbedUrl } from "@/lib/video-embed";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -79,6 +80,23 @@ export default async function ArticlePage({ params }: PageProps) {
             referrerPolicy="no-referrer"
           />
         </div>
+
+        {/* Optional Embedded Video */}
+        {(() => {
+          const embedUrl = article.videoUrl ? getVideoEmbedUrl(article.videoUrl) : null;
+          if (!embedUrl) return null;
+          return (
+            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-xl border border-gray-100 mb-12" id="article-video">
+              <iframe
+                src={embedUrl}
+                title={`${article.title} video`}
+                className="absolute inset-0 w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          );
+        })()}
 
         {/* Content & Sharing Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12" id="article-layout">

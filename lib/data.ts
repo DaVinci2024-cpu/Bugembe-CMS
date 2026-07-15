@@ -45,6 +45,7 @@ export interface NewsArticle {
   image: string;
   featured: boolean;
   readTime: string;
+  videoUrl?: string; // Optional YouTube/Vimeo link, embedded on the article page
 }
 
 export interface GalleryItem {

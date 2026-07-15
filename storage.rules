@@ -1,0 +1,41 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Same hardcoded super admin as firestore.rules — keep both in sync with
+    // NEXT_PUBLIC_SUPER_ADMIN_EMAIL.
+    function isSuperAdmin() {
+      return isSignedIn() && request.auth.token.email.lower() == "bugembeislamic1971@gmail.com";
+    }
+
+    // Mirrors firestore.rules' hasModulePermission(), cross-referencing the
+    // same Firestore user doc via firestore.get()/firestore.exists().
+    function hasModulePermission(moduleKey) {
+      return isSuperAdmin() || (
+        isSignedIn() &&
+        firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.status == "approved" &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.permissions[moduleKey] == true
+      );
+    }
+
+    function isReasonablySizedImage() {
+      return request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // One folder per content module, named after the permission that gates it.
+    match /news/{fileName} {
+      allow read: if true;
+      allow write: if hasModulePermission('blogs') && isReasonablySizedImage();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

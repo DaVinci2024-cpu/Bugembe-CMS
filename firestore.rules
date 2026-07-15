@@ -126,6 +126,7 @@ service cloud.firestore {
         && incoming().image is string
         && incoming().featured is bool
         && incoming().readTime is string
+        && (!('videoUrl' in incoming()) || incoming().videoUrl is string)
       );
       allow delete: if hasModulePermission('blogs');
     }

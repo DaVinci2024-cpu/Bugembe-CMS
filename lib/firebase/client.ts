@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp, type FirebaseOptions } from "firebase/app";
 import { getAuth, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
+import { getStorage, type FirebaseStorage } from "firebase/storage";
 
 // True once real Firebase project credentials are present. Used only to show a
 // setup-needed screen instead of letting Auth/Firestore calls fail cryptically —
@@ -17,6 +18,7 @@ export const SUPER_ADMIN_EMAIL = (
 
 let auth: Auth;
 let db: Firestore;
+let storage: FirebaseStorage;
 
 // getAuth() validates the apiKey and throws immediately if it isn't real —
 // even a syntactically-plausible placeholder trips it — which would crash
@@ -37,9 +39,11 @@ if (isFirebaseConfigured) {
   const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   auth = getAuth(app);
   db = getFirestore(app);
+  storage = getStorage(app);
 } else {
   auth = undefined as unknown as Auth;
   db = undefined as unknown as Firestore;
+  storage = undefined as unknown as FirebaseStorage;
 }
 
-export { auth, db };
+export { auth, db, storage };

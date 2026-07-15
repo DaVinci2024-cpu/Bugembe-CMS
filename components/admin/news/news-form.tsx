@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { NewsArticle } from "@/lib/data";
 import { newsRepository } from "@/lib/firebase/newsRepository";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 const CATEGORIES: NewsArticle["category"][] = [
   "Announcements",
@@ -43,6 +44,7 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
   const [image, setImage] = useState(existing?.image ?? "");
   const [featured, setFeatured] = useState(existing?.featured ?? false);
   const [readTime, setReadTime] = useState(existing?.readTime ?? "3 min read");
+  const [videoUrl, setVideoUrl] = useState(existing?.videoUrl ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -51,12 +53,28 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
     setSaving(true);
     setError(null);
     try {
+      if (!image) throw new Error("Please add an image before saving.");
       // firestore.rules requires slug to match ^[a-z0-9-]+$ — normalize
       // whatever was typed (or fall back to the title) rather than pass
       // through a blank/uppercase/spaced value that would fail validation.
       const normalizedSlug = slugify(slug || title);
       if (!normalizedSlug) throw new Error("Enter a title or slug so we can generate the article's URL.");
-      const fields = { title, slug: normalizedSlug, excerpt, content, category, date, author, image, featured, readTime };
+      // Always store videoUrl (possibly ""), rather than omitting the key —
+      // that way clearing the field on an edit actually clears it in
+      // Firestore too. Rendering treats "" the same as absent (falsy check).
+      const fields = {
+        title,
+        slug: normalizedSlug,
+        excerpt,
+        content,
+        category,
+        date,
+        author,
+        image,
+        featured,
+        readTime,
+        videoUrl: videoUrl.trim(),
+      };
       if (isEdit) {
         await newsRepository.update(existing.id, fields);
       } else {
@@ -132,8 +150,22 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
       </div>
 
       <div>
-        <label className={labelClass}>Image URL</label>
-        <input required type="url" className={inputClass} value={image} onChange={(e) => setImage(e.target.value)} placeholder="https://..." />
+        <label className={labelClass}>Image</label>
+        <ImageUpload value={image} onChange={setImage} folder="news" />
+        {!image && <p className="text-xs text-rose-600 mt-1">An image is required.</p>}
+      </div>
+
+      <div>
+        <label className={labelClass}>
+          Video <span className="font-normal normal-case text-slate-400">(optional — paste a YouTube or Vimeo link)</span>
+        </label>
+        <input
+          type="url"
+          className={inputClass}
+          value={videoUrl}
+          onChange={(e) => setVideoUrl(e.target.value)}
+          placeholder="https://youtube.com/watch?v=..."
+        />
       </div>
 
       <label className="flex items-center gap-2 text-sm text-slate-700">
