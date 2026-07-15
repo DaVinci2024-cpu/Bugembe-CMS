@@ -51,13 +51,16 @@ export function NewsForm({ existing }: { existing?: NewsArticle }) {
     setSaving(true);
     setError(null);
     try {
-      const fields = { title, slug, excerpt, content, category, date, author, image, featured, readTime };
+      // firestore.rules requires slug to match ^[a-z0-9-]+$ — normalize
+      // whatever was typed (or fall back to the title) rather than pass
+      // through a blank/uppercase/spaced value that would fail validation.
+      const normalizedSlug = slugify(slug || title);
+      if (!normalizedSlug) throw new Error("Enter a title or slug so we can generate the article's URL.");
+      const fields = { title, slug: normalizedSlug, excerpt, content, category, date, author, image, featured, readTime };
       if (isEdit) {
         await newsRepository.update(existing.id, fields);
       } else {
-        const id = slugify(slug || title);
-        if (!id) throw new Error("Enter a title or slug so we can generate the article's URL.");
-        await newsRepository.create(id, fields);
+        await newsRepository.create(normalizedSlug, fields);
       }
       router.push("/admin/news");
       router.refresh();
