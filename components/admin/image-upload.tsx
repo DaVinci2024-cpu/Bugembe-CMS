@@ -2,9 +2,8 @@
 
 import { useRef, useState } from "react";
 import Image from "next/image";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { UploadCloud, X } from "lucide-react";
-import { storage } from "@/lib/firebase/client";
+import { uploadImage } from "@/lib/cloudinary";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 
@@ -33,14 +32,11 @@ export function ImageUpload({
     }
     setUploading(true);
     try {
-      const path = `${folder}/${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
-      const storageRef = ref(storage, path);
-      await uploadBytes(storageRef, file);
-      const url = await getDownloadURL(storageRef);
+      const url = await uploadImage(file, folder);
       onChange(url);
     } catch (err) {
       console.error(err);
-      setError("Upload failed. Please try again.");
+      setError(err instanceof Error ? err.message : "Upload failed. Please try again.");
     } finally {
       setUploading(false);
     }
