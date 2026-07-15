@@ -141,9 +141,10 @@ service cloud.firestore {
     }
 
     match /programs/{programId} {
-      allow read: if true;
+      // Same draft/published visibility as /news — see that block's comment.
+      allow get, list: if (!('status' in resource.data) || resource.data.status == 'published') || hasModulePermission('programs');
       allow create, update: if hasModulePermission('programs') && isValidId(programId) && (
-        incoming().keys().hasAll(['title', 'level', 'shortDescription', 'longDescription', 'curriculum', 'duration', 'admissionRequirements', 'feesPlaceholder', 'image', 'featured'])
+        incoming().keys().hasAll(['title', 'level', 'shortDescription', 'longDescription', 'curriculum', 'duration', 'admissionRequirements', 'feesPlaceholder', 'image', 'featured', 'status'])
         && incoming().title is string
         && incoming().level is string
         && incoming().shortDescription is string
@@ -154,6 +155,7 @@ service cloud.firestore {
         && incoming().feesPlaceholder is string
         && incoming().image is string
         && incoming().featured is bool
+        && incoming().status is string && incoming().status in ['draft', 'published']
       );
       allow delete: if hasModulePermission('programs');
     }

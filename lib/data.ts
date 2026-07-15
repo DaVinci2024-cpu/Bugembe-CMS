@@ -31,6 +31,7 @@ export interface Program {
   feesPlaceholder: string;
   image: string;
   featured: boolean;
+  status: "draft" | "published"; // Drafts are only visible in the admin panel
 }
 
 export interface NewsArticle {
@@ -187,6 +188,7 @@ export const academicPrograms: Program[] = [
     feesPlaceholder: "Contact Admissions Office for latest structure",
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=800",
     featured: false,
+    status: "published",
   },
   {
     id: "prog-2",
@@ -200,6 +202,7 @@ export const academicPrograms: Program[] = [
     feesPlaceholder: "Contact Admissions Office for latest structure",
     image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=800",
     featured: true,
+    status: "published",
   },
   {
     id: "prog-3",
@@ -213,6 +216,7 @@ export const academicPrograms: Program[] = [
     feesPlaceholder: "Contact Admissions Office for latest structure",
     image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800",
     featured: true,
+    status: "published",
   },
   {
     id: "prog-4",
@@ -226,6 +230,7 @@ export const academicPrograms: Program[] = [
     feesPlaceholder: "Sponsorships and scholar discounts available",
     image: "https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&q=80&w=800",
     featured: true,
+    status: "published",
   },
   {
     id: "prog-5",
@@ -239,6 +244,7 @@ export const academicPrograms: Program[] = [
     feesPlaceholder: "Inclusive of accommodation, meals, and healthcare",
     image: "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=800",
     featured: false,
+    status: "published",
   },
 ];
 
