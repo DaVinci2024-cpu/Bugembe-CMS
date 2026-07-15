@@ -202,7 +202,7 @@ export function AcademicsContent({ programs }: { programs: Program[] }) {
             <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#0c2340]">Extracurricular Clubs & Sports</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Club 1 */}
             <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm text-center">
               <Trophy className="h-8 w-8 mx-auto text-[#d4af37] mb-4" />
