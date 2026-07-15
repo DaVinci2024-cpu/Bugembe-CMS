@@ -176,14 +176,17 @@ service cloud.firestore {
     }
 
     match /testimonials/{testimonialId} {
-      allow read: if true;
+      // Same draft/published visibility as /news — see that block's comment.
+      allow get, list: if (!('status' in resource.data) || resource.data.status == 'published') || hasModulePermission('testimonials');
       allow create, update: if hasModulePermission('testimonials') && isValidId(testimonialId) && (
-        incoming().keys().hasAll(['name', 'role', 'quote', 'avatar', 'rating'])
+        incoming().keys().hasAll(['name', 'role', 'quote', 'avatar', 'rating', 'status'])
         && incoming().name is string
         && incoming().role is string
         && incoming().quote is string
         && incoming().avatar is string
         && incoming().rating is number
+        && incoming().status is string && incoming().status in ['draft', 'published']
+        && (!('graduationYear' in incoming()) || incoming().graduationYear is number)
       );
       allow delete: if hasModulePermission('testimonials');
     }

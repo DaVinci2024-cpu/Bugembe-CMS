@@ -68,6 +68,7 @@ export interface Testimonial {
   quote: string;
   avatar: string;
   rating: number;
+  status: "draft" | "published"; // Drafts are only visible in the admin panel
 }
 
 export interface Achievement {
@@ -430,6 +431,7 @@ export const parentStudentTestimonials: Testimonial[] = [
     quote: "Bugembe Islamic Institute is a rare gem. My children are not only mastering mathematics and chemistry, but they have also memorized half the Quran and exhibit flawless ethical behavior at home.",
     avatar: "https://picsum.photos/seed/kizza/150/150",
     rating: 5,
+    status: "published",
   },
   {
     id: "test-2",
@@ -439,6 +441,7 @@ export const parentStudentTestimonials: Testimonial[] = [
     quote: "The dual curriculum at Bugembe gave me a distinct edge. I learned coding, leadership, and Arabic theology together. Today, as a software developer, the ethical codes I gained still guide my corporate decisions.",
     avatar: "https://picsum.photos/seed/aisha/150/150",
     rating: 5,
+    status: "published",
   },
   {
     id: "test-3",
@@ -447,6 +450,7 @@ export const parentStudentTestimonials: Testimonial[] = [
     quote: "The teacher-student relationship here is incredibly supportive. We are treated as future leaders. In boarding, we build actual lifelong brotherhood, studying and praying in perfect harmony.",
     avatar: "https://picsum.photos/seed/nsubuga/150/150",
     rating: 5,
+    status: "published",
   },
 ];
 
