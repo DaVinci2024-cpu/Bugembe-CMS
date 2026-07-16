@@ -7,7 +7,6 @@ import {
   ArrowRight,
   Clock,
   MessageSquare,
-  Sparkles,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
@@ -405,10 +404,6 @@ export function HomeContent({
                 sizes="80px"
                 referrerPolicy="no-referrer"
               />
-            </div>
-            <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 px-4 py-2 rounded-full text-[#d4af37] text-xs font-semibold tracking-wider uppercase">
-              <Sparkles className="h-4 w-4 text-[#d4af37]" />
-              <span>Premium Dual Curriculum Islamic Academy</span>
             </div>
           </motion.div>
 

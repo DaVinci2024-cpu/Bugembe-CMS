@@ -126,7 +126,7 @@ export default function Navbar({ branding, announcements, contact }: { branding:
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative px-4 py-2 rounded-md text-xs font-medium tracking-wide transition-all duration-200 ${
+                  className={`relative px-3 py-2 rounded-md text-xs font-medium tracking-wide whitespace-nowrap transition-all duration-200 ${
                     isActive
                       ? "text-[#d4af37]"
                       : "text-gray-300 hover:text-white hover:bg-white/5"
@@ -136,7 +136,7 @@ export default function Navbar({ branding, announcements, contact }: { branding:
                   {isActive && (
                     <motion.div
                       layoutId="activeIndicator"
-                      className="absolute bottom-0 left-4 right-4 h-0.5 bg-[#d4af37]"
+                      className="absolute bottom-0 left-3 right-3 h-0.5 bg-[#d4af37]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -145,7 +145,7 @@ export default function Navbar({ branding, announcements, contact }: { branding:
             })}
             <Link
               href="/admissions"
-              className="ml-4 px-5 py-2 bg-[#d4af37] text-[#0c2340] hover:bg-amber-400 font-semibold text-xs tracking-wider uppercase rounded shadow-md hover:shadow-lg transition-all duration-200"
+              className="ml-3 px-5 py-2 bg-[#d4af37] text-[#0c2340] hover:bg-amber-400 font-semibold text-xs tracking-wider uppercase rounded shadow-md hover:shadow-lg transition-all duration-200 whitespace-nowrap"
             >
               Apply Online
             </Link>
