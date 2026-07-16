@@ -238,12 +238,15 @@ service cloud.firestore {
         (docId == 'statistics' && incoming().keys().hasAll(['items']) && incoming().items is list)
         ||
         (docId == 'branding' &&
-          incoming().keys().hasAll(['logoUrl', 'siteName', 'tagline', 'brandBlurb', 'certificationText'])
+          incoming().keys().hasAll(['logoUrl', 'siteName', 'tagline', 'brandBlurb', 'certificationText', 'primaryColor', 'primaryColorHover', 'accentColor'])
           && incoming().logoUrl is string
           && incoming().siteName is string
           && incoming().tagline is string
           && incoming().brandBlurb is string
-          && incoming().certificationText is string)
+          && incoming().certificationText is string
+          && incoming().primaryColor is string
+          && incoming().primaryColorHover is string
+          && incoming().accentColor is string)
         ||
         (docId == 'header' && incoming().keys().hasAll(['announcements']) && incoming().announcements is list)
         ||

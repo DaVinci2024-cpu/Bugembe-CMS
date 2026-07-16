@@ -80,6 +80,70 @@ export function BrandingForm() {
         </div>
       </div>
 
+      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
+        <div>
+          <h3 className="text-sm font-bold text-slate-900">Brand Colors</h3>
+          <p className="text-xs text-slate-500 mt-0.5">
+            Applies to the public website only — the header, footer, buttons, and accents. The admin console keeps its own fixed
+            colors regardless of what you set here.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label className={labelClass}>Primary Color</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                value={branding.primaryColor}
+                onChange={(e) => setBranding({ ...branding, primaryColor: e.target.value })}
+                className="w-10 h-10 rounded border border-slate-200 cursor-pointer shrink-0"
+              />
+              <input
+                className={inputClass}
+                value={branding.primaryColor}
+                onChange={(e) => setBranding({ ...branding, primaryColor: e.target.value })}
+              />
+            </div>
+            <p className="text-[10px] text-slate-400 mt-1">Header, footer, buttons.</p>
+          </div>
+          <div>
+            <label className={labelClass}>Primary Hover Shade</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                value={branding.primaryColorHover}
+                onChange={(e) => setBranding({ ...branding, primaryColorHover: e.target.value })}
+                className="w-10 h-10 rounded border border-slate-200 cursor-pointer shrink-0"
+              />
+              <input
+                className={inputClass}
+                value={branding.primaryColorHover}
+                onChange={(e) => setBranding({ ...branding, primaryColorHover: e.target.value })}
+              />
+            </div>
+            <p className="text-[10px] text-slate-400 mt-1">Usually a darker shade of Primary.</p>
+          </div>
+          <div>
+            <label className={labelClass}>Accent Color</label>
+            <div className="flex items-center gap-2">
+              <input
+                type="color"
+                value={branding.accentColor}
+                onChange={(e) => setBranding({ ...branding, accentColor: e.target.value })}
+                className="w-10 h-10 rounded border border-slate-200 cursor-pointer shrink-0"
+              />
+              <input
+                className={inputClass}
+                value={branding.accentColor}
+                onChange={(e) => setBranding({ ...branding, accentColor: e.target.value })}
+              />
+            </div>
+            <p className="text-[10px] text-slate-400 mt-1">Links, badges, highlights.</p>
+          </div>
+        </div>
+      </div>
+
       {error && <div className="text-rose-700 text-xs bg-rose-50 border border-rose-200 rounded-lg p-3">{error}</div>}
       {saved && <div className="text-emerald-700 text-xs bg-emerald-50 border border-emerald-200 rounded-lg p-3">Saved — changes are live site-wide.</div>}
 

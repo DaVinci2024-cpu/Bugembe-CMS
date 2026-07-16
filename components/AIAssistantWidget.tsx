@@ -108,10 +108,10 @@ export default function AIAssistantWidget() {
       >
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center space-x-2 bg-gradient-to-r from-[#d4af37] to-amber-600 hover:from-amber-500 hover:to-amber-600 text-[#0c2340] font-bold px-4 sm:px-5 py-3 rounded-full shadow-lg shadow-amber-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+          className="flex items-center space-x-2 bg-gradient-to-r from-[var(--color-accent)] to-amber-600 hover:from-amber-500 hover:to-amber-600 text-[var(--color-primary)] font-bold px-4 sm:px-5 py-3 rounded-full shadow-lg shadow-amber-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
           aria-label="Open AI counselor"
         >
-          <Sparkles className="h-4 w-4 animate-pulse text-[#0c2340] shrink-0" />
+          <Sparkles className="h-4 w-4 animate-pulse text-[var(--color-primary)] shrink-0" />
           <span className="text-xs font-semibold tracking-wider uppercase hidden sm:inline">Ask Al-Aleem (AI)</span>
           <span className="text-xs font-semibold tracking-wider uppercase sm:hidden">Ask AI</span>
         </button>
@@ -122,15 +122,15 @@ export default function AIAssistantWidget() {
         {isOpen && (
           <div className="fixed inset-0 lg:inset-auto lg:bottom-24 lg:right-6 lg:w-96 lg:h-[500px] z-50 flex flex-col bg-[#0c192d] border border-white/10 lg:rounded-2xl shadow-2xl overflow-hidden font-sans">
             {/* Header */}
-            <div className="bg-[#0c2340] px-4 py-4 flex justify-between items-center border-b border-white/10">
+            <div className="bg-[var(--color-primary)] px-4 py-4 flex justify-between items-center border-b border-white/10">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#d4af37] to-amber-500 flex items-center justify-center">
-                  <Bot className="h-4 w-4 text-[#0c2340]" />
+                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[var(--color-accent)] to-amber-500 flex items-center justify-center">
+                  <Bot className="h-4 w-4 text-[var(--color-primary)]" />
                 </div>
                 <div>
                   <h4 className="text-white text-sm font-serif font-semibold flex items-center">
                     Al-Aleem Advisor
-                    <span className="ml-1.5 px-1.5 py-0.2 bg-amber-500/10 border border-amber-500/20 text-[#d4af37] text-[9px] rounded uppercase font-mono tracking-wider">
+                    <span className="ml-1.5 px-1.5 py-0.2 bg-amber-500/10 border border-amber-500/20 text-[var(--color-accent)] text-[9px] rounded uppercase font-mono tracking-wider">
                       AI Live
                     </span>
                   </h4>
@@ -157,13 +157,13 @@ export default function AIAssistantWidget() {
                   <div className="flex items-start space-x-2 max-w-[85%]">
                     {m.role === "assistant" && (
                       <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center shrink-0 mt-0.5">
-                        <Bot className="h-3 w-3 text-[#d4af37]" />
+                        <Bot className="h-3 w-3 text-[var(--color-accent)]" />
                       </div>
                     )}
                     <div
                       className={`rounded-xl px-3.5 py-2.5 text-xs leading-relaxed ${
                         m.role === "user"
-                          ? "bg-[#d4af37] text-[#0c2340] font-medium rounded-tr-none"
+                          ? "bg-[var(--color-accent)] text-[var(--color-primary)] font-medium rounded-tr-none"
                           : "bg-white/5 text-gray-200 rounded-tl-none border border-white/5 whitespace-pre-wrap"
                       }`}
                     >
@@ -176,7 +176,7 @@ export default function AIAssistantWidget() {
                 <div className="flex justify-start">
                   <div className="flex items-start space-x-2">
                     <div className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center shrink-0">
-                      <Bot className="h-3 w-3 text-[#d4af37]" />
+                      <Bot className="h-3 w-3 text-[var(--color-accent)]" />
                     </div>
                     <div className="bg-white/5 rounded-xl rounded-tl-none px-4 py-3 border border-white/5">
                       <div className="flex space-x-1.5">
@@ -202,7 +202,7 @@ export default function AIAssistantWidget() {
                     <button
                       key={q}
                       onClick={() => handleSendMessage(q)}
-                      className="text-[10px] text-left text-gray-300 hover:text-[#d4af37] bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-3 py-1 transition-all"
+                      className="text-[10px] text-left text-gray-300 hover:text-[var(--color-accent)] bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-3 py-1 transition-all"
                     >
                       {q}
                     </button>
@@ -217,19 +217,19 @@ export default function AIAssistantWidget() {
                 e.preventDefault();
                 handleSendMessage(inputValue);
               }}
-              className="bg-[#0c2340] px-4 py-3 border-t border-white/10 flex items-center space-x-2"
+              className="bg-[var(--color-primary)] px-4 py-3 border-t border-white/10 flex items-center space-x-2"
             >
               <input
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Ask Al-Aleem about admissions..."
-                className="flex-1 bg-white/5 hover:bg-white/10 focus:bg-white/10 text-white rounded-lg px-3 py-2 text-xs border border-white/5 focus:border-[#d4af37] focus:outline-none transition-all placeholder:text-gray-500"
+                className="flex-1 bg-white/5 hover:bg-white/10 focus:bg-white/10 text-white rounded-lg px-3 py-2 text-xs border border-white/5 focus:border-[var(--color-accent)] focus:outline-none transition-all placeholder:text-gray-500"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim() || isLoading}
-                className="p-2 bg-[#d4af37] hover:bg-amber-400 text-[#0c2340] rounded-lg disabled:opacity-50 disabled:hover:bg-[#d4af37] transition-all"
+                className="p-2 bg-[var(--color-accent)] hover:bg-amber-400 text-[var(--color-primary)] rounded-lg disabled:opacity-50 disabled:hover:bg-[var(--color-accent)] transition-all"
                 aria-label="Send message"
               >
                 <Send className="h-4 w-4" />

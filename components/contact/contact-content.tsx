@@ -67,13 +67,13 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Block */}
         <div className="text-center space-y-4 mb-16">
-          <span className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+          <span className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
             Get In Touch
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#0c2340]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[var(--color-primary)]">
             Contact Our Campus
           </h2>
-          <div className="w-20 h-1 bg-[#d4af37] mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
           <p className="text-gray-500 max-w-3xl mx-auto text-sm leading-relaxed">
             Have questions about fees, boarding requirements, syllabus integration, or theological courses? Reach out to Bugembe Islamic Institute today.
           </p>
@@ -85,25 +85,25 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
           <div className="lg:col-span-5 space-y-8" id="contact-details-panel">
             {/* Direct Information card */}
             <div className="bg-white border border-gray-100 shadow-md p-8 rounded-2xl space-y-6">
-              <h3 className="font-serif font-bold text-lg text-[#0c2340] border-l-2 border-[#d4af37] pl-3">
+              <h3 className="font-serif font-bold text-lg text-[var(--color-primary)] border-l-2 border-[var(--color-accent)] pl-3">
                 Main Campus Desk
               </h3>
               <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">{contact.address}</p>
 
               <ul className="space-y-4 text-xs sm:text-sm text-gray-600">
                 <li className="flex items-start space-x-3.5">
-                  <MapPin className="h-5 w-5 text-[#d4af37] shrink-0 mt-0.5" />
+                  <MapPin className="h-5 w-5 text-[var(--color-accent)] shrink-0 mt-0.5" />
                   <span>{contact.address}</span>
                 </li>
                 <li className="flex items-center space-x-3.5">
-                  <Phone className="h-4.5 w-4.5 text-[#d4af37] shrink-0" />
-                  <a href={`tel:${contact.phone}`} className="hover:text-[#d4af37] transition-colors font-medium">
+                  <Phone className="h-4.5 w-4.5 text-[var(--color-accent)] shrink-0" />
+                  <a href={`tel:${contact.phone}`} className="hover:text-[var(--color-accent)] transition-colors font-medium">
                     {contact.phone}
                   </a>
                 </li>
                 <li className="flex items-center space-x-3.5">
-                  <Mail className="h-4.5 w-4.5 text-[#d4af37] shrink-0" />
-                  <a href={`mailto:${contact.email}`} className="hover:text-[#d4af37] transition-colors font-medium">
+                  <Mail className="h-4.5 w-4.5 text-[var(--color-accent)] shrink-0" />
+                  <a href={`mailto:${contact.email}`} className="hover:text-[var(--color-accent)] transition-colors font-medium">
                     {contact.email}
                   </a>
                 </li>
@@ -113,13 +113,13 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
             {/* Department-specific contact list */}
             {contact.quickContacts.length > 0 && (
               <div className="bg-white border border-gray-100 shadow-md p-8 rounded-2xl space-y-4">
-                <h3 className="font-serif font-bold text-base text-[#0c2340] border-l-2 border-[#d4af37] pl-3">
+                <h3 className="font-serif font-bold text-base text-[var(--color-primary)] border-l-2 border-[var(--color-accent)] pl-3">
                   Specific Portals & Office Hours
                 </h3>
                 <div className="space-y-3 text-xs text-gray-500">
                   {contact.quickContacts.map((qc, i) => (
                     <div key={i} className="flex justify-between border-b border-gray-50 pb-2">
-                      <strong className="text-[#0c2340]">{qc.label}</strong>
+                      <strong className="text-[var(--color-primary)]">{qc.label}</strong>
                       <span>{qc.phone}</span>
                     </div>
                   ))}
@@ -136,7 +136,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
 
           {/* Column 2: Message Form (Grid span 7) */}
           <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-2xl border border-gray-100 shadow-md" id="contact-form-panel">
-            <h3 className="text-lg sm:text-xl font-serif font-bold text-[#0c2340] mb-2">Send Campus Message</h3>
+            <h3 className="text-lg sm:text-xl font-serif font-bold text-[var(--color-primary)] mb-2">Send Campus Message</h3>
             <p className="text-xs text-gray-400 mb-6">Drop your inquiry, support request, or recommendation below.</p>
 
             {submitSuccess ? (
@@ -148,7 +148,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
                 </p>
                 <button
                   onClick={() => setSubmitSuccess(false)}
-                  className="px-5 py-2.5 bg-[#0c2340] hover:bg-indigo-950 text-white font-bold text-xs uppercase tracking-wider rounded transition-colors"
+                  className="px-5 py-2.5 bg-[var(--color-primary)] hover:bg-indigo-950 text-white font-bold text-xs uppercase tracking-wider rounded transition-colors"
                 >
                   Send Another Message
                 </button>
@@ -169,7 +169,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       placeholder="e.g. Yusuf Ssekandi"
-                      className="w-full bg-gray-50 border border-gray-200 focus:border-[#d4af37] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
+                      className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
                       required
                     />
                   </div>
@@ -180,7 +180,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="yusuf@example.com"
-                      className="w-full bg-gray-50 border border-gray-200 focus:border-[#d4af37] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
+                      className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
                     />
                   </div>
                 </div>
@@ -193,7 +193,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+256701..."
-                      className="w-full bg-gray-50 border border-gray-200 focus:border-[#d4af37] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
+                      className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
                       required
                     />
                   </div>
@@ -204,7 +204,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
                       value={subject}
                       onChange={(e) => setSubject(e.target.value)}
                       placeholder="e.g. Fees Query, Hifz certification..."
-                      className="w-full bg-gray-50 border border-gray-200 focus:border-[#d4af37] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
+                      className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all"
                       required
                     />
                   </div>
@@ -217,7 +217,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Write your comprehensive question or enrollment inquiry here..."
-                    className="w-full bg-gray-50 border border-gray-200 focus:border-[#d4af37] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all placeholder:text-gray-400"
+                    className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all placeholder:text-gray-400"
                     required
                   />
                 </div>
@@ -225,7 +225,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#0c2340] hover:bg-indigo-950 text-white font-bold py-3 px-6 rounded uppercase tracking-widest text-xs flex items-center justify-center space-x-2 transition-colors disabled:opacity-50"
+                  className="w-full bg-[var(--color-primary)] hover:bg-indigo-950 text-white font-bold py-3 px-6 rounded uppercase tracking-widest text-xs flex items-center justify-center space-x-2 transition-colors disabled:opacity-50"
                 >
                   {isSubmitting ? (
                     <span>Logging Message...</span>
@@ -245,7 +245,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
         <section className="bg-white rounded-2xl border border-gray-100 shadow-xl p-6 sm:p-8" id="location-map">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 pb-4 mb-6 gap-4">
             <div>
-              <h3 className="font-serif font-bold text-[#0c2340] text-lg">Jinja City Campus Map</h3>
+              <h3 className="font-serif font-bold text-[var(--color-primary)] text-lg">Jinja City Campus Map</h3>
               <p className="text-xs text-gray-400 font-mono uppercase tracking-wider mt-0.5">Coordinates: 0.4428° N, 33.2267° E</p>
             </div>
             <span className="bg-emerald-50 text-emerald-800 border border-emerald-100 px-3 py-1 rounded text-xs flex items-center">
@@ -280,7 +280,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
               transition={{ repeat: Infinity, duration: 2 }}
               className="relative z-10 flex flex-col items-center"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-[#d4af37] to-amber-600 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+              <div className="w-10 h-10 bg-gradient-to-br from-[var(--color-accent)] to-amber-600 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
                 <span className="text-white font-serif font-bold text-xs">BI</span>
               </div>
               <div className="w-1 h-3 bg-amber-600 -mt-0.5 shadow-md" />
@@ -288,7 +288,7 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
             </motion.div>
 
             {/* Map Labels */}
-            <div className="absolute top-1/2 left-[55%] z-10 bg-[#0c2340] border border-[#d4af37]/30 text-white px-3 py-2 rounded shadow-md text-xs">
+            <div className="absolute top-1/2 left-[55%] z-10 bg-[var(--color-primary)] border border-[var(--color-accent)]/30 text-white px-3 py-2 rounded shadow-md text-xs">
               <p className="font-serif font-bold">Bugembe Islamic Institute</p>
               <p className="text-[9px] text-gray-400 font-mono uppercase tracking-wider">Campus Gates</p>
             </div>

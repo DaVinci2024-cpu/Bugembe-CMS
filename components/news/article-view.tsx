@@ -19,7 +19,7 @@ export function ArticleView({ article, relatedArticles }: { article: NewsArticle
         <div className="mb-8" id="back-nav-container">
           <Link
             href="/news"
-            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-[#0c2340] transition-colors"
+            className="inline-flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-gray-500 hover:text-[var(--color-primary)] transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Back to All Dispatches</span>
@@ -28,14 +28,14 @@ export function ArticleView({ article, relatedArticles }: { article: NewsArticle
 
         {/* Article Meta Header */}
         <header className="space-y-4 mb-10" id="article-header">
-          <span className="inline-block bg-[#0c2340] text-[#d4af37] px-3 py-1 rounded text-[10px] font-mono font-bold uppercase tracking-wider">
+          <span className="inline-block bg-[var(--color-primary)] text-[var(--color-accent)] px-3 py-1 rounded text-[10px] font-mono font-bold uppercase tracking-wider">
             {article.category}
           </span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[#0c2340] leading-snug tracking-tight">{article.title}</h1>
+          <h1 className="text-3xl sm:text-4xl font-serif font-bold text-[var(--color-primary)] leading-snug tracking-tight">{article.title}</h1>
 
           <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-gray-400 font-mono pt-2 border-b border-gray-100 pb-6">
             <span className="flex items-center">
-              <User className="h-4 w-4 mr-1.5 text-[#d4af37]" />
+              <User className="h-4 w-4 mr-1.5 text-[var(--color-accent)]" />
               {article.author}
             </span>
             <span className="hidden sm:inline">•</span>
@@ -91,7 +91,7 @@ export function ArticleView({ article, relatedArticles }: { article: NewsArticle
           {/* Sharing Utilities Sidebar */}
           <aside className="lg:col-span-1 space-y-6" id="article-sidebar">
             <div className="border border-gray-100 bg-white rounded-xl p-6 shadow-sm sticky top-28 space-y-4 text-center">
-              <h4 className="font-serif font-bold text-sm text-[#0c2340] uppercase tracking-wider">Share Article</h4>
+              <h4 className="font-serif font-bold text-sm text-[var(--color-primary)] uppercase tracking-wider">Share Article</h4>
               <p className="text-[10px] text-gray-400">Invite parents and family to read about Bugembe achievements.</p>
               <div className="space-y-3 pt-2">
                 <a
@@ -111,7 +111,7 @@ export function ArticleView({ article, relatedArticles }: { article: NewsArticle
         {/* Related Articles segment */}
         {relatedArticles.length > 0 && (
           <section className="border-t border-gray-100 pt-16 mt-16" id="related-articles-section">
-            <h3 className="text-xl sm:text-2xl font-serif font-bold text-[#0c2340] mb-8">Related Dispatches</h3>
+            <h3 className="text-xl sm:text-2xl font-serif font-bold text-[var(--color-primary)] mb-8">Related Dispatches</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {relatedArticles.map((ra) => (
                 <div
@@ -130,14 +130,14 @@ export function ArticleView({ article, relatedArticles }: { article: NewsArticle
                   </div>
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div>
-                      <span className="text-[9px] text-[#d4af37] font-mono font-bold uppercase tracking-wider">{ra.category}</span>
-                      <h4 className="text-sm font-serif font-bold text-[#0c2340] hover:text-[#d4af37] transition-colors mt-1 mb-2 line-clamp-2">
+                      <span className="text-[9px] text-[var(--color-accent)] font-mono font-bold uppercase tracking-wider">{ra.category}</span>
+                      <h4 className="text-sm font-serif font-bold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors mt-1 mb-2 line-clamp-2">
                         <Link href={`/news/${ra.id}`}>{ra.title}</Link>
                       </h4>
                     </div>
                     <Link
                       href={`/news/${ra.id}`}
-                      className="text-[10px] text-gray-400 hover:text-[#d4af37] font-mono uppercase tracking-wider font-semibold inline-flex items-center space-x-1.5 transition-colors mt-4"
+                      className="text-[10px] text-gray-400 hover:text-[var(--color-accent)] font-mono uppercase tracking-wider font-semibold inline-flex items-center space-x-1.5 transition-colors mt-4"
                     >
                       <span>Read Story</span>
                       <span>→</span>

@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Public-site brand colors — overridden per-request via an inline <style>
+   tag in app/(public)/layout.tsx from the admin-editable Branding settings.
+   Deliberately scoped to the public site only; the admin console keeps its
+   own fixed navy/gold regardless of what the public brand colors are set
+   to, so rebranding never makes the admin tool itself hard to read. */
+:root {
+  --color-primary: #0c2340;
+  --color-primary-hover: #0b1c3c;
+  --color-accent: #d4af37;
+}
+
 @utility animate-marquee {
   animation: marquee 45s linear infinite;
 }
@@ -18,7 +29,7 @@
     background: linear-gradient(
       to right,
       rgba(255, 255, 255, 0) 0%,
-      rgba(212, 175, 55, 0.25) 50%,
+      color-mix(in srgb, var(--color-accent) 25%, transparent) 50%,
       rgba(255, 255, 255, 0) 100%
     );
     transform: rotate(30deg);

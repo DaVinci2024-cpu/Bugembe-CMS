@@ -159,7 +159,7 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
   };
 
   return (
-    <section className="bg-[#0c2340] text-white py-20 relative overflow-hidden" id="alumni-scroll-section">
+    <section className="bg-[var(--color-primary)] text-white py-20 relative overflow-hidden" id="alumni-scroll-section">
       {/* Decorative background ambient glows */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -167,7 +167,7 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div className="space-y-3">
-            <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+            <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
               Enduring Legacy
             </p>
             <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-white">
@@ -200,8 +200,8 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
         {/* Carousel Container */}
         <div className="relative mx-[-16px] px-4 sm:mx-0 sm:px-0">
           {/* Left & Right Fade Overlays */}
-          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[#0c2340] to-transparent pointer-events-none z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[#0c2340] to-transparent pointer-events-none z-10" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-[var(--color-primary)] to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-[var(--color-primary)] to-transparent pointer-events-none z-10" />
 
           {/* Scrolling Row */}
           <div
@@ -266,7 +266,7 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
         <div className="text-center mt-10">
           <Link
             href="/alumni"
-            className="inline-flex items-center space-x-2 bg-gradient-to-r from-[#d4af37] to-amber-600 hover:from-amber-500 hover:to-amber-600 text-[#0c2340] font-bold px-6 py-3 rounded-full shadow-lg shadow-amber-900/20 hover:shadow-xl transition-all duration-300"
+            className="inline-flex items-center space-x-2 bg-gradient-to-r from-[var(--color-accent)] to-amber-600 hover:from-amber-500 hover:to-amber-600 text-[var(--color-primary)] font-bold px-6 py-3 rounded-full shadow-lg shadow-amber-900/20 hover:shadow-xl transition-all duration-300"
           >
             <span>Explore Alumni Profiles & Stories</span>
             <ArrowRight className="h-4 w-4" />
@@ -352,7 +352,7 @@ export function HomeContent({
             referrerPolicy="no-referrer"
           />
           {/* Deep Navy/Black Overlays for maximum text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0c2340] via-[#0c2340]/60 to-[#0c192d]/80 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)] via-[var(--color-primary)]/60 to-[#0c192d]/80 z-10" />
         </div>
 
         {/* Hero Content */}
@@ -363,7 +363,7 @@ export function HomeContent({
             transition={{ duration: 0.8 }}
             className="flex flex-col items-center space-y-4"
           >
-            <div className="w-20 h-20 relative rounded-full bg-[#0c2340] border-2 border-[#d4af37]/40 p-1.5 shadow-2xl overflow-hidden mb-1 hover:scale-105 transition-transform duration-300">
+            <div className="w-20 h-20 relative rounded-full bg-[var(--color-primary)] border-2 border-[var(--color-accent)]/40 p-1.5 shadow-2xl overflow-hidden mb-1 hover:scale-105 transition-transform duration-300">
               <Image
                 src={branding.logoUrl || logoImg}
                 alt={`${branding.siteName} Emblem`}
@@ -402,7 +402,7 @@ export function HomeContent({
           >
             <Link
               href={heroContent.ctaPrimaryLink}
-              className="w-full sm:w-auto px-8 py-4 bg-[#d4af37] hover:bg-amber-400 text-[#0c2340] font-bold text-sm tracking-wider uppercase rounded shadow-lg shadow-black/30 hover:scale-102 transition-all flex items-center justify-center space-x-2"
+              className="w-full sm:w-auto px-8 py-4 bg-[var(--color-accent)] hover:bg-amber-400 text-[var(--color-primary)] font-bold text-sm tracking-wider uppercase rounded shadow-lg shadow-black/30 hover:scale-102 transition-all flex items-center justify-center space-x-2"
             >
               <span>{heroContent.ctaPrimaryText}</span>
               <ArrowRight className="h-4 w-4" />
@@ -431,12 +431,12 @@ export function HomeContent({
               : (animatedValues[i] ?? 0).toFixed(1);
             return (
               <div key={stat.id} className={`text-center p-4 ${i > 0 ? "pt-6 lg:pt-4" : ""}`}>
-                <StatIcon className="h-5 w-5 text-[#d4af37] mx-auto mb-2" />
-                <p className="text-3xl md:text-4xl font-serif font-bold text-[#0c2340]">
+                <StatIcon className="h-5 w-5 text-[var(--color-accent)] mx-auto mb-2" />
+                <p className="text-3xl md:text-4xl font-serif font-bold text-[var(--color-primary)]">
                   {displayValue}
                   {stat.suffix}
                 </p>
-                <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">{stat.label}</p>
+                <p className="text-[var(--color-accent)] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">{stat.label}</p>
                 <p className="text-gray-400 text-xs mt-1">{stat.description}</p>
               </div>
             );
@@ -447,13 +447,13 @@ export function HomeContent({
       {/* 3. WHY CHOOSE US - PREMIUM GRID CARDS */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="why-choose-us-section">
         <div className="text-center space-y-3 mb-16">
-          <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
             The Bugembe Advantage
           </p>
-          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">
+          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
             Pioneering Academic and Spiritual Success
           </h3>
-          <div className="w-16 h-1 bg-[#d4af37] mx-auto rounded-full" />
+          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
           <p className="text-gray-500 max-w-2xl mx-auto text-sm leading-relaxed">
             Our curriculum integrates the rigorous national curriculum with profound theology, ensuring our graduates lead in corporate and ethical landscapes.
           </p>
@@ -489,13 +489,13 @@ export function HomeContent({
                 <div>
                   <div className="flex justify-between items-start mb-6">
                     {/* Responsive Icon: shrinks/grows beautifully */}
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg ${cardColor.bg} flex items-center justify-center group-hover:bg-[#0c2340] transition-colors duration-300`}>
-                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 ${cardColor.text} group-hover:text-[#d4af37] transition-colors`} />
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg ${cardColor.bg} flex items-center justify-center group-hover:bg-[var(--color-primary)] transition-colors duration-300`}>
+                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 ${cardColor.text} group-hover:text-[var(--color-accent)] transition-colors`} />
                     </div>
 
                     <button
                       onClick={() => toggleCard(adv.id)}
-                      className="text-xs text-[#0c2340] hover:text-[#d4af37] border border-gray-200 hover:border-amber-300 bg-gray-50/50 hover:bg-amber-50 px-2.5 py-1.5 rounded flex items-center space-x-1 transition-all"
+                      className="text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] border border-gray-200 hover:border-amber-300 bg-gray-50/50 hover:bg-amber-50 px-2.5 py-1.5 rounded flex items-center space-x-1 transition-all"
                       title={isExpanded ? "Collapse Details" : "Expand Details"}
                     >
                       <span className="font-mono text-[10px] uppercase font-semibold">
@@ -509,7 +509,7 @@ export function HomeContent({
                     </button>
                   </div>
 
-                  <h4 className="text-base sm:text-lg font-serif font-semibold text-[#0c2340] mb-3 group-hover:text-[#d4af37] transition-colors">
+                  <h4 className="text-base sm:text-lg font-serif font-semibold text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors">
                     {adv.title}
                   </h4>
                   
@@ -527,13 +527,13 @@ export function HomeContent({
                         transition={{ duration: 0.25, ease: "easeInOut" }}
                         className="overflow-hidden mt-4 pt-4 border-t border-gray-50 space-y-2.5"
                       >
-                        <p className="text-[10px] font-mono uppercase text-[#d4af37] font-semibold tracking-wider">
+                        <p className="text-[10px] font-mono uppercase text-[var(--color-accent)] font-semibold tracking-wider">
                           Key Offerings:
                         </p>
                         <ul className="space-y-1.5">
                           {adv.details.map((detail, idx) => (
                             <li key={idx} className="flex items-start text-xs text-gray-600 space-x-2">
-                              <span className="text-[#d4af37] mt-1 shrink-0">✓</span>
+                              <span className="text-[var(--color-accent)] mt-1 shrink-0">✓</span>
                               <span>{detail}</span>
                             </li>
                           ))}
@@ -549,7 +549,7 @@ export function HomeContent({
                   </span>
                   <button
                     onClick={() => toggleCard(adv.id)}
-                    className="text-xs text-[#d4af37] hover:text-[#0c2340] font-semibold flex items-center space-x-1"
+                    className="text-xs text-[var(--color-accent)] hover:text-[var(--color-primary)] font-semibold flex items-center space-x-1"
                   >
                     <span className="hover:underline">
                       {isExpanded ? "Hide details" : "Show details"}
@@ -590,12 +590,12 @@ export function HomeContent({
             {/* Right Column: Message & Signature */}
             <div className="lg:col-span-7 space-y-6">
               <div className="space-y-2">
-                <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold flex items-center gap-2">
+                <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold flex items-center gap-2">
                   {React.createElement(getIcon(founder.icon), { className: "h-3.5 w-3.5" })}
                   {founder.eyebrow}
                 </p>
-                <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">{founder.heading}</h3>
-                <div className="w-12 h-1 bg-[#d4af37] rounded-full" />
+                <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">{founder.heading}</h3>
+                <div className="w-12 h-1 bg-[var(--color-accent)] rounded-full" />
               </div>
 
               <div className="relative">
@@ -605,12 +605,12 @@ export function HomeContent({
 
               <div className="border-t border-gray-200/80 pt-6 flex items-center justify-between">
                 <div>
-                  <h4 className="text-base font-serif font-bold text-[#0c2340]">{founder.name}</h4>
-                  <p className="text-xs text-[#d4af37] font-mono tracking-wider mt-0.5">{founder.title}</p>
+                  <h4 className="text-base font-serif font-bold text-[var(--color-primary)]">{founder.name}</h4>
+                  <p className="text-xs text-[var(--color-accent)] font-mono tracking-wider mt-0.5">{founder.title}</p>
                 </div>
 
                 {/* Vintage seal ornament */}
-                <div className="h-12 w-12 rounded-full border-2 border-dashed border-[#d4af37]/40 flex items-center justify-center text-[#d4af37] text-[10px] font-mono font-bold rotate-12">
+                <div className="h-12 w-12 rounded-full border-2 border-dashed border-[var(--color-accent)]/40 flex items-center justify-center text-[var(--color-accent)] text-[10px] font-mono font-bold rotate-12">
                   {founder.badgeText}
                 </div>
               </div>
@@ -624,11 +624,11 @@ export function HomeContent({
       <AlumniScrollSection profiles={featuredAlumni} />
 
       {/* 4. ACADEMIC PROGRAMS SECTION */}
-      <section className="bg-[#0c2340] text-white py-20" id="programs-section">
+      <section className="bg-[var(--color-primary)] text-white py-20" id="programs-section">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-4">
             <div>
-              <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+              <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
                 Our Pathways
               </p>
               <h3 className="text-3xl sm:text-4xl font-serif font-bold mt-2">
@@ -637,7 +637,7 @@ export function HomeContent({
             </div>
             <Link
               href="/academics"
-              className="px-6 py-3 bg-[#d4af37] hover:bg-amber-400 text-[#0c2340] font-bold text-xs tracking-wider uppercase rounded transition-all flex items-center space-x-2"
+              className="px-6 py-3 bg-[var(--color-accent)] hover:bg-amber-400 text-[var(--color-primary)] font-bold text-xs tracking-wider uppercase rounded transition-all flex items-center space-x-2"
             >
               <span>Explore Curriculum Details</span>
               <ArrowRight className="h-4 w-4" />
@@ -662,7 +662,7 @@ export function HomeContent({
                   visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
                 }}
                 whileHover={{ y: -6, scale: 1.01 }}
-                className="bg-[#0c1c35] rounded-xl overflow-hidden border border-white/5 shadow-lg group hover:border-[#d4af37]/30 transition-all duration-300 flex flex-col h-full"
+                className="bg-[#0c1c35] rounded-xl overflow-hidden border border-white/5 shadow-lg group hover:border-[var(--color-accent)]/30 transition-all duration-300 flex flex-col h-full"
               >
                 {/* Program image container */}
                 <div className="relative h-48 w-full overflow-hidden">
@@ -674,7 +674,7 @@ export function HomeContent({
                     sizes="(max-width: 768px) 100vw, 33vw"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute top-4 left-4 bg-[#0c2340]/90 text-[#d4af37] px-3.5 py-1.5 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-[#d4af37]/30">
+                  <div className="absolute top-4 left-4 bg-[var(--color-primary)]/90 text-[var(--color-accent)] px-3.5 py-1.5 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-[var(--color-accent)]/30">
                     {program.level}
                   </div>
                 </div>
@@ -682,7 +682,7 @@ export function HomeContent({
                 {/* Card body */}
                 <div className="p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <h4 className="text-lg font-serif font-bold text-white mb-3 group-hover:text-[#d4af37] transition-colors">
+                    <h4 className="text-lg font-serif font-bold text-white mb-3 group-hover:text-[var(--color-accent)] transition-colors">
                       {program.title}
                     </h4>
                     <p className="text-gray-400 text-xs sm:text-sm leading-relaxed mb-6">
@@ -691,7 +691,7 @@ export function HomeContent({
                   </div>
                   <Link
                     href={`/academics#${program.id}`}
-                    className="text-xs text-[#d4af37] hover:text-amber-400 font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform"
+                    className="text-xs text-[var(--color-accent)] hover:text-amber-400 font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform"
                   >
                     <span>Read Requirements</span>
                     <ArrowRight className="h-3 w-3" />
@@ -706,13 +706,13 @@ export function HomeContent({
       {/* 5. CAMPUS LIFE SHOWCASE (MIGRATED LIGHTBOX READY IMAGES) */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="campus-life-section">
         <div className="text-center space-y-3 mb-16">
-          <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
             Life on Campus
           </p>
-          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">
+          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
             Our Facilities & Dynamic Activities
           </h3>
-          <div className="w-16 h-1 bg-[#d4af37] mx-auto rounded-full" />
+          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
         </div>
 
         {/* Masonry-like Grid */}
@@ -746,8 +746,8 @@ export function HomeContent({
                 referrerPolicy="no-referrer"
               />
               {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-[#0c2340]/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 z-10">
-                <span className="text-[10px] text-[#d4af37] font-mono uppercase tracking-widest mb-1.5">
+              <div className="absolute inset-0 bg-[var(--color-primary)]/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 z-10">
+                <span className="text-[10px] text-[var(--color-accent)] font-mono uppercase tracking-widest mb-1.5">
                   {item.category}
                 </span>
                 <h4 className="text-white font-serif font-semibold text-base mb-1">
@@ -764,7 +764,7 @@ export function HomeContent({
         <div className="text-center pt-10">
           <Link
             href="/gallery"
-            className="inline-flex items-center space-x-2 text-xs text-[#0c2340] hover:text-[#d4af37] font-bold tracking-wider uppercase border-b-2 border-[#0c2340] hover:border-[#d4af37] pb-1.5 transition-colors"
+            className="inline-flex items-center space-x-2 text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] font-bold tracking-wider uppercase border-b-2 border-[var(--color-primary)] hover:border-[var(--color-accent)] pb-1.5 transition-colors"
           >
             <span>Explore Campus Gallery</span>
             <ArrowRight className="h-4 w-4" />
@@ -776,33 +776,33 @@ export function HomeContent({
       <section className="bg-gray-50 py-20" id="achievements-section">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-3 mb-16">
-            <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+            <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
               Legacy of Success
             </p>
-            <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">
+            <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
               Milestones & National UNEB Results
             </h3>
-            <div className="w-16 h-1 bg-[#d4af37] mx-auto rounded-full" />
+            <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
           </div>
 
           <div className="relative border-l border-gray-300 pl-6 sm:pl-8 space-y-12">
             {achievements.map((ach) => (
               <div key={ach.id} className="relative group">
                 {/* Dot marker */}
-                <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 bg-[#d4af37] rounded-full border-4 border-white group-hover:bg-[#0c2340] group-hover:scale-120 transition-all duration-300 shadow-md" />
+                <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 bg-[var(--color-accent)] rounded-full border-4 border-white group-hover:bg-[var(--color-primary)] group-hover:scale-120 transition-all duration-300 shadow-md" />
 
                 {/* Achievement Block */}
                 <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group-hover:shadow-lg transition-shadow">
                   <div>
                     <div className="flex items-center space-x-3 mb-2">
-                      <span className="bg-[#0c2340] text-white px-3 py-1 rounded text-[11px] font-mono font-bold">
+                      <span className="bg-[var(--color-primary)] text-white px-3 py-1 rounded text-[11px] font-mono font-bold">
                         {ach.year}
                       </span>
-                      <span className="text-xs text-[#d4af37] font-semibold uppercase tracking-wider">
+                      <span className="text-xs text-[var(--color-accent)] font-semibold uppercase tracking-wider">
                         {ach.category}
                       </span>
                     </div>
-                    <h4 className="text-lg font-serif font-semibold text-[#0c2340] mb-2">
+                    <h4 className="text-lg font-serif font-semibold text-[var(--color-primary)] mb-2">
                       {ach.title}
                     </h4>
                     <p className="text-gray-500 text-xs sm:text-sm leading-relaxed max-w-2xl">
@@ -810,7 +810,7 @@ export function HomeContent({
                     </p>
                   </div>
                   {ach.metric && (
-                    <div className="shrink-0 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded text-[#d4af37] font-mono text-xs font-semibold tracking-wider uppercase">
+                    <div className="shrink-0 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded text-[var(--color-accent)] font-mono text-xs font-semibold tracking-wider uppercase">
                       {ach.metric}
                     </div>
                   )}
@@ -826,13 +826,13 @@ export function HomeContent({
       {/* 7. TESTIMONIALS & SUCCESS STORIES */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="testimonials-section">
         <div className="text-center space-y-3 mb-16">
-          <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
             Voices of Trust
           </p>
-          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">
+          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
             What Our Community Says About Us
           </h3>
-          <div className="w-16 h-1 bg-[#d4af37] mx-auto rounded-full" />
+          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
         </div>
 
         <TestimonialsGrid testimonials={testimonials} />
@@ -843,16 +843,16 @@ export function HomeContent({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-16 gap-4">
             <div>
-              <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+              <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
                 News & Dispatches
               </p>
-              <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">
+              <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
                 Latest Institutional Announcements
               </h3>
             </div>
             <Link
               href="/news"
-              className="px-6 py-3 border-2 border-[#0c2340] hover:bg-[#0c2340] hover:text-white text-[#0c2340] font-bold text-xs tracking-wider uppercase rounded transition-all"
+              className="px-6 py-3 border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white text-[var(--color-primary)] font-bold text-xs tracking-wider uppercase rounded transition-all"
             >
               View All News
             </Link>
@@ -874,7 +874,7 @@ export function HomeContent({
                     sizes="(max-width: 768px) 100vw, 33vw"
                     referrerPolicy="no-referrer"
                   />
-                  <span className="absolute top-4 left-4 bg-[#0c2340] text-[#d4af37] px-3 py-1 rounded text-[10px] font-semibold tracking-wider uppercase">
+                  <span className="absolute top-4 left-4 bg-[var(--color-primary)] text-[var(--color-accent)] px-3 py-1 rounded text-[10px] font-semibold tracking-wider uppercase">
                     {article.category}
                   </span>
                 </div>
@@ -890,7 +890,7 @@ export function HomeContent({
                       <span>•</span>
                       <span>{article.readTime}</span>
                     </div>
-                    <h4 className="text-base font-serif font-bold text-[#0c2340] mb-3 group-hover:text-[#d4af37] transition-colors line-clamp-2">
+                    <h4 className="text-base font-serif font-bold text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors line-clamp-2">
                       {article.title}
                     </h4>
                     <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-6 line-clamp-3">
@@ -899,7 +899,7 @@ export function HomeContent({
                   </div>
                   <Link
                     href={`/news/${article.id}`}
-                    className="text-xs text-[#0c2340] hover:text-[#d4af37] font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 transition-colors"
+                    className="text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 transition-colors"
                   >
                     <span>Read Article</span>
                     <ArrowRight className="h-3 w-3" />
@@ -912,8 +912,8 @@ export function HomeContent({
       </section>
 
       {/* 9. ADMISSIONS CALL-TO-ACTION (CTA) */}
-      <section className="bg-[#0b1c3c] text-white py-16 relative overflow-hidden" id="admissions-cta">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0c2340] via-[#0c2340]/90 to-[#0c1c35]/95 z-0" />
+      <section className="bg-[var(--color-primary-hover)] text-white py-16 relative overflow-hidden" id="admissions-cta">
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary)]/90 to-[#0c1c35]/95 z-0" />
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <h3 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold text-white tracking-tight">
             Nurture Your Child&apos;s Academic and Moral Legacy Today
@@ -924,7 +924,7 @@ export function HomeContent({
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
             <Link
               href="/admissions"
-              className="w-full sm:w-auto px-8 py-4 bg-[#d4af37] hover:bg-amber-400 text-[#0c2340] font-bold text-xs tracking-wider uppercase rounded shadow-lg transition-colors flex items-center justify-center space-x-2"
+              className="w-full sm:w-auto px-8 py-4 bg-[var(--color-accent)] hover:bg-amber-400 text-[var(--color-primary)] font-bold text-xs tracking-wider uppercase rounded shadow-lg transition-colors flex items-center justify-center space-x-2"
             >
               <span>Begin Application Process</span>
               <ArrowRight className="h-4 w-4" />

@@ -92,7 +92,7 @@ export default function WhatsAppButton({ departments }: { departments: WhatsAppD
             id="whatsapp-routing-panel"
           >
             {/* Header: Institutional Clean Styling */}
-            <div className="bg-[#0c2340] px-4 py-3.5 flex justify-between items-center border-b border-gray-200 shrink-0">
+            <div className="bg-[var(--color-primary)] px-4 py-3.5 flex justify-between items-center border-b border-gray-200 shrink-0">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center shadow-md">
                   <MessageSquare className="h-4 w-4 text-white fill-white" />
@@ -157,13 +157,13 @@ export default function WhatsAppButton({ departments }: { departments: WhatsAppD
                         >
                           <div className="flex items-start space-x-2.5">
                             <div className={`p-1.5 rounded-lg shrink-0 ${
-                              isSelected ? "bg-emerald-600 text-white" : "bg-[#0c2340]/5 text-[#0c2340]"
+                              isSelected ? "bg-emerald-600 text-white" : "bg-[var(--color-primary)]/5 text-[var(--color-primary)]"
                             }`}>
                               <DeptIcon className="h-3.5 w-3.5" />
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center justify-between">
-                                <h5 className="text-[11px] font-bold text-[#0c2340] truncate">
+                                <h5 className="text-[11px] font-bold text-[var(--color-primary)] truncate">
                                   {dept.name}
                                 </h5>
                                 <span className={`text-[8px] px-1.5 py-0.2 rounded font-mono uppercase tracking-wider ${
@@ -207,7 +207,7 @@ export default function WhatsAppButton({ departments }: { departments: WhatsAppD
                     value={customMessage}
                     onChange={(e) => setCustomMessage(e.target.value.slice(0, 300))}
                     placeholder={`Write your inquiry for ${activeDept.contactName}...`}
-                    className="w-full h-16 bg-white text-[#0c2340] text-[11px] p-2.5 rounded-lg border border-gray-200 focus:border-emerald-600 focus:outline-none transition-all placeholder:text-gray-400 resize-none shadow-inner"
+                    className="w-full h-16 bg-white text-[var(--color-primary)] text-[11px] p-2.5 rounded-lg border border-gray-200 focus:border-emerald-600 focus:outline-none transition-all placeholder:text-gray-400 resize-none shadow-inner"
                   />
                 </div>
 
@@ -236,7 +236,7 @@ export default function WhatsAppButton({ departments }: { departments: WhatsAppD
               <div className="p-3 bg-white space-y-2">
                 <div className="flex items-center justify-between text-[11px] border-b border-gray-100 pb-1.5">
                   <span className="text-gray-500">Selected Desk:</span>
-                  <span className="font-bold text-[#0c2340] font-serif">{activeDept.badge}</span>
+                  <span className="font-bold text-[var(--color-primary)] font-serif">{activeDept.badge}</span>
                 </div>
                 <div className="text-[10px] text-gray-400 line-clamp-1">
                   Message: &quot;{customMessage || "Default admission packet inquiry"}&quot;
@@ -258,7 +258,7 @@ export default function WhatsAppButton({ departments }: { departments: WhatsAppD
               {isMinimized && (
                 <button
                   onClick={() => setIsMinimized(false)}
-                  className="w-full mt-1.5 text-center text-[9px] text-[#0c2340]/60 hover:text-[#0c2340] font-bold uppercase tracking-wider"
+                  className="w-full mt-1.5 text-center text-[9px] text-[var(--color-primary)]/60 hover:text-[var(--color-primary)] font-bold uppercase tracking-wider"
                 >
                   Expand Full Options Form
                 </button>

@@ -54,13 +54,13 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header Block */}
         <div className="text-center space-y-4 mb-16">
-          <span className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+          <span className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
             Institute Dispatches
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#0c2340]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[var(--color-primary)]">
             News & Achievements Portal
           </h2>
-          <div className="w-20 h-1 bg-[#d4af37] mx-auto rounded-full" />
+          <div className="w-20 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
           <p className="text-gray-500 max-w-3xl mx-auto text-sm leading-relaxed">
             Follow the latest celebrations, academic PLE/UCE metrics, Islamic memorization achievements, and community events directly from Bugembe.
           </p>
@@ -80,7 +80,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   referrerPolicy="no-referrer"
                 />
-                <span className="absolute top-6 left-6 bg-[#0c2340] text-[#d4af37] border border-[#d4af37]/30 px-3.5 py-1.5 rounded-md text-[10px] font-bold tracking-wider uppercase">
+                <span className="absolute top-6 left-6 bg-[var(--color-primary)] text-[var(--color-accent)] border border-[var(--color-accent)]/30 px-3.5 py-1.5 rounded-md text-[10px] font-bold tracking-wider uppercase">
                   Featured Announcement
                 </span>
               </div>
@@ -93,17 +93,17 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                   <span>•</span>
                   <span>{featuredArticle.readTime}</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[#0c2340] hover:text-[#d4af37] transition-colors leading-snug">
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors leading-snug">
                   <Link href={`/news/${featuredArticle.id}`}>{featuredArticle.title}</Link>
                 </h3>
                 <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">{featuredArticle.excerpt}</p>
                 <div className="pt-2">
                   <Link
                     href={`/news/${featuredArticle.id}`}
-                    className="inline-flex items-center space-x-2 bg-[#0c2340] hover:bg-indigo-950 text-white font-bold py-3.5 px-6 rounded uppercase tracking-wider text-xs shadow-md transition-colors"
+                    className="inline-flex items-center space-x-2 bg-[var(--color-primary)] hover:bg-indigo-950 text-white font-bold py-3.5 px-6 rounded uppercase tracking-wider text-xs shadow-md transition-colors"
                   >
                     <span>Read Full Story</span>
-                    <ArrowRight className="h-4 w-4 text-[#d4af37]" />
+                    <ArrowRight className="h-4 w-4 text-[var(--color-accent)]" />
                   </Link>
                 </div>
               </div>
@@ -122,7 +122,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                 placeholder="Search articles, milestones, awards..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-gray-50 hover:bg-gray-100/50 focus:bg-white text-xs sm:text-sm rounded-lg pl-11 pr-4 py-3 border border-gray-200 focus:border-[#d4af37] focus:outline-none transition-all placeholder:text-gray-400"
+                className="w-full bg-gray-50 hover:bg-gray-100/50 focus:bg-white text-xs sm:text-sm rounded-lg pl-11 pr-4 py-3 border border-gray-200 focus:border-[var(--color-accent)] focus:outline-none transition-all placeholder:text-gray-400"
               />
             </div>
 
@@ -134,8 +134,8 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                   onClick={() => setSelectedCategory(cat)}
                   className={`px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider border transition-all ${
                     selectedCategory === cat
-                      ? "bg-[#0c2340] text-[#d4af37] border-[#0c2340]"
-                      : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-[#0c2340]"
+                      ? "bg-[var(--color-primary)] text-[var(--color-accent)] border-[var(--color-primary)]"
+                      : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100 hover:text-[var(--color-primary)]"
                   }`}
                 >
                   {cat === "all" ? "All Dispatches" : cat}
@@ -172,7 +172,7 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                       sizes="(max-width: 768px) 100vw, 33vw"
                       referrerPolicy="no-referrer"
                     />
-                    <span className="absolute top-4 left-4 bg-[#0c2340] text-[#d4af37] px-3.5 py-1.5 rounded text-[10px] font-semibold tracking-wider uppercase border border-white/5">
+                    <span className="absolute top-4 left-4 bg-[var(--color-primary)] text-[var(--color-accent)] px-3.5 py-1.5 rounded text-[10px] font-semibold tracking-wider uppercase border border-white/5">
                       {article.category}
                     </span>
                   </div>
@@ -188,14 +188,14 @@ export function NewsBrowser({ articles }: { articles: NewsArticle[] }) {
                         <span>•</span>
                         <span>{article.readTime}</span>
                       </div>
-                      <h4 className="text-base font-serif font-bold text-[#0c2340] mb-3 group-hover:text-[#d4af37] transition-colors line-clamp-2">
+                      <h4 className="text-base font-serif font-bold text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors line-clamp-2">
                         {article.title}
                       </h4>
                       <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-6 line-clamp-3">{article.excerpt}</p>
                     </div>
                     <Link
                       href={`/news/${article.id}`}
-                      className="text-xs text-[#0c2340] hover:text-[#d4af37] font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 transition-colors"
+                      className="text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 transition-colors"
                     >
                       <span>Read Full Article</span>
                       <ArrowRight className="h-3.5 w-3.5" />

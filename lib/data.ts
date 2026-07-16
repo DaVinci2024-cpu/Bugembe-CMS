@@ -130,6 +130,9 @@ export interface Branding {
   tagline: string; // small line under the site name in the header
   brandBlurb: string; // footer description paragraph
   certificationText: string; // small credential line in the footer
+  primaryColor: string; // main brand color (header, buttons, footer) — hex
+  primaryColorHover: string; // darker shade used on hover states — hex
+  accentColor: string; // secondary/highlight color (links, badges) — hex
 }
 
 export interface ContactInfo {
@@ -548,6 +551,9 @@ export const defaultBranding: Branding = {
   brandBlurb:
     "Nurturing faith, knowledge, and moral leadership. We offer a high-status dual curriculum, balancing top-tier UNEB academics with spiritual Islamic values.",
   certificationText: "Certified Ministry of Education & Sports (Uganda)",
+  primaryColor: "#0c2340",
+  primaryColorHover: "#0b1c3c",
+  accentColor: "#d4af37",
 };
 
 export const defaultHeaderAnnouncements: string[] = [

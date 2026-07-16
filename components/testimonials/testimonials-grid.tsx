@@ -10,7 +10,7 @@ export function TestimonialsGrid({ testimonials }: { testimonials: Testimonial[]
       {testimonials.map((t) => (
         <div key={t.id} className="relative bg-white p-8 rounded-xl border border-gray-100 shadow-md flex flex-col justify-between h-full">
           {t.status === "draft" && (
-            <span className="absolute top-3 right-3 bg-amber-500 text-[#0c2340] px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-wider shadow">
+            <span className="absolute top-3 right-3 bg-amber-500 text-[var(--color-primary)] px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-wider shadow">
               Draft — not public
             </span>
           )}
@@ -29,8 +29,8 @@ export function TestimonialsGrid({ testimonials }: { testimonials: Testimonial[]
               <Image src={t.avatar} alt={t.name} fill className="object-cover" referrerPolicy="no-referrer" />
             </div>
             <div>
-              <h4 className="text-[#0c2340] font-serif font-bold text-sm">{t.name}</h4>
-              <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono">
+              <h4 className="text-[var(--color-primary)] font-serif font-bold text-sm">{t.name}</h4>
+              <p className="text-[var(--color-accent)] text-[10px] uppercase tracking-wider font-mono">
                 {t.role} {t.graduationYear ? `(Class of '${String(t.graduationYear).slice(-2)})` : ""}
               </p>
             </div>

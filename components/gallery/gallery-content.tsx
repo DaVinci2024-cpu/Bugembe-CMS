@@ -36,11 +36,11 @@ export function GalleryContent({ items }: { items: GalleryItem[] }) {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="text-center space-y-4 mb-16"
         >
-          <span className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold bg-amber-500/5 px-3.5 py-1.5 rounded-full border border-amber-500/10">
+          <span className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold bg-amber-500/5 px-3.5 py-1.5 rounded-full border border-amber-500/10">
             Bugembe Visual Record
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[#0c2340]">Media & Campus Gallery</h2>
-          <div className="w-20 h-1 bg-[#d4af37] mx-auto rounded-full" />
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-[var(--color-primary)]">Media & Campus Gallery</h2>
+          <div className="w-20 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
           <p className="text-gray-500 max-w-3xl mx-auto text-xs sm:text-sm md:text-base leading-relaxed">
             Take a visual tour of Bugembe Islamic Institute. Browse our classrooms, state-of-the-art laboratories, prayer gatherings, and
             athletic events.
@@ -60,14 +60,14 @@ export function GalleryContent({ items }: { items: GalleryItem[] }) {
                 }}
                 className={`relative px-4.5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 border ${
                   isActive
-                    ? "text-[#d4af37] border-[#0c2340] shadow-md shadow-indigo-950/10 z-10"
-                    : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:text-[#0c2340]"
+                    ? "text-[var(--color-accent)] border-[var(--color-primary)] shadow-md shadow-indigo-950/10 z-10"
+                    : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50 hover:text-[var(--color-primary)]"
                 }`}
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeGalleryTab"
-                    className="absolute inset-0 bg-[#0c2340] rounded-full -z-10"
+                    className="absolute inset-0 bg-[var(--color-primary)] rounded-full -z-10"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -121,13 +121,13 @@ export function GalleryContent({ items }: { items: GalleryItem[] }) {
                     referrerPolicy="no-referrer"
                   />
                   {item.status === "draft" && (
-                    <span className="absolute top-3 right-3 bg-amber-500 text-[#0c2340] px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-wider z-10 shadow">
+                    <span className="absolute top-3 right-3 bg-amber-500 text-[var(--color-primary)] px-2.5 py-1 rounded text-[9px] font-bold uppercase tracking-wider z-10 shadow">
                       Draft — not public
                     </span>
                   )}
                   {/* Subtle caption bottom panel (appears on hover) */}
-                  <div className="absolute inset-0 bg-[#0c2340]/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-6 z-10">
-                    <span className="text-[9px] text-[#d4af37] font-mono uppercase tracking-widest mb-1.5 font-bold">{item.category}</span>
+                  <div className="absolute inset-0 bg-[var(--color-primary)]/90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-6 z-10">
+                    <span className="text-[9px] text-[var(--color-accent)] font-mono uppercase tracking-widest mb-1.5 font-bold">{item.category}</span>
                     <h4 className="text-white font-serif font-bold text-sm sm:text-base mb-1">{item.title}</h4>
                     <p className="text-gray-300 text-xs line-clamp-2 leading-relaxed">{item.description}</p>
                     <span className="text-[10px] text-gray-400 font-mono mt-3">{item.date}</span>
@@ -165,7 +165,7 @@ export function GalleryContent({ items }: { items: GalleryItem[] }) {
               whileHover={{ scale: 1.1, x: -4 }}
               whileTap={{ scale: 0.9 }}
               onClick={handlePrev}
-              className="absolute left-4 p-3 rounded-full bg-white/5 hover:bg-white/10 text-white hover:text-[#d4af37] transition-all z-50"
+              className="absolute left-4 p-3 rounded-full bg-white/5 hover:bg-white/10 text-white hover:text-[var(--color-accent)] transition-all z-50"
               aria-label="Previous Image"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -175,7 +175,7 @@ export function GalleryContent({ items }: { items: GalleryItem[] }) {
               whileHover={{ scale: 1.1, x: 4 }}
               whileTap={{ scale: 0.9 }}
               onClick={handleNext}
-              className="absolute right-4 p-3 rounded-full bg-white/5 hover:bg-white/10 text-white hover:text-[#d4af37] transition-all z-50"
+              className="absolute right-4 p-3 rounded-full bg-white/5 hover:bg-white/10 text-white hover:text-[var(--color-accent)] transition-all z-50"
               aria-label="Next Image"
             >
               <ChevronRight className="h-6 w-6" />
@@ -201,7 +201,7 @@ export function GalleryContent({ items }: { items: GalleryItem[] }) {
               </div>
               {/* Caption Panel */}
               <div className="text-center text-white mt-4 space-y-1.5 bg-black/60 p-5 rounded-xl border border-white/5 backdrop-blur-md">
-                <span className="text-[10px] text-[#d4af37] font-mono uppercase tracking-widest font-bold">
+                <span className="text-[10px] text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
                   {filteredItems[lightboxIndex].category}
                 </span>
                 <h4 className="font-serif font-semibold text-base sm:text-lg">{filteredItems[lightboxIndex].title}</h4>

@@ -23,13 +23,25 @@ export default async function PublicLayout({ children }: { children: React.React
   const resolvedContact = contact ?? defaultContactInfo;
   const resolvedWhatsAppDepartments = whatsappDepartments ?? defaultWhatsAppDepartments;
 
+  // display: contents keeps this div out of the flex layout entirely (its
+  // children behave as if they were direct children of <body>) while still
+  // letting the brand color variables cascade down to every public page —
+  // the admin console never sees these, since it renders under a separate
+  // layout that doesn't set them.
+  const brandColorVars = {
+    display: "contents",
+    "--color-primary": resolvedBranding.primaryColor,
+    "--color-primary-hover": resolvedBranding.primaryColorHover,
+    "--color-accent": resolvedBranding.accentColor,
+  } as React.CSSProperties;
+
   return (
-    <>
+    <div style={brandColorVars}>
       <Navbar branding={resolvedBranding} announcements={resolvedAnnouncements} contact={resolvedContact} />
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
       <Footer branding={resolvedBranding} contact={resolvedContact} />
       <WhatsAppButton departments={resolvedWhatsAppDepartments} />
       <AIAssistantWidget />
-    </>
+    </div>
   );
 }
