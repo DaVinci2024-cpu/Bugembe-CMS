@@ -223,7 +223,20 @@ service cloud.firestore {
     // document IDs ("hero", "statistics"), no free-form doc creation.
     match /siteSettings/{docId} {
       allow read: if true;
-      allow write: if hasModulePermission('homepage') && docId in ['hero', 'statistics'];
+      allow create, update: if hasModulePermission('homepage') && (
+        (docId == 'hero' &&
+          incoming().keys().hasAll(['headline', 'subheadline', 'bgImage', 'ctaPrimaryText', 'ctaPrimaryLink', 'ctaSecondaryText', 'ctaSecondaryLink'])
+          && incoming().headline is string
+          && incoming().subheadline is string
+          && incoming().bgImage is string
+          && incoming().ctaPrimaryText is string
+          && incoming().ctaPrimaryLink is string
+          && incoming().ctaSecondaryText is string
+          && incoming().ctaSecondaryLink is string)
+        ||
+        (docId == 'statistics' && incoming().keys().hasAll(['items']) && incoming().items is list)
+      );
+      allow delete: if false;
     }
 
     // Admissions page copy (process/requirements/FAQs) — single doc, same

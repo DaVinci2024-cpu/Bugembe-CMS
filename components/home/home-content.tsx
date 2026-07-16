@@ -21,15 +21,16 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import logoImg from "@/src/assets/images/bugembe_islamic_institute_logo_1783765351760.jpg";
 import {
-  heroContent,
-  trustStatistics,
   premiumAchievements,
   Program,
   NewsArticle,
   GalleryItem,
   Testimonial,
+  Hero,
+  Statistic,
 } from "@/lib/data";
 import { TestimonialsGrid } from "@/components/testimonials/testimonials-grid";
+import { getStatIcon } from "@/lib/stat-icons";
 
 const advantagesList = [
   {
@@ -419,9 +420,11 @@ interface HomeContentProps {
   newsArticles: NewsArticle[];
   galleryItems: GalleryItem[];
   testimonials: Testimonial[];
+  hero: Hero;
+  statistics: Statistic[];
 }
 
-export function HomeContent({ programs, newsArticles, galleryItems, testimonials }: HomeContentProps) {
+export function HomeContent({ programs, newsArticles, galleryItems, testimonials, hero: heroContent, statistics }: HomeContentProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [expandedCards, setExpandedCards] = useState<Record<number, boolean>>({});
@@ -437,27 +440,22 @@ export function HomeContent({ programs, newsArticles, galleryItems, testimonials
   const filteredGallery = galleryItems.slice(0, 6);
 
   // Counter animation helper state
-  const [statsCount, setStatsCount] = useState({
-    students: 100,
-    uneb: 80,
-    hifz: 50,
-    teachers: 10,
-    years: 5,
-  });
+  // Counts each statistic up from 0 to its target over ~1.2s, regardless of
+  // how many statistics there are or what their target values look like.
+  const [animatedValues, setAnimatedValues] = useState<number[]>(() => statistics.map(() => 0));
 
   useEffect(() => {
+    const steps = 30;
+    const targets = statistics.map((s) => s.value);
+    let tick = 0;
     const interval = setInterval(() => {
-      setStatsCount((prev) => ({
-        students: Math.min(prev.students + 50, 1250),
-        uneb: Math.min(Number((prev.uneb + 0.5).toFixed(1)), 98.6),
-        hifz: Math.min(prev.hifz + 10, 180),
-        teachers: Math.min(prev.teachers + 2, 45),
-        years: Math.min(prev.years + 2, 52),
-      }));
+      tick += 1;
+      setAnimatedValues(targets.map((t) => Math.min((t / steps) * tick, t)));
+      if (tick >= steps) clearInterval(interval);
     }, 40);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [statistics]);
 
   return (
     <div className="relative min-h-screen bg-[#fcfbf9]" id="home-page-root">
@@ -550,60 +548,23 @@ export function HomeContent({ programs, newsArticles, galleryItems, testimonials
       {/* 2. TRUST STATISTICS WITH ANIMATED COUNTERS */}
       <section className="relative z-30 -mt-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" id="stats-section">
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 border border-amber-500/10 grid grid-cols-2 lg:grid-cols-5 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-          {/* Stat 1 */}
-          <div className="text-center p-4">
-            <p className="text-3xl md:text-4xl font-serif font-bold text-[#0c2340]">
-              {statsCount.students}+
-            </p>
-            <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">
-              Active Students
-            </p>
-            <p className="text-gray-400 text-xs mt-1">Nurtured on campus</p>
-          </div>
-
-          {/* Stat 2 */}
-          <div className="text-center p-4 pt-6 lg:pt-4">
-            <p className="text-3xl md:text-4xl font-serif font-bold text-[#0c2340]">
-              {statsCount.uneb}%
-            </p>
-            <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">
-              UNEB Pass Rate
-            </p>
-            <p className="text-gray-400 text-xs mt-1">First-Grade distinction</p>
-          </div>
-
-          {/* Stat 3 */}
-          <div className="text-center p-4 pt-6 lg:pt-4">
-            <p className="text-3xl md:text-4xl font-serif font-bold text-[#0c2340]">
-              {statsCount.hifz}+
-            </p>
-            <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">
-              Hafiz Graduates
-            </p>
-            <p className="text-gray-400 text-xs mt-1">Full Quran Memorized</p>
-          </div>
-
-          {/* Stat 4 */}
-          <div className="text-center p-4 pt-6 lg:pt-4">
-            <p className="text-3xl md:text-4xl font-serif font-bold text-[#0c2340]">
-              {statsCount.teachers}+
-            </p>
-            <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">
-              Certified Faculty
-            </p>
-            <p className="text-gray-400 text-xs mt-1">Expert teachers & Sheikhs</p>
-          </div>
-
-          {/* Stat 5 */}
-          <div className="text-center p-4 pt-6 lg:pt-4">
-            <p className="text-3xl md:text-4xl font-serif font-bold text-[#0c2340]">
-              {statsCount.years}
-            </p>
-            <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">
-              Years Heritage
-            </p>
-            <p className="text-gray-400 text-xs mt-1">Educating since 1974</p>
-          </div>
+          {statistics.map((stat, i) => {
+            const StatIcon = getStatIcon(stat.icon);
+            const displayValue = Number.isInteger(stat.value)
+              ? Math.round(animatedValues[i] ?? 0)
+              : (animatedValues[i] ?? 0).toFixed(1);
+            return (
+              <div key={stat.id} className={`text-center p-4 ${i > 0 ? "pt-6 lg:pt-4" : ""}`}>
+                <StatIcon className="h-5 w-5 text-[#d4af37] mx-auto mb-2" />
+                <p className="text-3xl md:text-4xl font-serif font-bold text-[#0c2340]">
+                  {displayValue}
+                  {stat.suffix}
+                </p>
+                <p className="text-[#d4af37] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">{stat.label}</p>
+                <p className="text-gray-400 text-xs mt-1">{stat.description}</p>
+              </div>
+            );
+          })}
         </div>
       </section>
 
