@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, UploadCloud, Check, Star } from "lucide-react";
+import { Plus, Pencil, Trash2, UploadCloud, Check, Star, Search } from "lucide-react";
 import { ModuleGate } from "@/components/admin/module-gate";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
 import { initialAlumniProfiles as staticAlumni, AlumniProfile } from "@/lib/data";
@@ -14,6 +14,8 @@ function AlumniList() {
   const [seeding, setSeeding] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<"pending" | "approved">("pending");
+  const [search, setSearch] = useState("");
+  const [yearFilter, setYearFilter] = useState("all");
 
   const load = async () => {
     try {
@@ -32,8 +34,29 @@ function AlumniList() {
     load();
   }, []);
 
-  const pending = useMemo(() => profiles.filter((p) => p.status === "pending"), [profiles]);
-  const approved = useMemo(() => profiles.filter((p) => p.status === "approved"), [profiles]);
+  // Computed from the full unfiltered list, so the dropdown always offers
+  // every cohort on record regardless of the current search/tab state.
+  const availableYears = useMemo(
+    () => [...new Set(profiles.map((p) => p.graduationYear))].sort((a, b) => b - a),
+    [profiles]
+  );
+
+  const filteredProfiles = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    return profiles.filter((p) => {
+      const matchesSearch =
+        !query ||
+        p.fullName.toLowerCase().includes(query) ||
+        p.profession.toLowerCase().includes(query) ||
+        p.organization.toLowerCase().includes(query) ||
+        p.email.toLowerCase().includes(query);
+      const matchesYear = yearFilter === "all" || String(p.graduationYear) === yearFilter;
+      return matchesSearch && matchesYear;
+    });
+  }, [profiles, search, yearFilter]);
+
+  const pending = useMemo(() => filteredProfiles.filter((p) => p.status === "pending"), [filteredProfiles]);
+  const approved = useMemo(() => filteredProfiles.filter((p) => p.status === "approved"), [filteredProfiles]);
   const visible = tab === "pending" ? pending : approved;
 
   const handleApprove = async (id: string) => {
@@ -112,6 +135,33 @@ function AlumniList() {
           <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-slate-100 text-slate-500">{approved.length}</span>
         </button>
       </div>
+
+      {profiles.length > 0 && (
+        <div className="flex flex-col sm:flex-row gap-2.5">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 w-3.5 h-3.5 text-slate-400" />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, profession, organization, or email..."
+              className="w-full bg-white border border-slate-200 rounded-lg pl-9 pr-3 py-2 text-xs focus:outline-none focus:border-[#0c2340] focus:ring-2 focus:ring-[#0c2340]/10"
+            />
+          </div>
+          <select
+            value={yearFilter}
+            onChange={(e) => setYearFilter(e.target.value)}
+            className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#0c2340] focus:ring-2 focus:ring-[#0c2340]/10 cursor-pointer"
+          >
+            <option value="all">All Years</option>
+            {availableYears.map((year) => (
+              <option key={year} value={String(year)}>
+                Class of {year}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-hidden">
         {loading ? (
