@@ -174,9 +174,9 @@ export default function Footer({ branding, contact }: { branding: Branding; cont
               Alumni Guidelines
             </Link>
             <span>•</span>
-            <span className="font-mono flex items-center text-white/20">
-              CMS-Ready Architecture v1.0
-            </span>
+            <Link href="/admin" className="hover:text-[#d4af37] transition-colors">
+              Staff Login
+            </Link>
           </div>
         </div>
       </div>
