@@ -1,17 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Send,
-  MessageCircle,
-  Clock,
-  ShieldCheck,
-  CheckCircle,
-} from "lucide-react";
-import { motion } from "motion/react";
+import { MapPin, Phone, Mail, Send, Clock, CheckCircle } from "lucide-react";
 import { saveLocalMessage, ContactInfo } from "@/lib/data";
 
 export function ContactPageContent({ contact }: { contact: ContactInfo }) {
@@ -241,65 +231,23 @@ export function ContactPageContent({ contact }: { contact: ContactInfo }) {
           </div>
         </div>
 
-        {/* 3. Google Map Custom Mock Section */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-xl p-6 sm:p-8" id="location-map">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 pb-4 mb-6 gap-4">
-            <div>
-              <h3 className="font-serif font-bold text-[var(--color-primary)] text-lg">Jinja City Campus Map</h3>
-              <p className="text-xs text-gray-400 font-mono uppercase tracking-wider mt-0.5">Coordinates: 0.4428° N, 33.2267° E</p>
+        {/* 3. Campus Map */}
+        {contact.mapEmbedUrl && (
+          <section className="bg-white rounded-2xl border border-gray-100 shadow-xl p-6 sm:p-8" id="location-map">
+            <div className="border-b border-gray-100 pb-4 mb-6">
+              <h3 className="font-serif font-bold text-[var(--color-primary)] text-lg">Campus Location</h3>
             </div>
-            <span className="bg-emerald-50 text-emerald-800 border border-emerald-100 px-3 py-1 rounded text-xs flex items-center">
-              <ShieldCheck className="h-4.5 w-4.5 text-emerald-600 mr-2 shrink-0" />
-              Main Highway Access
-            </span>
-          </div>
-
-          {/* Highly Styled Mock City Map Box */}
-          <div className="relative w-full h-80 rounded-xl bg-gray-100/50 border border-gray-200 flex flex-col justify-center items-center overflow-hidden" id="city-map-box">
-            {/* Mock Vector Street Grid */}
-            <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-70" />
-            
-            {/* Street 1 */}
-            <div className="absolute h-4 w-full bg-gray-200/60 top-1/3 left-0 flex items-center justify-center">
-              <span className="text-[9px] uppercase tracking-widest font-mono text-gray-400">Jinja - Iganga Highway</span>
+            <div className="relative w-full h-80 rounded-xl overflow-hidden border border-gray-200">
+              <iframe
+                src={contact.mapEmbedUrl}
+                className="absolute inset-0 w-full h-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Bugembe Islamic Institute campus map"
+              />
             </div>
-
-            {/* Street 2 */}
-            <div className="absolute w-4 h-full bg-gray-200/60 left-1/4 top-0 flex items-center justify-center">
-              <span className="text-[9px] uppercase tracking-widest font-mono text-gray-400 rotate-90 whitespace-nowrap">Bugembe Access Rd</span>
-            </div>
-
-            {/* Street 3 */}
-            <div className="absolute w-4 h-full bg-gray-200/60 left-2/3 top-0 flex items-center justify-center">
-              <span className="text-[9px] uppercase tracking-widest font-mono text-gray-400 rotate-90 whitespace-nowrap">Highway Link</span>
-            </div>
-
-            {/* Institute Pin indicator */}
-            <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="relative z-10 flex flex-col items-center"
-            >
-              <div className="w-10 h-10 bg-gradient-to-br from-[var(--color-accent)] to-amber-600 rounded-full flex items-center justify-center shadow-lg border-2 border-white">
-                <span className="text-white font-serif font-bold text-xs">BI</span>
-              </div>
-              <div className="w-1 h-3 bg-amber-600 -mt-0.5 shadow-md" />
-              <div className="w-16 h-1 bg-black/10 rounded-full blur-xs mt-1" />
-            </motion.div>
-
-            {/* Map Labels */}
-            <div className="absolute top-1/2 left-[55%] z-10 bg-[var(--color-primary)] border border-[var(--color-accent)]/30 text-white px-3 py-2 rounded shadow-md text-xs">
-              <p className="font-serif font-bold">Bugembe Islamic Institute</p>
-              <p className="text-[9px] text-gray-400 font-mono uppercase tracking-wider">Campus Gates</p>
-            </div>
-
-            <div className="absolute bottom-6 right-6 z-10 bg-white/95 border border-gray-100 rounded p-3 text-[10px] text-gray-500 shadow space-y-1">
-              <p className="font-bold text-gray-700">CAMPUS POIS:</p>
-              <p>• Central Masjid (200m)</p>
-              <p>• Al-Khwarizmi Science Wing (50m)</p>
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Home,
+  Info,
   FileText,
   BookOpen,
   GraduationCap,
@@ -38,6 +39,7 @@ const navGroups: NavGroup[] = [
     title: "CMS Management",
     items: [
       { href: "/admin/homepage", label: "Home & Settings", icon: Home, permission: "homepage" },
+      { href: "/admin/about", label: "About Us Page", icon: Info, permission: "about" },
       { href: "/admin/news", label: "News & Announcements", icon: FileText, permission: "blogs" },
       { href: "/admin/programs", label: "Academic Programs", icon: BookOpen, permission: "programs" },
       { href: "/admin/gallery", label: "Gallery", icon: ImageIcon, permission: "gallery" },

@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { AboutContent } from "@/components/about/about-content";
+import { aboutRepository } from "@/lib/firebase/aboutRepository";
+import { defaultAboutContent } from "@/lib/data";
+import { AboutPageContent } from "@/components/about/about-content";
+
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -12,6 +16,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AboutPage() {
-  return <AboutContent />;
+export default async function AboutPage() {
+  const content = await aboutRepository.get();
+  return <AboutPageContent content={content ?? defaultAboutContent} />;
 }

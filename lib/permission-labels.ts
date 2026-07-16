@@ -5,6 +5,7 @@ import { CustomPermissions } from "@/lib/types/auth";
 // for the same key.
 export const PERMISSION_LABELS: Record<keyof CustomPermissions, string> = {
   homepage: "Home & Site Settings",
+  about: "About Us Page",
   blogs: "News & Announcements",
   programs: "Academic Programs",
   admissions: "Admissions",

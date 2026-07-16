@@ -152,6 +152,7 @@ export interface ContactInfo {
   facebookUrl: string;
   officeHours: string;
   quickContacts: { label: string; phone: string }[];
+  mapEmbedUrl: string; // Google Maps "Embed a map" iframe src URL; blank hides the map section
 }
 
 export interface WhatsAppDepartment {
@@ -584,6 +585,7 @@ export const defaultContactInfo: ContactInfo = {
     { label: "Registrar Office", phone: "+256 701 000 222" },
     { label: "Theological Affairs", phone: "+256 701 000 333" },
   ],
+  mapEmbedUrl: "",
 };
 
 export const defaultWhatsAppDepartments: WhatsAppDepartment[] = [
@@ -907,7 +909,35 @@ export const admissionsDetails: AdmissionsContent = {
   ]
 };
 
-export const aboutContent = {
+export interface CoreValue {
+  name: string;
+  description: string;
+}
+
+export interface Facility {
+  name: string;
+  description: string;
+}
+
+export interface LeadershipMessage {
+  author: string;
+  role: string;
+  avatar: string;
+  quote: string;
+}
+
+export interface AboutContent {
+  historyImage: string;
+  history: string;
+  mission: string;
+  vision: string;
+  coreValues: CoreValue[];
+  leadershipMessage: LeadershipMessage;
+  facilities: Facility[];
+}
+
+export const defaultAboutContent: AboutContent = {
+  historyImage: "https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=1200",
   history: "Founded in 1974 by legendary Islamic scholars and community builders, Bugembe Islamic Institute was established in response to a critical community need: a sanctuary of high-quality modern science education that doesn't force children to compromise their religious values and moral guidelines. Over the past five decades, the institute has evolved from a small secondary group into a multi-level educational hub. Today, it stands as a celebrated lighthouse of leadership, discipline, and scholarly brilliance, launching thousands of graduates who now serve as doctors, software engineers, policy makers, and community leaders across Uganda and the wider international sphere.",
   mission: "To provide premium, comprehensive, and affordable education that integrates modern scientific knowledge with Islamic theological values, creating highly disciplined, innovative, and ethically grounded leaders for a global community.",
   vision: "To be the premier center of academic and moral excellence in East Africa, producing visionary leaders who embody the teachings of the Quran and excel in scientific innovation.",

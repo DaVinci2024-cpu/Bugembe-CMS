@@ -251,14 +251,15 @@ service cloud.firestore {
         (docId == 'header' && incoming().keys().hasAll(['announcements']) && incoming().announcements is list)
         ||
         (docId == 'contact' &&
-          incoming().keys().hasAll(['address', 'phone', 'email', 'whatsappNumber', 'facebookUrl', 'officeHours', 'quickContacts'])
+          incoming().keys().hasAll(['address', 'phone', 'email', 'whatsappNumber', 'facebookUrl', 'officeHours', 'quickContacts', 'mapEmbedUrl'])
           && incoming().address is string
           && incoming().phone is string
           && incoming().email is string
           && incoming().whatsappNumber is string
           && incoming().facebookUrl is string
           && incoming().officeHours is string
-          && incoming().quickContacts is list)
+          && incoming().quickContacts is list
+          && incoming().mapEmbedUrl is string)
         ||
         (docId == 'whatsappDepartments' && incoming().keys().hasAll(['items']) && incoming().items is list)
         ||
@@ -303,6 +304,25 @@ service cloud.firestore {
         && incoming().requirements.general is list
         && incoming().requirements.boardingList is list
         && incoming().faqs is list
+      );
+    }
+
+    // About Us page content — single doc, same pattern as admissionsContent.
+    match /aboutPage/{docId} {
+      allow read: if true;
+      allow write: if hasModulePermission('about') && docId == 'main' && (
+        incoming().keys().hasAll(['historyImage', 'history', 'mission', 'vision', 'coreValues', 'leadershipMessage', 'facilities'])
+        && incoming().historyImage is string
+        && incoming().history is string
+        && incoming().mission is string
+        && incoming().vision is string
+        && incoming().coreValues is list
+        && incoming().leadershipMessage is map
+        && incoming().leadershipMessage.author is string
+        && incoming().leadershipMessage.role is string
+        && incoming().leadershipMessage.avatar is string
+        && incoming().leadershipMessage.quote is string
+        && incoming().facilities is list
       );
     }
 

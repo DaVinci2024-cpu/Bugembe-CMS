@@ -89,6 +89,18 @@ export function ContactForm() {
             onChange={(e) => setContact({ ...contact, officeHours: e.target.value })}
           />
         </div>
+        <div>
+          <label className={labelClass}>Google Maps Embed URL <span className="font-normal normal-case text-slate-400">(optional)</span></label>
+          <input
+            className={inputClass}
+            placeholder="https://www.google.com/maps/embed?pb=..."
+            value={contact.mapEmbedUrl}
+            onChange={(e) => setContact({ ...contact, mapEmbedUrl: e.target.value })}
+          />
+          <p className="text-[10px] text-slate-400 mt-1">
+            From Google Maps: search your location → Share → Embed a map → copy the src URL from the iframe code. Leave blank to hide the map section on the Contact page.
+          </p>
+        </div>
       </div>
 
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Branding, defaultBranding } from "@/lib/data";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
 import { ImageUpload } from "@/components/shared/image-upload";
@@ -140,6 +140,69 @@ export function BrandingForm() {
               />
             </div>
             <p className="text-[10px] text-slate-400 mt-1">Links, badges, highlights.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
+        <div>
+          <h3 className="text-sm font-bold text-slate-900">Live Preview</h3>
+          <p className="text-xs text-slate-500 mt-0.5">Updates instantly as you adjust colors above — nothing here is saved until you click Save Changes.</p>
+        </div>
+
+        <div
+          className="rounded-lg border border-slate-200 overflow-hidden"
+          style={
+            {
+              "--color-primary": branding.primaryColor,
+              "--color-primary-hover": branding.primaryColorHover,
+              "--color-accent": branding.accentColor,
+            } as CSSProperties
+          }
+        >
+          {/* Mock header */}
+          <div className="bg-[var(--color-primary)] px-5 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-md bg-[var(--color-accent)]" />
+              <span className="text-white font-bold text-sm">{branding.siteName || "Site Name"}</span>
+            </div>
+            <div className="hidden sm:flex items-center gap-4 text-white/80 text-xs font-medium">
+              <span>Home</span>
+              <span>About</span>
+              <span>Admissions</span>
+            </div>
+          </div>
+
+          {/* Mock hero / body */}
+          <div className="bg-[#fcfbf9] p-6 space-y-4">
+            <span className="inline-block text-[10px] font-mono uppercase tracking-widest font-bold text-[var(--color-accent)] bg-[var(--color-accent)]/10 px-3 py-1 rounded-full">
+              {branding.tagline || "Tagline"}
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-white border border-slate-100 rounded-lg p-4 shadow-sm space-y-2">
+                <h4 className="text-[var(--color-primary)] font-serif font-bold text-sm">Sample Card Title</h4>
+                <p className="text-slate-500 text-xs">A short line of card body copy to preview text against the surrounding colors.</p>
+              </div>
+              <div className="flex flex-col justify-center gap-2">
+                <button
+                  type="button"
+                  className="bg-[var(--color-primary)] hover:bg-[var(--color-primary-hover)] text-white font-bold py-2.5 px-4 rounded-lg text-xs"
+                >
+                  Primary Button
+                </button>
+                <button
+                  type="button"
+                  className="bg-[var(--color-accent)] text-[var(--color-primary)] font-bold py-2.5 px-4 rounded-lg text-xs"
+                >
+                  Accent Button
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Mock footer */}
+          <div className="bg-[var(--color-primary)] px-5 py-3">
+            <span className="text-white/60 text-[10px]">{branding.brandBlurb || "Footer description"}</span>
           </div>
         </div>
       </div>

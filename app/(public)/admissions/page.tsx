@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { admissionsRepository } from "@/lib/firebase/admissionsRepository";
-import { admissionsDetails } from "@/lib/data";
+import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
+import { admissionsDetails, defaultContactInfo } from "@/lib/data";
 import { AdmissionsPageContent } from "@/components/admissions/admissions-content";
 
 // Refresh from Firestore at most once an hour — keeps this off the
@@ -21,6 +22,9 @@ export const metadata: Metadata = {
 export default async function AdmissionsPage() {
   // Fall back to the static defaults if the admin hasn't saved anything to
   // Firestore yet, so this page is never blank before first use.
-  const content = (await admissionsRepository.get()) ?? admissionsDetails;
-  return <AdmissionsPageContent content={content} />;
+  const [content, contact] = await Promise.all([
+    admissionsRepository.get().then((c) => c ?? admissionsDetails),
+    siteSettingsRepository.getContact().then((c) => c ?? defaultContactInfo),
+  ]);
+  return <AdmissionsPageContent content={content} contact={contact} />;
 }

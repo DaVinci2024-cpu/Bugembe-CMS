@@ -2,12 +2,12 @@
 
 import React from "react";
 import Image from "next/image";
-import { Shield, Target, Compass, Sparkles, Award, BookOpen, Quote } from "lucide-react";
+import { Shield, Target, Compass, Quote } from "lucide-react";
 import { motion } from "motion/react";
-import { aboutContent } from "@/lib/data";
+import { AboutContent } from "@/lib/data";
 import logoImg from "@/src/assets/images/bugembe_islamic_institute_logo_1783765351760.jpg";
 
-export function AboutContent() {
+export function AboutPageContent({ content }: { content: AboutContent }) {
   return (
     <div className="relative min-h-screen bg-[#fcfbf9] py-16 sm:py-24" id="about-page-root">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,7 +56,7 @@ export function AboutContent() {
               Our Historic Foundations
             </h3>
             <p className="text-gray-600 text-xs sm:text-sm leading-relaxed whitespace-pre-line">
-              {aboutContent.history}
+              {content.history}
             </p>
             <div className="grid grid-cols-2 gap-4 pt-4">
               <motion.div 
@@ -80,7 +80,7 @@ export function AboutContent() {
             className="relative h-72 sm:h-96 rounded-2xl overflow-hidden shadow-xl border border-gray-100"
           >
             <Image
-              src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=1200"
+              src={content.historyImage}
               alt="Bugembe Islamic Library Sanctuary"
               fill
               className="object-cover"
@@ -117,7 +117,7 @@ export function AboutContent() {
               </div>
               <h3 className="text-xl font-serif font-bold text-[var(--color-primary)] mb-4">Our Mission</h3>
               <p className="text-gray-600 text-xs sm:text-sm leading-relaxed mb-6">
-                {aboutContent.mission}
+                {content.mission}
               </p>
             </div>
             <div className="h-1 w-full bg-gradient-to-r from-[var(--color-primary)] to-indigo-600 absolute bottom-0 left-0" />
@@ -138,7 +138,7 @@ export function AboutContent() {
               </div>
               <h3 className="text-xl font-serif font-bold text-[var(--color-primary)] mb-4">Our Vision</h3>
               <p className="text-gray-600 text-xs sm:text-sm leading-relaxed mb-6">
-                {aboutContent.vision}
+                {content.vision}
               </p>
             </div>
             <div className="h-1 w-full bg-gradient-to-r from-[var(--color-accent)] to-amber-500 absolute bottom-0 left-0" />
@@ -162,7 +162,7 @@ export function AboutContent() {
             viewport={{ once: true, margin: "-50px" }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
           >
-            {aboutContent.coreValues.map((val, idx) => (
+            {content.coreValues.map((val, idx) => (
               <motion.div 
                 key={idx} 
                 variants={{
@@ -196,8 +196,8 @@ export function AboutContent() {
           <div className="grid grid-cols-1 lg:grid-cols-3">
             <div className="relative h-80 lg:h-auto min-h-[320px] bg-gray-100">
               <Image
-                src={aboutContent.leadershipMessage.avatar}
-                alt={aboutContent.leadershipMessage.author}
+                src={content.leadershipMessage.avatar}
+                alt={content.leadershipMessage.author}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 33vw"
@@ -207,14 +207,14 @@ export function AboutContent() {
             <div className="lg:col-span-2 p-8 sm:p-12 flex flex-col justify-center space-y-6 bg-gradient-to-br from-white via-white to-amber-500/5">
               <Quote className="h-10 w-10 text-amber-300 animate-pulse" />
               <p className="text-[var(--color-primary)] text-sm sm:text-base italic leading-relaxed font-serif font-medium">
-                &quot;{aboutContent.leadershipMessage.quote}&quot;
+                &quot;{content.leadershipMessage.quote}&quot;
               </p>
               <div>
                 <h4 className="text-[var(--color-primary)] font-serif font-bold text-lg">
-                  {aboutContent.leadershipMessage.author}
+                  {content.leadershipMessage.author}
                 </h4>
                 <p className="text-[var(--color-accent)] text-xs uppercase tracking-wider font-mono font-bold">
-                  {aboutContent.leadershipMessage.role}
+                  {content.leadershipMessage.role}
                 </p>
               </div>
             </div>
@@ -238,7 +238,7 @@ export function AboutContent() {
             viewport={{ once: true, margin: "-50px" }}
             className="grid grid-cols-1 md:grid-cols-2 gap-8"
           >
-            {aboutContent.facilities.map((fac, idx) => (
+            {content.facilities.map((fac, idx) => (
               <motion.div 
                 key={idx} 
                 variants={{

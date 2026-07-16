@@ -4,6 +4,7 @@ export type UserStatus = "pending" | "approved" | "rejected" | "suspended" | "re
 // checked in firestore.rules and with the nav items in the admin sidebar.
 export interface CustomPermissions {
   homepage: boolean; // Hero + trust statistics (site-wide settings)
+  about: boolean; // About Us page content
   blogs: boolean; // News & announcements
   programs: boolean; // Academic programs
   admissions: boolean; // Admissions content
@@ -15,6 +16,7 @@ export interface CustomPermissions {
 
 export const ALL_PERMISSION_KEYS: (keyof CustomPermissions)[] = [
   "homepage",
+  "about",
   "blogs",
   "programs",
   "admissions",

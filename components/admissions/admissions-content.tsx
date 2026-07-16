@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { CheckCircle, AlertTriangle, Send, HelpCircle, ChevronDown, ChevronUp } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { AdmissionsContent, saveLocalMessage } from "@/lib/data";
+import { AdmissionsContent, ContactInfo, saveLocalMessage } from "@/lib/data";
 
-export function AdmissionsPageContent({ content }: { content: AdmissionsContent }) {
+export function AdmissionsPageContent({ content, contact }: { content: AdmissionsContent; contact: ContactInfo }) {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   // Form states
@@ -191,7 +191,7 @@ export function AdmissionsPageContent({ content }: { content: AdmissionsContent 
             <motion.a
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              href="https://wa.me/256701000000?text=Assalamu%20Alaikum.%20I%20am%20asking%20for%20the%20detailed%20school%20fees%20structure%20for%20my%20child."
+              href={`https://wa.me/${contact.whatsappNumber}?text=Assalamu%20Alaikum.%20I%20am%20asking%20for%20the%20detailed%20school%20fees%20structure%20for%20my%20child.`}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-[var(--color-accent)] hover:bg-amber-400 text-[var(--color-primary)] py-3 px-5 rounded font-bold text-xs uppercase tracking-wider text-center block z-10 shadow-lg"

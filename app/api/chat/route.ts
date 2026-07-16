@@ -1,10 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
 import { NextRequest, NextResponse } from "next/server";
-import { aboutContent, academicPrograms, admissionsDetails, trustStatistics, defaultContactInfo } from "../../../lib/data";
+import { defaultAboutContent, academicPrograms, admissionsDetails, trustStatistics, defaultContactInfo } from "../../../lib/data";
 import { programsRepository } from "@/lib/firebase/programsRepository";
 import { admissionsRepository } from "@/lib/firebase/admissionsRepository";
 import { newsRepository } from "@/lib/firebase/newsRepository";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
+import { aboutRepository } from "@/lib/firebase/aboutRepository";
 
 // Lazy-initialize GoogleGenAI to prevent crashes if the key is missing during build
 let aiClient: GoogleGenAI | null = null;
@@ -48,12 +49,13 @@ export async function POST(req: NextRequest) {
     // published today, not from data baked in at build time. Each falls
     // back to the original static seed if the admin hasn't saved anything
     // to that module yet, so the assistant never ends up with empty facts.
-    const [programs, admissions, statistics, contact, recentNews] = await Promise.all([
+    const [programs, admissions, statistics, contact, recentNews, about] = await Promise.all([
       programsRepository.listPublished(),
       admissionsRepository.get(),
       siteSettingsRepository.getStatistics(),
       siteSettingsRepository.getContact(),
       newsRepository.listPublished(),
+      aboutRepository.get(),
     ]);
 
     const livePrograms = programs.length > 0 ? programs : academicPrograms;
@@ -61,6 +63,7 @@ export async function POST(req: NextRequest) {
     const liveStatistics = statistics ?? trustStatistics;
     const liveContact = contact ?? defaultContactInfo;
     const liveNews = [...recentNews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+    const liveAbout = about ?? defaultAboutContent;
 
     // Build the system knowledge base context to inject into Gemini
     const systemInstruction = `You are "Al-Aleem", the official AI Counselor and Academic Advisor for Bugembe Islamic Institute, a prestigious and respected educational institution in Uganda founded in 1974.
@@ -79,9 +82,9 @@ Email: ${liveContact.email}
 WhatsApp: https://wa.me/${liveContact.whatsappNumber}
 
 === MISSION & VISION ===
-Mission: ${aboutContent.mission}
-Vision: ${aboutContent.vision}
-Core Values: ${aboutContent.coreValues.map((v) => `${v.name}: ${v.description}`).join(" | ")}
+Mission: ${liveAbout.mission}
+Vision: ${liveAbout.vision}
+Core Values: ${liveAbout.coreValues.map((v) => `${v.name}: ${v.description}`).join(" | ")}
 
 === STATISTICS ===
 ${liveStatistics.map((s) => `- ${s.label}: ${s.value}${s.suffix} (${s.description})`).join("\n")}
