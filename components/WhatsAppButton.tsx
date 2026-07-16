@@ -1,70 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  MessageSquare, 
-  X, 
-  ExternalLink, 
-  Check, 
-  GraduationCap, 
-  BookOpen, 
-  ChevronRight, 
-  Compass, 
-  DollarSign,
+import {
+  MessageSquare,
+  X,
+  ExternalLink,
+  Check,
+  ChevronRight,
   Minus,
   Maximize2,
   Minimize2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-
-interface Department {
-  id: string;
-  name: string;
-  contactName: string;
-  phone: string;
-  desc: string;
-  icon: React.ElementType;
-  badge: string;
-}
-
-const departments: Department[] = [
-  {
-    id: "primary",
-    name: "Nursery & Primary Campus",
-    contactName: "Ustadh Yusuf (Primary Registrar)",
-    phone: "256701123456",
-    desc: "Primary school, daycare curricula, and boarding facilities inquiries.",
-    icon: GraduationCap,
-    badge: "Primary Desk",
-  },
-  {
-    id: "secondary",
-    name: "Secondary School (O & A Level)",
-    contactName: "Sister Aisha (Secondary Admissions)",
-    phone: "256701123457",
-    desc: "O-Level & A-Level science/arts pathways and boarding registration.",
-    icon: BookOpen,
-    badge: "Secondary Desk",
-  },
-  {
-    id: "tahfidh",
-    name: "Tahfidhul Qur'an Memorization",
-    contactName: "Sheikh Mukhtar (Hifz Director)",
-    phone: "256701123458",
-    desc: "Full-time and part-time boarding Quran memorization (Hifz) programs.",
-    icon: Compass,
-    badge: "Hifz Quran",
-  },
-  {
-    id: "general",
-    name: "General Admin & Fees Registry",
-    contactName: "Administrative Office",
-    phone: "256701000000",
-    desc: "Payment schedules, bank slips, visitation, and general office support.",
-    icon: DollarSign,
-    badge: "Main Office",
-  }
-];
+import { WhatsAppDepartment } from "@/lib/data";
+import { getIcon } from "@/lib/icon-options";
 
 const quickTemplates = [
   "Can I get the Term 2 school fees structure PDF?",
@@ -73,13 +22,15 @@ const quickTemplates = [
   "I would like to schedule a physical visit to tour the school campus.",
 ];
 
-export default function WhatsAppButton() {
+export default function WhatsAppButton({ departments }: { departments: WhatsAppDepartment[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [selectedDeptId, setSelectedDeptId] = useState("general");
+  const [selectedDeptId, setSelectedDeptId] = useState(() => departments[0]?.id ?? "");
   const [customMessage, setCustomMessage] = useState("");
 
-  const activeDept = departments.find((d) => d.id === selectedDeptId) || departments[3];
+  if (departments.length === 0) return null;
+
+  const activeDept = departments.find((d) => d.id === selectedDeptId) ?? departments[0];
 
   const handleLaunchWhatsApp = () => {
     const greeting = "Assalamu Alaikum. ";
@@ -193,7 +144,7 @@ export default function WhatsAppButton() {
                   <div className="grid grid-cols-1 gap-2">
                     {departments.map((dept) => {
                       const isSelected = dept.id === selectedDeptId;
-                      const DeptIcon = dept.icon;
+                      const DeptIcon = getIcon(dept.icon);
                       return (
                         <button
                           key={dept.id}

@@ -75,7 +75,7 @@ export interface Achievement {
   id: string;
   year: string;
   title: string;
-  category: "UNEB Results" | "Quran Memorization" | "Sports" | "Debate" | "Institutional";
+  category: string;
   description: string;
   metric?: string;
 }
@@ -118,6 +118,47 @@ export interface ContactMessage {
   subject: string;
   message: string;
   submittedAt: string;
+}
+
+// ==========================================
+// SITE-WIDE SETTINGS (Logo/Header/Contact/Footer)
+// ==========================================
+
+export interface Branding {
+  logoUrl: string;
+  siteName: string;
+  tagline: string; // small line under the site name in the header
+  brandBlurb: string; // footer description paragraph
+  certificationText: string; // small credential line in the footer
+}
+
+export interface ContactInfo {
+  address: string;
+  phone: string;
+  email: string;
+  whatsappNumber: string; // digits only, e.g. "256701000000"
+  facebookUrl: string;
+  officeHours: string;
+  quickContacts: { label: string; phone: string }[];
+}
+
+export interface WhatsAppDepartment {
+  id: string;
+  name: string;
+  contactName: string;
+  phone: string;
+  desc: string;
+  icon: string;
+  badge: string;
+}
+
+export interface Advantage {
+  id: string;
+  title: string;
+  description: string;
+  details: string[];
+  icon: string;
+  color: string; // key into ADVANTAGE_COLORS
 }
 
 // ==========================================
@@ -486,6 +527,162 @@ export const premiumAchievements: Achievement[] = [
     category: "Institutional",
     description: "Installed a high-speed fiber computer laboratory training 500+ students in web fundamentals and coding.",
     metric: "SaaS Ready Lab",
+  },
+];
+
+export const defaultBranding: Branding = {
+  logoUrl: "",
+  siteName: "Bugembe Islamic Institute",
+  tagline: "Nurturing Faith & Knowledge",
+  brandBlurb:
+    "Nurturing faith, knowledge, and moral leadership. We offer a high-status dual curriculum, balancing top-tier UNEB academics with spiritual Islamic values.",
+  certificationText: "Certified Ministry of Education & Sports (Uganda)",
+};
+
+export const defaultHeaderAnnouncements: string[] = [
+  "Admissions closing soon for Term 2 High School Science and Hifz Pathways.",
+  "Weekly Congregational Friday Sermon (Khutbah) stream starting soon.",
+  "Al-Khwarizmi Digital Suite upgraded with modern programming terminals.",
+  "MashaAllah! 18+ candidates completed complete Quran Memorization (Hifz) this term.",
+];
+
+export const defaultContactInfo: ContactInfo = {
+  address: "Jinja-Iganga Highway, Bugembe, Jinja City, Uganda",
+  phone: "+256701000000",
+  email: "bugembeislamic1971@gmail.com",
+  whatsappNumber: "256701000000",
+  facebookUrl: "https://facebook.com",
+  officeHours: "WEEKDAYS: 8:00 AM - 4:30 PM",
+  quickContacts: [
+    { label: "Admissions Desk", phone: "+256 701 000 111" },
+    { label: "Registrar Office", phone: "+256 701 000 222" },
+    { label: "Theological Affairs", phone: "+256 701 000 333" },
+  ],
+};
+
+export const defaultWhatsAppDepartments: WhatsAppDepartment[] = [
+  {
+    id: "primary",
+    name: "Nursery & Primary Campus",
+    contactName: "Ustadh Yusuf (Primary Registrar)",
+    phone: "256701123456",
+    desc: "Primary school, daycare curricula, and boarding facilities inquiries.",
+    icon: "GraduationCap",
+    badge: "Primary Desk",
+  },
+  {
+    id: "secondary",
+    name: "Secondary School (O & A Level)",
+    contactName: "Sister Aisha (Secondary Admissions)",
+    phone: "256701123457",
+    desc: "O-Level & A-Level science/arts pathways and boarding registration.",
+    icon: "BookOpen",
+    badge: "Secondary Desk",
+  },
+  {
+    id: "tahfidh",
+    name: "Tahfidhul Qur'an Memorization",
+    contactName: "Sheikh Mukhtar (Hifz Director)",
+    phone: "256701123458",
+    desc: "Full-time and part-time boarding Quran memorization (Hifz) programs.",
+    icon: "Compass",
+    badge: "Hifz Quran",
+  },
+  {
+    id: "general",
+    name: "General Admin & Fees Registry",
+    contactName: "Administrative Office",
+    phone: "256701000000",
+    desc: "Payment schedules, bank slips, visitation, and general office support.",
+    icon: "DollarSign",
+    badge: "Main Office",
+  },
+];
+
+export const defaultAdvantages: Advantage[] = [
+  {
+    id: "adv-1",
+    title: "Academic Excellence",
+    icon: "Award",
+    color: "indigo",
+    description:
+      "Consistently achieving superior grades in national examinations. Our structured revisions and test prep ensure students are accepted in prestigious institutions worldwide.",
+    details: [
+      "UNEB Division 1 distinction preparation",
+      "Tailored remedial and academic boost hours",
+      "Comprehensive external mock testing & review",
+      "Regular career and university pathways guidance",
+    ],
+  },
+  {
+    id: "adv-2",
+    title: "Islamic Values & Adab",
+    icon: "BookOpen",
+    color: "emerald",
+    description:
+      "Integrating daily congregational prayers, deep Quranic study, and character building (adab). We cultivate individuals with clean spirits and high moral integrity.",
+    details: [
+      "Daily structured Hifz & Quran memorization hours",
+      "Pragmatic character (Adab & Akhlaq) cultivation",
+      "Daily congregational prayer observance",
+      "Weekly spiritual reflections led by esteemed Sheikhs",
+    ],
+  },
+  {
+    id: "adv-3",
+    title: "Leadership Development",
+    icon: "Globe",
+    color: "amber",
+    description:
+      "We emphasize public speaking, structured debating, and project coordination. Students are motivated to think critically and lead local and global communities.",
+    details: [
+      "Interactive debating society and writing forums",
+      "Elected prefect and student council mentorship",
+      "Community outreach and social impact initiatives",
+      "Public speaking & sermon delivery workshops",
+    ],
+  },
+  {
+    id: "adv-4",
+    title: "Safe & Disciplined Boarding",
+    icon: "Users",
+    color: "blue",
+    description:
+      "Highly secure, separate boys' and girls' residential wards overseen by resident patrons and matrons. A strict, predictable schedule of study, prayer, and sports.",
+    details: [
+      "Completely isolated gender-segregated boarding facilities",
+      "Active resident wardens, patrons, and caring matrons",
+      "Balanced daily schedules (Prep, Prayer, Rest, Play)",
+      "Strict security with checked access gates",
+    ],
+  },
+  {
+    id: "adv-5",
+    title: "Technology & ICT Coding",
+    icon: "Sparkles",
+    color: "cyan",
+    description:
+      "Equipped with our Al-Khwarizmi ICT Suite. Students learn computer literacy, web-architecture, and research skills, preparing them for the digital economy.",
+    details: [
+      "Hands-on modern computer lab practice sessions",
+      "Essential digital literacy & office suite mastery",
+      "Introductory logic & web design activities",
+      "Supervised, safe academic research resources",
+    ],
+  },
+  {
+    id: "adv-6",
+    title: "Compassionate Community",
+    icon: "Heart",
+    color: "purple",
+    description:
+      "A caring, inclusive ecosystem of scholars, teachers, and parents. We support every child's unique talents and provide generous sponsorship schemes.",
+    details: [
+      "Active PTA collaborative sessions",
+      "Generous community sponsorship structures",
+      "Holistic child welfare support and health checkups",
+      "Inclusive social events celebrating faith & success",
+    ],
   },
 ];
 

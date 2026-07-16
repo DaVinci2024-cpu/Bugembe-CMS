@@ -219,8 +219,9 @@ service cloud.firestore {
       allow update, delete: if hasModulePermission('alumni');
     }
 
-    // Site-wide settings: hero content + trust statistics. Single well-known
-    // document IDs ("hero", "statistics"), no free-form doc creation.
+    // Site-wide settings: hero, statistics, branding, header announcements,
+    // contact info, WhatsApp departments, homepage advantages/achievements.
+    // Single well-known document IDs, no free-form doc creation.
     match /siteSettings/{docId} {
       allow read: if true;
       allow create, update: if hasModulePermission('homepage') && (
@@ -235,6 +236,32 @@ service cloud.firestore {
           && incoming().ctaSecondaryLink is string)
         ||
         (docId == 'statistics' && incoming().keys().hasAll(['items']) && incoming().items is list)
+        ||
+        (docId == 'branding' &&
+          incoming().keys().hasAll(['logoUrl', 'siteName', 'tagline', 'brandBlurb', 'certificationText'])
+          && incoming().logoUrl is string
+          && incoming().siteName is string
+          && incoming().tagline is string
+          && incoming().brandBlurb is string
+          && incoming().certificationText is string)
+        ||
+        (docId == 'header' && incoming().keys().hasAll(['announcements']) && incoming().announcements is list)
+        ||
+        (docId == 'contact' &&
+          incoming().keys().hasAll(['address', 'phone', 'email', 'whatsappNumber', 'facebookUrl', 'officeHours', 'quickContacts'])
+          && incoming().address is string
+          && incoming().phone is string
+          && incoming().email is string
+          && incoming().whatsappNumber is string
+          && incoming().facebookUrl is string
+          && incoming().officeHours is string
+          && incoming().quickContacts is list)
+        ||
+        (docId == 'whatsappDepartments' && incoming().keys().hasAll(['items']) && incoming().items is list)
+        ||
+        (docId == 'advantages' && incoming().keys().hasAll(['items']) && incoming().items is list)
+        ||
+        (docId == 'achievements' && incoming().keys().hasAll(['items']) && incoming().items is list)
       );
       allow delete: if false;
     }

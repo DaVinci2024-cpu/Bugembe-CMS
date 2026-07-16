@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { GraduationCap, Mail, Phone, MapPin, Facebook, MessageSquare, ShieldCheck, Heart } from "lucide-react";
+import { Mail, Phone, MapPin, Facebook, MessageSquare, ShieldCheck } from "lucide-react";
 import logoImg from "@/src/assets/images/bugembe_islamic_institute_logo_1783765351760.jpg";
+import { Branding, ContactInfo } from "@/lib/data";
 
-export default function Footer() {
+export default function Footer({ branding, contact }: { branding: Branding; contact: ContactInfo }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -18,29 +19,24 @@ export default function Footer() {
             <Link href="/" className="flex items-center space-x-3 group">
               <div className="w-10 h-10 rounded-lg bg-[#0b1c3c] border border-[#d4af37]/30 flex items-center justify-center shadow-md shadow-black/20 group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
                 <Image
-                  src={logoImg}
-                  alt="Bugembe Islamic Institute Logo"
+                  src={branding.logoUrl || logoImg}
+                  alt={`${branding.siteName} Logo`}
                   fill
                   className="object-cover"
                   sizes="40px"
                   referrerPolicy="no-referrer"
+                  unoptimized={!!branding.logoUrl}
                 />
               </div>
               <div>
-                <h3 className="text-white font-serif font-semibold text-base sm:text-lg">
-                  Bugembe Islamic Institute
-                </h3>
-                <p className="text-[#a0aec0] text-[10px] tracking-wider uppercase font-mono">
-                  Since 1974
-                </p>
+                <h3 className="text-white font-serif font-semibold text-base sm:text-lg">{branding.siteName}</h3>
+                <p className="text-[#a0aec0] text-[10px] tracking-wider uppercase font-mono">{branding.tagline}</p>
               </div>
             </Link>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              Nurturing faith, knowledge, and moral leadership. We offer a high-status dual curriculum, balancing top-tier UNEB academics with spiritual Islamic values.
-            </p>
+            <p className="text-gray-400 text-sm leading-relaxed">{branding.brandBlurb}</p>
             <div className="flex items-center space-x-3 pt-2 text-xs text-[#d4af37]">
               <ShieldCheck className="h-4 w-4" />
-              <span>Certified Ministry of Education & Sports (Uganda)</span>
+              <span>{branding.certificationText}</span>
             </div>
           </div>
 
@@ -125,25 +121,25 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li className="flex items-start space-x-3">
                 <MapPin className="h-5 w-5 text-[#d4af37] shrink-0 mt-0.5" />
-                <span>Bugembe, Jinja City, Uganda (Near Jinja-Iganga Highway)</span>
+                <span>{contact.address}</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="h-4 w-4 text-[#d4af37] shrink-0" />
-                <a href="tel:+256701000000" className="hover:text-[#d4af37] transition-colors">
-                  +256 701 000 000
+                <a href={`tel:${contact.phone}`} className="hover:text-[#d4af37] transition-colors">
+                  {contact.phone}
                 </a>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="h-4 w-4 text-[#d4af37] shrink-0" />
-                <a href="mailto:bugembeislamic1971@gmail.com" className="hover:text-[#d4af37] transition-colors">
-                  bugembeislamic1971@gmail.com
+                <a href={`mailto:${contact.email}`} className="hover:text-[#d4af37] transition-colors">
+                  {contact.email}
                 </a>
               </li>
             </ul>
             {/* Social handles */}
             <div className="flex items-center space-x-4 pt-3">
               <a
-                href="https://facebook.com"
+                href={contact.facebookUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded bg-white/5 hover:bg-[#d4af37] hover:text-[#0b1424] flex items-center justify-center transition-all"
@@ -152,7 +148,7 @@ export default function Footer() {
                 <Facebook className="h-4 w-4" />
               </a>
               <a
-                href="https://wa.me/256701000000"
+                href={`https://wa.me/${contact.whatsappNumber}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-8 h-8 rounded bg-white/5 hover:bg-[#d4af37] hover:text-[#0b1424] flex items-center justify-center transition-all"

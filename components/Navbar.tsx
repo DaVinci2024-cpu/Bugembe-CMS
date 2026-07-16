@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X, GraduationCap, Compass, BookOpen, UserCheck, Calendar, Image as ImageIcon, Users, MessageSquare } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import logoImg from "@/src/assets/images/bugembe_islamic_institute_logo_1783765351760.jpg";
+import { Branding, ContactInfo } from "@/lib/data";
 
 interface NavLink {
   label: string;
@@ -25,7 +26,7 @@ const navLinks: NavLink[] = [
   { label: "Contact Us", href: "/contact", icon: MessageSquare },
 ];
 
-export default function Navbar() {
+export default function Navbar({ branding, announcements, contact }: { branding: Branding; announcements: string[]; contact: ContactInfo }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -52,44 +53,20 @@ export default function Navbar() {
       <div className="bg-[#0b1c3c] text-[#f2e7d5] text-xs py-2 px-4 md:px-8 flex justify-between items-center font-sans tracking-wide border-b border-white/5 z-50 relative">
         {/* Live Academic Event Ticker */}
         <div className="flex-1 max-w-[55%] sm:max-w-[65%] md:max-w-[72%] overflow-hidden relative mr-4">
-          <div className="flex items-center space-x-2 whitespace-nowrap animate-marquee hover:[animation-play-state:paused] cursor-pointer">
-            <span className="inline-flex items-center text-[#d4af37] font-semibold text-[9px] sm:text-[10px] uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded mr-3 border border-amber-500/20 shrink-0">
-              Live Updates
-            </span>
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-[#d4af37] rounded-full mr-2 shrink-0 animate-pulse"></span>
-              Admissions closing soon for Term 2 High School Science and Hifz Pathways.
-            </span>
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 shrink-0 animate-pulse"></span>
-              Weekly Congregational Friday Sermon (Khutbah) stream starting soon.
-            </span>
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-[#d4af37] rounded-full mr-2 shrink-0 animate-pulse"></span>
-              Al-Khwarizmi Digital Suite upgraded with modern programming terminals.
-            </span>
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 shrink-0"></span>
-              MashaAllah! 18+ candidates completed complete Quran Memorization (Hifz) this term.
-            </span>
-            {/* Duplicate content to make scrolling loop seamlessly */}
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-[#d4af37] rounded-full mr-2 shrink-0 animate-pulse"></span>
-              Admissions closing soon for Term 2 High School Science and Hifz Pathways.
-            </span>
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 shrink-0 animate-pulse"></span>
-              Weekly Congregational Friday Sermon (Khutbah) stream starting soon.
-            </span>
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-[#d4af37] rounded-full mr-2 shrink-0 animate-pulse"></span>
-              Al-Khwarizmi Digital Suite upgraded with modern programming terminals.
-            </span>
-            <span className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
-              <span className="inline-block w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 shrink-0"></span>
-              MashaAllah! 18+ candidates completed complete Quran Memorization (Hifz) this term.
-            </span>
-          </div>
+          {announcements.length > 0 && (
+            <div className="flex items-center space-x-2 whitespace-nowrap animate-marquee hover:[animation-play-state:paused] cursor-pointer">
+              <span className="inline-flex items-center text-[#d4af37] font-semibold text-[9px] sm:text-[10px] uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded mr-3 border border-amber-500/20 shrink-0">
+                Live Updates
+              </span>
+              {/* Rendered twice so the marquee loop has no visible seam */}
+              {[...announcements, ...announcements].map((text, i) => (
+                <span key={i} className="inline-block text-[#f2e7d5] text-[11px] sm:text-xs font-medium pr-12 shrink-0">
+                  <span className="inline-block w-1.5 h-1.5 bg-[#d4af37] rounded-full mr-2 shrink-0 animate-pulse"></span>
+                  {text}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex items-center space-x-4 shrink-0">
           <Link
@@ -100,7 +77,7 @@ export default function Navbar() {
           </Link>
           <span className="text-white/30">|</span>
           <a
-            href="https://wa.me/256701000000?text=Assalamu%20Alaikum.%20I%20am%20inquiring%20about%20admissions%20at%20Bugembe%20Islamic%20Institute."
+            href={`https://wa.me/${contact.whatsappNumber}?text=Assalamu%20Alaikum.%20I%20am%20inquiring%20about%20admissions%20at%20Bugembe%20Islamic%20Institute.`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#d4af37] hover:text-amber-400 font-medium transition-colors"
@@ -124,21 +101,20 @@ export default function Navbar() {
           <Link href="/" className="flex items-center space-x-3 group" id="logo-brand">
             <div className="w-10 h-10 rounded-lg bg-[#0b1c3c] border border-[#d4af37]/30 flex items-center justify-center shadow-md shadow-black/20 group-hover:scale-105 transition-transform duration-300 relative overflow-hidden">
               <Image
-                src={logoImg}
-                alt="Bugembe Islamic Institute Logo"
+                src={branding.logoUrl || logoImg}
+                alt={`${branding.siteName} Logo`}
                 fill
                 className="object-cover"
                 sizes="40px"
                 referrerPolicy="no-referrer"
+                unoptimized={!!branding.logoUrl}
               />
             </div>
             <div>
               <h1 className="text-white font-serif font-semibold text-base sm:text-lg tracking-tight group-hover:text-[#d4af37] transition-colors">
-                Bugembe Islamic Institute
+                {branding.siteName}
               </h1>
-              <p className="text-[#a0aec0] text-[10px] tracking-wider uppercase font-mono">
-                Nurturing Faith & Knowledge
-              </p>
+              <p className="text-[#a0aec0] text-[10px] tracking-wider uppercase font-mono">{branding.tagline}</p>
             </div>
           </Link>
 

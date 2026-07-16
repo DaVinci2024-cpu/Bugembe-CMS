@@ -5,7 +5,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { Hero, Statistic, heroContent, trustStatistics } from "@/lib/data";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
 import { ImageUpload } from "@/components/admin/image-upload";
-import { STAT_ICON_OPTIONS } from "@/lib/stat-icons";
+import { ICON_OPTIONS } from "@/lib/icon-options";
 
 const inputClass =
   "w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0c2340]/20 focus:border-[#0c2340] outline-none";
@@ -163,7 +163,7 @@ export function HomepageForm() {
                   value={stat.icon}
                   onChange={(e) => setStats(stats.map((s, idx) => (idx === i ? { ...s, icon: e.target.value } : s)))}
                 >
-                  {STAT_ICON_OPTIONS.map((opt) => (
+                  {ICON_OPTIONS.map((opt) => (
                     <option key={opt.name} value={opt.name}>
                       {opt.name}
                     </option>

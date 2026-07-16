@@ -5,14 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowRight,
-  BookOpen,
-  Award,
-  Users,
-  Calendar,
-  CheckCircle,
   Clock,
-  Heart,
-  Globe,
   MessageSquare,
   Sparkles,
   ChevronDown,
@@ -21,109 +14,17 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import logoImg from "@/src/assets/images/bugembe_islamic_institute_logo_1783765351760.jpg";
 import {
-  premiumAchievements,
   Program,
   NewsArticle,
   GalleryItem,
   Testimonial,
   Hero,
   Statistic,
+  Advantage,
+  Achievement,
 } from "@/lib/data";
 import { TestimonialsGrid } from "@/components/testimonials/testimonials-grid";
-import { getStatIcon } from "@/lib/stat-icons";
-
-const advantagesList = [
-  {
-    id: 1,
-    title: "Academic Excellence",
-    icon: Award,
-    bgColor: "bg-indigo-50/50",
-    hoverBgColor: "group-hover:bg-[#0c2340]",
-    iconColor: "text-[#0c2340]",
-    description: "Consistently achieving superior grades in national examinations. Our structured revisions and test prep ensure students are accepted in prestigious institutions worldwide.",
-    details: [
-      "UNEB Division 1 distinction preparation",
-      "Tailored remedial and academic boost hours",
-      "Comprehensive external mock testing & review",
-      "Regular career and university pathways guidance"
-    ]
-  },
-  {
-    id: 2,
-    title: "Islamic Values & Adab",
-    icon: BookOpen,
-    bgColor: "bg-emerald-50/50",
-    hoverBgColor: "group-hover:bg-[#0c2340]",
-    iconColor: "text-emerald-600",
-    description: "Integrating daily congregational prayers, deep Quranic study, and character building (adab). We cultivate individuals with clean spirits and high moral integrity.",
-    details: [
-      "Daily structured Hifz & Quran memorization hours",
-      "Pragmatic character (Adab & Akhlaq) cultivation",
-      "Daily congregational prayer observance",
-      "Weekly spiritual reflections led by esteemed Sheikhs"
-    ]
-  },
-  {
-    id: 3,
-    title: "Leadership Development",
-    icon: Globe,
-    bgColor: "bg-amber-50/50",
-    hoverBgColor: "group-hover:bg-[#0c2340]",
-    iconColor: "text-amber-600",
-    description: "We emphasize public speaking, structured debating, and project coordination. Students are motivated to think critically and lead local and global communities.",
-    details: [
-      "Interactive debating society and writing forums",
-      "Elected prefect and student council mentorship",
-      "Community outreach and social impact initiatives",
-      "Public speaking & sermon delivery workshops"
-    ]
-  },
-  {
-    id: 4,
-    title: "Safe & Disciplined Boarding",
-    icon: Users,
-    bgColor: "bg-blue-50/50",
-    hoverBgColor: "group-hover:bg-[#0c2340]",
-    iconColor: "text-blue-600",
-    description: "Highly secure, separate boys' and girls' residential wards overseen by resident patrons and matrons. A strict, predictable schedule of study, prayer, and sports.",
-    details: [
-      "Completely isolated gender-segregated boarding facilities",
-      "Active resident wardens, patrons, and caring matrons",
-      "Balanced daily schedules (Prep, Prayer, Rest, Play)",
-      "Strict security with checked access gates"
-    ]
-  },
-  {
-    id: 5,
-    title: "Technology & ICT Coding",
-    icon: Sparkles,
-    bgColor: "bg-cyan-50/50",
-    hoverBgColor: "group-hover:bg-[#0c2340]",
-    iconColor: "text-cyan-600",
-    description: "Equipped with our Al-Khwarizmi ICT Suite. Students learn computer literacy, web-architecture, and research skills, preparing them for the digital economy.",
-    details: [
-      "Hands-on modern computer lab practice sessions",
-      "Essential digital literacy & office suite mastery",
-      "Introductory logic & web design activities",
-      "Supervised, safe academic research resources"
-    ]
-  },
-  {
-    id: 6,
-    title: "Compassionate Community",
-    icon: Heart,
-    bgColor: "bg-purple-50/50",
-    hoverBgColor: "group-hover:bg-[#0c2340]",
-    iconColor: "text-purple-600",
-    description: "A caring, inclusive ecosystem of scholars, teachers, and parents. We support every child's unique talents and provide generous sponsorship schemes.",
-    details: [
-      "Active PTA collaborative sessions",
-      "Generous community sponsorship structures",
-      "Holistic child welfare support and health checkups",
-      "Inclusive social events celebrating faith & success"
-    ]
-  }
-];
+import { getIcon, getCardColor } from "@/lib/icon-options";
 
 const alumniProfiles = [
   {
@@ -422,14 +323,25 @@ interface HomeContentProps {
   testimonials: Testimonial[];
   hero: Hero;
   statistics: Statistic[];
+  advantages: Advantage[];
+  achievements: Achievement[];
 }
 
-export function HomeContent({ programs, newsArticles, galleryItems, testimonials, hero: heroContent, statistics }: HomeContentProps) {
+export function HomeContent({
+  programs,
+  newsArticles,
+  galleryItems,
+  testimonials,
+  hero: heroContent,
+  statistics,
+  advantages,
+  achievements,
+}: HomeContentProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const [expandedCards, setExpandedCards] = useState<Record<number, boolean>>({});
+  const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
 
-  const toggleCard = (id: number) => {
+  const toggleCard = (id: string) => {
     setExpandedCards((prev) => ({
       ...prev,
       [id]: !prev[id],
@@ -549,7 +461,7 @@ export function HomeContent({ programs, newsArticles, galleryItems, testimonials
       <section className="relative z-30 -mt-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" id="stats-section">
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 border border-amber-500/10 grid grid-cols-2 lg:grid-cols-5 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
           {statistics.map((stat, i) => {
-            const StatIcon = getStatIcon(stat.icon);
+            const StatIcon = getIcon(stat.icon);
             const displayValue = Number.isInteger(stat.value)
               ? Math.round(animatedValues[i] ?? 0)
               : (animatedValues[i] ?? 0).toFixed(1);
@@ -594,8 +506,9 @@ export function HomeContent({ programs, newsArticles, galleryItems, testimonials
           viewport={{ once: true, margin: "-50px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {advantagesList.map((adv) => {
-            const Icon = adv.icon;
+          {advantages.map((adv) => {
+            const Icon = getIcon(adv.icon);
+            const cardColor = getCardColor(adv.color);
             const isExpanded = !!expandedCards[adv.id];
 
             return (
@@ -612,8 +525,8 @@ export function HomeContent({ programs, newsArticles, galleryItems, testimonials
                 <div>
                   <div className="flex justify-between items-start mb-6">
                     {/* Responsive Icon: shrinks/grows beautifully */}
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg ${adv.bgColor} flex items-center justify-center group-hover:bg-[#0c2340] transition-colors duration-300`}>
-                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 ${adv.iconColor} group-hover:text-[#d4af37] transition-colors`} />
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg ${cardColor.bg} flex items-center justify-center group-hover:bg-[#0c2340] transition-colors duration-300`}>
+                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 ${cardColor.text} group-hover:text-[#d4af37] transition-colors`} />
                     </div>
 
                     <button
@@ -920,7 +833,7 @@ export function HomeContent({ programs, newsArticles, galleryItems, testimonials
           </div>
 
           <div className="relative border-l border-gray-300 pl-6 sm:pl-8 space-y-12">
-            {premiumAchievements.map((ach) => (
+            {achievements.map((ach) => (
               <div key={ach.id} className="relative group">
                 {/* Dot marker */}
                 <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 bg-[#d4af37] rounded-full border-4 border-white group-hover:bg-[#0c2340] group-hover:scale-120 transition-all duration-300 shadow-md" />
