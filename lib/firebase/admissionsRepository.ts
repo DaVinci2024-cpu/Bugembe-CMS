@@ -1,6 +1,7 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./client";
 import { AdmissionsContent } from "@/lib/data";
+import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
 const DOC_PATH = ["admissionsContent", "main"] as const;
 
@@ -14,5 +15,6 @@ export const admissionsRepository = {
 
   async save(content: AdmissionsContent): Promise<void> {
     await setDoc(doc(db, ...DOC_PATH), content);
+    await revalidatePublicSite();
   },
 };

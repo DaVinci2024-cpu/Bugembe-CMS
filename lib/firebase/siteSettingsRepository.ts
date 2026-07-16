@@ -1,6 +1,7 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./client";
 import { Hero, Statistic, Branding, ContactInfo, WhatsAppDepartment, Advantage, Achievement } from "@/lib/data";
+import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
 const HERO_DOC = ["siteSettings", "hero"] as const;
 const STATISTICS_DOC = ["siteSettings", "statistics"] as const;
@@ -21,6 +22,7 @@ export const siteSettingsRepository = {
 
   async saveHero(hero: Hero): Promise<void> {
     await setDoc(doc(db, ...HERO_DOC), hero);
+    await revalidatePublicSite();
   },
 
   async getStatistics(): Promise<Statistic[] | null> {
@@ -30,6 +32,7 @@ export const siteSettingsRepository = {
 
   async saveStatistics(items: Statistic[]): Promise<void> {
     await setDoc(doc(db, ...STATISTICS_DOC), { items });
+    await revalidatePublicSite();
   },
 
   async getBranding(): Promise<Branding | null> {
@@ -39,6 +42,7 @@ export const siteSettingsRepository = {
 
   async saveBranding(branding: Branding): Promise<void> {
     await setDoc(doc(db, ...BRANDING_DOC), branding);
+    await revalidatePublicSite();
   },
 
   async getHeaderAnnouncements(): Promise<string[] | null> {
@@ -48,6 +52,7 @@ export const siteSettingsRepository = {
 
   async saveHeaderAnnouncements(announcements: string[]): Promise<void> {
     await setDoc(doc(db, ...HEADER_DOC), { announcements });
+    await revalidatePublicSite();
   },
 
   async getContact(): Promise<ContactInfo | null> {
@@ -57,6 +62,7 @@ export const siteSettingsRepository = {
 
   async saveContact(contact: ContactInfo): Promise<void> {
     await setDoc(doc(db, ...CONTACT_DOC), contact);
+    await revalidatePublicSite();
   },
 
   async getWhatsAppDepartments(): Promise<WhatsAppDepartment[] | null> {
@@ -66,6 +72,7 @@ export const siteSettingsRepository = {
 
   async saveWhatsAppDepartments(items: WhatsAppDepartment[]): Promise<void> {
     await setDoc(doc(db, ...WHATSAPP_DEPARTMENTS_DOC), { items });
+    await revalidatePublicSite();
   },
 
   async getAdvantages(): Promise<Advantage[] | null> {
@@ -75,6 +82,7 @@ export const siteSettingsRepository = {
 
   async saveAdvantages(items: Advantage[]): Promise<void> {
     await setDoc(doc(db, ...ADVANTAGES_DOC), { items });
+    await revalidatePublicSite();
   },
 
   async getAchievements(): Promise<Achievement[] | null> {
@@ -84,5 +92,6 @@ export const siteSettingsRepository = {
 
   async saveAchievements(items: Achievement[]): Promise<void> {
     await setDoc(doc(db, ...ACHIEVEMENTS_DOC), { items });
+    await revalidatePublicSite();
   },
 };

@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, getDocs, query, where, setDoc, updateDoc, deleteDoc, FirestoreError } from "firebase/firestore";
 import { db } from "./client";
 import { Testimonial } from "@/lib/data";
+import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
 const COLLECTION = "testimonials";
 
@@ -36,13 +37,16 @@ export const testimonialsRepository = {
 
   async create(id: string, fields: TestimonialFields): Promise<void> {
     await setDoc(doc(db, COLLECTION, id), fields);
+    await revalidatePublicSite();
   },
 
   async update(id: string, updates: Partial<TestimonialFields>): Promise<void> {
     await updateDoc(doc(db, COLLECTION, id), updates);
+    await revalidatePublicSite();
   },
 
   async remove(id: string): Promise<void> {
     await deleteDoc(doc(db, COLLECTION, id));
+    await revalidatePublicSite();
   },
 };

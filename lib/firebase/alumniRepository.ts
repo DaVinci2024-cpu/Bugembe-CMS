@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "./client";
 import { AlumniProfile } from "@/lib/data";
+import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
 const COLLECTION = "alumni";
 
@@ -26,13 +27,16 @@ export const alumniRepository = {
   // the local optimistic-update copy matches what actually gets stored.
   async create(id: string, fields: AlumniProfileFields): Promise<void> {
     await setDoc(doc(db, COLLECTION, id), fields);
+    await revalidatePublicSite();
   },
 
   async update(id: string, updates: Partial<AlumniProfileFields>): Promise<void> {
     await updateDoc(doc(db, COLLECTION, id), updates);
+    await revalidatePublicSite();
   },
 
   async remove(id: string): Promise<void> {
     await deleteDoc(doc(db, COLLECTION, id));
+    await revalidatePublicSite();
   },
 };

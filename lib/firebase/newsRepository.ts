@@ -1,6 +1,7 @@
 import { collection, doc, getDoc, getDocs, query, where, setDoc, updateDoc, deleteDoc, FirestoreError } from "firebase/firestore";
 import { db } from "./client";
 import { NewsArticle } from "@/lib/data";
+import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
 const COLLECTION = "news";
 
@@ -45,13 +46,16 @@ export const newsRepository = {
 
   async create(id: string, fields: NewsArticleFields): Promise<void> {
     await setDoc(doc(db, COLLECTION, id), fields);
+    await revalidatePublicSite(id);
   },
 
   async update(id: string, updates: Partial<NewsArticleFields>): Promise<void> {
     await updateDoc(doc(db, COLLECTION, id), updates);
+    await revalidatePublicSite(id);
   },
 
   async remove(id: string): Promise<void> {
     await deleteDoc(doc(db, COLLECTION, id));
+    await revalidatePublicSite(id);
   },
 };
