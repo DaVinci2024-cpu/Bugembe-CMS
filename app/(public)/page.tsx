@@ -27,7 +27,13 @@ export default async function HomePage() {
       alumniRepository.list(),
     ]);
 
-  const featuredAlumni = alumni.filter((a) => a.featured && a.status === "approved");
+  // Cap at 5 — this is a small homepage highlight reel, not the full
+  // directory (that's what the "View All Alumni" link on this section is
+  // for). Most recent cohort first, matching the Alumni directory page.
+  const featuredAlumni = alumni
+    .filter((a) => a.featured && a.status === "approved")
+    .sort((a, b) => b.graduationYear - a.graduationYear)
+    .slice(0, 5);
 
   return (
     <HomeContent
