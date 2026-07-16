@@ -58,7 +58,7 @@ export function Sidebar() {
   const { user, userDoc, isSuperAdmin, hasPermission, logout } = useAuth();
 
   return (
-    <aside className="min-h-screen w-[240px] shrink-0 bg-[#0c2340] border-r border-white/10 flex flex-col justify-between text-slate-300">
+    <aside className="h-full w-[240px] shrink-0 bg-[#0c2340] border-r border-white/10 flex flex-col justify-between text-slate-300">
       <div className="flex flex-col flex-1 overflow-y-auto">
         <div className="p-4 border-b border-white/10 flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-[#d4af37] flex items-center justify-center text-[#0c2340] shrink-0 font-bold text-sm">
