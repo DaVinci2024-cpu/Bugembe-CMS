@@ -110,7 +110,6 @@ ${newsArticles.map((a) => `- ${a.title} (${a.category}, ${a.date}): ${a.excerpt}
       };
     });
 
-    // Call the model using 'gemini-2.5-flash' as recommended by AI Studio guidelines
     const response = await client.models.generateContent({
       model: "gemini-2.5-flash",
       contents: contents,

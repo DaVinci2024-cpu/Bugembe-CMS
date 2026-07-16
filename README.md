@@ -1,20 +1,14 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# Bugembe Islamic Institute — Website & Admin CMS
 
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/601b5fd2-569d-426b-b6f2-8480c0302087
+Public website and Firebase-backed admin CMS for Bugembe Islamic Institute.
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+2. Copy `.env.example` to `.env.local` and fill in your Firebase, Cloudinary, and site URL values.
 3. Run the app:
    `npm run dev`
+4. Public site: [http://localhost:3000](http://localhost:3000) — Admin panel: [http://localhost:3000/admin](http://localhost:3000/admin)
