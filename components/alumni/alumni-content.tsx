@@ -13,8 +13,9 @@ import {
   Zap,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { communityGroups, AlumniProfile, CommunityGroup } from "@/lib/data";
+import { AlumniProfile, CommunityGroup, AlumniSpotlight } from "@/lib/data";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
+import { ImageUpload } from "@/components/shared/image-upload";
 
 function slugify(value: string) {
   return value
@@ -26,7 +27,13 @@ function slugify(value: string) {
 
 const PAGE_SIZE = 12;
 
-export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProfile[] }) {
+interface AlumniPageContentProps {
+  initialAlumni: AlumniProfile[];
+  spotlight: AlumniSpotlight;
+  communityGroups: CommunityGroup[];
+}
+
+export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }: AlumniPageContentProps) {
   const [alumniList, setAlumniList] = useState<AlumniProfile[]>(initialAlumni);
   const [searchName, setSearchName] = useState("");
   const [filterYear, setFilterYear] = useState("all");
@@ -233,8 +240,8 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
           >
             <div className="relative h-80 lg:h-auto min-h-[350px] overflow-hidden group">
               <Image
-                src="https://picsum.photos/seed/anas/400/400"
-                alt="Sheikh Dr. Anas Lwanga"
+                src={spotlight.photo}
+                alt={spotlight.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 sizes="(max-width: 1024px) 100vw, 33vw"
@@ -243,20 +250,16 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
             </div>
             <div className="lg:col-span-2 p-8 sm:p-12 flex flex-col justify-center space-y-6">
               <span className="bg-[var(--color-primary)] text-[var(--color-accent)] px-3.5 py-1.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider w-max border border-[var(--color-accent)]/20">
-                Academic & Sharia Scholar
+                {spotlight.badge}
               </span>
-              <h4 className="text-2xl font-serif font-bold text-[var(--color-primary)]">Sheikh Dr. Anas Lwanga (Class of 2004)</h4>
-              <p className="text-gray-500 text-xs sm:text-sm leading-relaxed italic">
-                &quot;After Bugembe, I achieved my PhD in Islamic Jurisprudence from Medina. The rigorous double curriculum at the
-                institute made me comfortable in modern boardrooms and religious seminaries. It prepared me to guide Islamic banking
-                policies in Uganda.&quot;
-              </p>
+              <h4 className="text-2xl font-serif font-bold text-[var(--color-primary)]">{spotlight.name}</h4>
+              <p className="text-gray-500 text-xs sm:text-sm leading-relaxed italic">&quot;{spotlight.quote}&quot;</p>
               <div className="border-t border-gray-100 pt-4 text-xs text-gray-400 space-y-1">
                 <p>
-                  <strong>Current Role:</strong> Professor of Islamic Law at Islamic University in Uganda
+                  <strong>Current Role:</strong> {spotlight.currentRole}
                 </p>
                 <p>
-                  <strong>Location:</strong> Mbale, Uganda
+                  <strong>Location:</strong> {spotlight.location}
                 </p>
               </div>
             </div>
@@ -522,6 +525,12 @@ export function AlumniPageContent({ initialAlumni }: { initialAlumni: AlumniProf
                   placeholder="Share a brief overview of your academic and career achievements..."
                   className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all placeholder:text-gray-400"
                 />
+              </div>
+
+              <div className="space-y-1">
+                <label className="block text-gray-600 font-medium">Profile Photo</label>
+                <ImageUpload value={photo} onChange={setPhoto} folder="alumni" />
+                <p className="text-[10px] text-gray-400">Optional — a placeholder photo will be used if you skip this.</p>
               </div>
 
               <button

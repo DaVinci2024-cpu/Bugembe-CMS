@@ -1,6 +1,17 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./client";
-import { Hero, Statistic, Branding, ContactInfo, WhatsAppDepartment, Advantage, Achievement, FounderMessage } from "@/lib/data";
+import {
+  Hero,
+  Statistic,
+  Branding,
+  ContactInfo,
+  WhatsAppDepartment,
+  Advantage,
+  Achievement,
+  FounderMessage,
+  AlumniSpotlight,
+  CommunityGroup,
+} from "@/lib/data";
 import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
 const HERO_DOC = ["siteSettings", "hero"] as const;
@@ -12,6 +23,8 @@ const WHATSAPP_DEPARTMENTS_DOC = ["siteSettings", "whatsappDepartments"] as cons
 const ADVANTAGES_DOC = ["siteSettings", "advantages"] as const;
 const ACHIEVEMENTS_DOC = ["siteSettings", "achievements"] as const;
 const FOUNDER_MESSAGE_DOC = ["siteSettings", "founderMessage"] as const;
+const ALUMNI_SPOTLIGHT_DOC = ["siteSettings", "alumniSpotlight"] as const;
+const COMMUNITY_GROUPS_DOC = ["siteSettings", "communityGroups"] as const;
 
 // Single settings documents, not content lists — no draft/published status,
 // no per-item CRUD. Saving writes straight to the live doc.
@@ -103,6 +116,26 @@ export const siteSettingsRepository = {
 
   async saveFounderMessage(founder: FounderMessage): Promise<void> {
     await setDoc(doc(db, ...FOUNDER_MESSAGE_DOC), founder);
+    await revalidatePublicSite();
+  },
+
+  async getAlumniSpotlight(): Promise<AlumniSpotlight | null> {
+    const snap = await getDoc(doc(db, ...ALUMNI_SPOTLIGHT_DOC));
+    return snap.exists() ? (snap.data() as AlumniSpotlight) : null;
+  },
+
+  async saveAlumniSpotlight(spotlight: AlumniSpotlight): Promise<void> {
+    await setDoc(doc(db, ...ALUMNI_SPOTLIGHT_DOC), spotlight);
+    await revalidatePublicSite();
+  },
+
+  async getCommunityGroups(): Promise<CommunityGroup[] | null> {
+    const snap = await getDoc(doc(db, ...COMMUNITY_GROUPS_DOC));
+    return snap.exists() ? (snap.data().items as CommunityGroup[]) : null;
+  },
+
+  async saveCommunityGroups(items: CommunityGroup[]): Promise<void> {
+    await setDoc(doc(db, ...COMMUNITY_GROUPS_DOC), { items });
     await revalidatePublicSite();
   },
 };

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { FounderMessage, defaultFounderMessage } from "@/lib/data";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
-import { ImageUpload } from "@/components/admin/image-upload";
+import { ImageUpload } from "@/components/shared/image-upload";
 import { ICON_OPTIONS } from "@/lib/icon-options";
 
 const inputClass =

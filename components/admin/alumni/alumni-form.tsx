@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AlumniProfile } from "@/lib/data";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
-import { ImageUpload } from "@/components/admin/image-upload";
+import { ImageUpload } from "@/components/shared/image-upload";
 
 function slugify(value: string) {
   return value

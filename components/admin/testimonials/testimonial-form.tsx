@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Testimonial } from "@/lib/data";
 import { testimonialsRepository } from "@/lib/firebase/testimonialsRepository";
-import { ImageUpload } from "@/components/admin/image-upload";
+import { ImageUpload } from "@/components/shared/image-upload";
 
 const ROLES: Testimonial["role"][] = ["Parent", "Student", "Alumnus", "Teacher"];
 

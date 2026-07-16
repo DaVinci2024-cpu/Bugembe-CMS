@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { NewsArticle } from "@/lib/data";
 import { newsRepository } from "@/lib/firebase/newsRepository";
-import { ImageUpload } from "@/components/admin/image-upload";
+import { ImageUpload } from "@/components/shared/image-upload";
 
 const CATEGORIES: NewsArticle["category"][] = [
   "Announcements",

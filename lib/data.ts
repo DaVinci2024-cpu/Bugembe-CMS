@@ -110,6 +110,15 @@ export interface CommunityGroup {
   };
 }
 
+export interface AlumniSpotlight {
+  photo: string;
+  badge: string; // e.g. "Academic & Sharia Scholar"
+  name: string; // e.g. "Sheikh Dr. Anas Lwanga (Class of 2004)"
+  quote: string;
+  currentRole: string;
+  location: string;
+}
+
 export interface ContactMessage {
   id: string;
   fullName: string;
@@ -763,7 +772,17 @@ export const initialAlumniProfiles: AlumniProfile[] = [
   }
 ];
 
-export const communityGroups: CommunityGroup[] = [
+export const defaultAlumniSpotlight: AlumniSpotlight = {
+  photo: "https://picsum.photos/seed/anas/400/400",
+  badge: "Academic & Sharia Scholar",
+  name: "Sheikh Dr. Anas Lwanga (Class of 2004)",
+  quote:
+    "After Bugembe, I achieved my PhD in Islamic Jurisprudence from Medina. The rigorous double curriculum at the institute made me comfortable in modern boardrooms and religious seminaries. It prepared me to guide Islamic banking policies in Uganda.",
+  currentRole: "Professor of Islamic Law at Islamic University in Uganda",
+  location: "Mbale, Uganda",
+};
+
+export const defaultCommunityGroups: CommunityGroup[] = [
   {
     id: "comm-1",
     name: "Main Alumni Community",

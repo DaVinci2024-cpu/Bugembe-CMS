@@ -276,6 +276,17 @@ service cloud.firestore {
           && incoming().name is string
           && incoming().title is string
           && incoming().badgeText is string)
+        ||
+        (docId == 'alumniSpotlight' &&
+          incoming().keys().hasAll(['photo', 'badge', 'name', 'quote', 'currentRole', 'location'])
+          && incoming().photo is string
+          && incoming().badge is string
+          && incoming().name is string
+          && incoming().quote is string
+          && incoming().currentRole is string
+          && incoming().location is string)
+        ||
+        (docId == 'communityGroups' && incoming().keys().hasAll(['items']) && incoming().items is list)
       );
       allow delete: if false;
     }

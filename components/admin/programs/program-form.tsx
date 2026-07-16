@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Program } from "@/lib/data";
 import { programsRepository } from "@/lib/firebase/programsRepository";
-import { ImageUpload } from "@/components/admin/image-upload";
+import { ImageUpload } from "@/components/shared/image-upload";
 
 const LEVELS: Program["level"][] = ["Nursery", "Primary", "Secondary", "Islamic Studies", "Boarding"];
 

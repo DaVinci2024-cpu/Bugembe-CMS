@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
+import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
 import { AlumniPageContent } from "@/components/alumni/alumni-content";
+import { defaultAlumniSpotlight, defaultCommunityGroups } from "@/lib/data";
 
 // Refresh from Firestore at most once an hour — keeps this off the
 // per-visitor read path so we stay well within the Spark (free) plan quota.
@@ -20,6 +22,17 @@ export const metadata: Metadata = {
 };
 
 export default async function AlumniPage() {
-  const alumni = await alumniRepository.list();
-  return <AlumniPageContent initialAlumni={alumni} />;
+  const [alumni, spotlight, communityGroups] = await Promise.all([
+    alumniRepository.list(),
+    siteSettingsRepository.getAlumniSpotlight(),
+    siteSettingsRepository.getCommunityGroups(),
+  ]);
+
+  return (
+    <AlumniPageContent
+      initialAlumni={alumni}
+      spotlight={spotlight ?? defaultAlumniSpotlight}
+      communityGroups={communityGroups ?? defaultCommunityGroups}
+    />
+  );
 }

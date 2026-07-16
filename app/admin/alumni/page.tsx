@@ -7,8 +7,18 @@ import { Plus, Pencil, Trash2, UploadCloud, Check, Star, Search, StarOff } from 
 import { ModuleGate } from "@/components/admin/module-gate";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
 import { initialAlumniProfiles as staticAlumni, AlumniProfile } from "@/lib/data";
+import { SpotlightForm } from "@/components/admin/alumni/spotlight-form";
+import { CommunityGroupsForm } from "@/components/admin/alumni/community-groups-form";
 
 const HOMEPAGE_CAROUSEL_LIMIT = 5;
+
+const PAGE_TABS = [
+  { id: "directory", label: "Directory" },
+  { id: "spotlight", label: "Alumni Spotlight" },
+  { id: "groups", label: "Community Groups" },
+] as const;
+
+type PageTabId = (typeof PAGE_TABS)[number]["id"];
 
 function AlumniList() {
   const [profiles, setProfiles] = useState<AlumniProfile[]>([]);
@@ -330,10 +340,36 @@ function AlumniList() {
   );
 }
 
+function AdminAlumniContent() {
+  const [pageTab, setPageTab] = useState<PageTabId>("directory");
+
+  return (
+    <div className="space-y-4">
+      <div className="flex border-b border-slate-200 gap-1">
+        {PAGE_TABS.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setPageTab(t.id)}
+            className={`pb-2.5 px-3 text-xs font-bold border-b-2 cursor-pointer ${
+              pageTab === t.id ? "border-[#0c2340] text-[#0c2340]" : "border-transparent text-slate-400 hover:text-slate-600"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {pageTab === "directory" && <AlumniList />}
+      {pageTab === "spotlight" && <SpotlightForm />}
+      {pageTab === "groups" && <CommunityGroupsForm />}
+    </div>
+  );
+}
+
 export default function AdminAlumniPage() {
   return (
     <ModuleGate permission="alumni">
-      <AlumniList />
+      <AdminAlumniContent />
     </ModuleGate>
   );
 }

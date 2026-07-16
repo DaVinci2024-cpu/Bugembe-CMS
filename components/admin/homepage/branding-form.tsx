@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Branding, defaultBranding } from "@/lib/data";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
-import { ImageUpload } from "@/components/admin/image-upload";
+import { ImageUpload } from "@/components/shared/image-upload";
 
 const inputClass =
   "w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-[#0c2340]/20 focus:border-[#0c2340] outline-none";
