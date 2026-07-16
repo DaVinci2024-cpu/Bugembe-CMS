@@ -161,6 +161,17 @@ export interface Advantage {
   color: string; // key into ADVANTAGE_COLORS
 }
 
+export interface FounderMessage {
+  photo: string;
+  icon: string; // small accent icon shown by the section label
+  eyebrow: string; // small label above the heading, e.g. "The Spiritual Visionary"
+  heading: string; // e.g. "A Message from Our Founder"
+  message: string; // the quoted message body
+  name: string;
+  title: string; // e.g. "Founder & First Principal (Est. 1974)"
+  badgeText: string; // small seal text, e.g. "50 YRS"
+}
+
 // ==========================================
 // SEED / STATIC DATA (CMS Ready Architecture)
 // ==========================================
@@ -685,6 +696,18 @@ export const defaultAdvantages: Advantage[] = [
     ],
   },
 ];
+
+export const defaultFounderMessage: FounderMessage = {
+  photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+  icon: "Quote",
+  eyebrow: "The Spiritual Visionary",
+  heading: "A Message from Our Founder",
+  message:
+    "In 1974, amidst the hills of Jinja, we laid a single brick with a profound prayer: that this institute would become a sanctuary where divine revelation and modern academic sciences flourish hand-in-hand. Over fifty years later, our graduates stand tall across Uganda and the globe, carrying the noble legacy of ethical leadership, intellectual rigor, and spiritual integrity.",
+  name: "Sheikh Al-Hajj Jamil Al-Siddiqi",
+  title: "Founder & First Principal (Est. 1974)",
+  badgeText: "50 YRS",
+};
 
 export const initialAlumniProfiles: AlumniProfile[] = [
   {

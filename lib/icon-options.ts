@@ -13,6 +13,7 @@ import {
   Compass,
   DollarSign,
   MessageSquare,
+  Quote,
   LucideIcon,
 } from "lucide-react";
 
@@ -34,6 +35,7 @@ export const ICON_OPTIONS: { name: string; icon: LucideIcon }[] = [
   { name: "Compass", icon: Compass },
   { name: "DollarSign", icon: DollarSign },
   { name: "MessageSquare", icon: MessageSquare },
+  { name: "Quote", icon: Quote },
 ];
 
 const ICON_MAP: Record<string, LucideIcon> = Object.fromEntries(ICON_OPTIONS.map((o) => [o.name, o.icon]));

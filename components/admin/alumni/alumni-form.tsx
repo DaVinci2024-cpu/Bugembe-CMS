@@ -166,7 +166,7 @@ export function AlumniForm({ existing }: { existing?: AlumniProfile }) {
 
       <label className="flex items-center gap-2 text-sm text-slate-700">
         <input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} className="cursor-pointer" />
-        Feature this profile
+        Feature this profile <span className="text-slate-400 font-normal">(shows in the homepage Alumni carousel)</span>
       </label>
 
       {error && <div className="text-rose-700 text-xs bg-rose-50 border border-rose-200 rounded-lg p-3">{error}</div>}

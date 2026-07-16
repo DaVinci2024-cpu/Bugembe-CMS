@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "./client";
-import { Hero, Statistic, Branding, ContactInfo, WhatsAppDepartment, Advantage, Achievement } from "@/lib/data";
+import { Hero, Statistic, Branding, ContactInfo, WhatsAppDepartment, Advantage, Achievement, FounderMessage } from "@/lib/data";
 import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
 const HERO_DOC = ["siteSettings", "hero"] as const;
@@ -11,6 +11,7 @@ const CONTACT_DOC = ["siteSettings", "contact"] as const;
 const WHATSAPP_DEPARTMENTS_DOC = ["siteSettings", "whatsappDepartments"] as const;
 const ADVANTAGES_DOC = ["siteSettings", "advantages"] as const;
 const ACHIEVEMENTS_DOC = ["siteSettings", "achievements"] as const;
+const FOUNDER_MESSAGE_DOC = ["siteSettings", "founderMessage"] as const;
 
 // Single settings documents, not content lists — no draft/published status,
 // no per-item CRUD. Saving writes straight to the live doc.
@@ -92,6 +93,16 @@ export const siteSettingsRepository = {
 
   async saveAchievements(items: Achievement[]): Promise<void> {
     await setDoc(doc(db, ...ACHIEVEMENTS_DOC), { items });
+    await revalidatePublicSite();
+  },
+
+  async getFounderMessage(): Promise<FounderMessage | null> {
+    const snap = await getDoc(doc(db, ...FOUNDER_MESSAGE_DOC));
+    return snap.exists() ? (snap.data() as FounderMessage) : null;
+  },
+
+  async saveFounderMessage(founder: FounderMessage): Promise<void> {
+    await setDoc(doc(db, ...FOUNDER_MESSAGE_DOC), founder);
     await revalidatePublicSite();
   },
 };

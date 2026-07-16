@@ -262,6 +262,17 @@ service cloud.firestore {
         (docId == 'advantages' && incoming().keys().hasAll(['items']) && incoming().items is list)
         ||
         (docId == 'achievements' && incoming().keys().hasAll(['items']) && incoming().items is list)
+        ||
+        (docId == 'founderMessage' &&
+          incoming().keys().hasAll(['photo', 'icon', 'eyebrow', 'heading', 'message', 'name', 'title', 'badgeText'])
+          && incoming().photo is string
+          && incoming().icon is string
+          && incoming().eyebrow is string
+          && incoming().heading is string
+          && incoming().message is string
+          && incoming().name is string
+          && incoming().title is string
+          && incoming().badgeText is string)
       );
       allow delete: if false;
     }

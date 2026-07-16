@@ -21,65 +21,25 @@ import {
   Statistic,
   Advantage,
   Achievement,
+  Branding,
+  FounderMessage,
+  AlumniProfile,
 } from "@/lib/data";
 import { TestimonialsGrid } from "@/components/testimonials/testimonials-grid";
 import { getIcon, getCardColor } from "@/lib/icon-options";
 
-const alumniProfiles = [
-  {
-    name: "Dr. Sulaiman Kibirige",
-    role: "Chief Pediatric Surgeon",
-    org: "Mulago National Hospital",
-    classYear: "Class of 1991",
-    quote: "Bugembe instilled in me the discipline of clinical excellence alongside deep spiritual humility.",
-    image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=300",
-  },
-  {
-    name: "Sister Maryam Nakato",
-    role: "Senior Software Engineer",
-    org: "Kampala FinTech Hub",
-    classYear: "Class of 2012",
-    quote: "The programming lab at Bugembe was where my love for computer sciences and logic began.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
-  },
-  {
-    name: "Sheikh Dr. Anas Lubega",
-    role: "Director of Theology",
-    org: "Islamic University in Uganda",
-    classYear: "Class of 1988",
-    quote: "Our studies in Arabic syntax and Tafsir prepared us for global academic dialogue with confidence.",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300",
-  },
-  {
-    name: "Hon. Yusuf Lule Sali",
-    role: "Diplomatic Envoy",
-    org: "East African Community",
-    classYear: "Class of 1985",
-    quote: "Negotiation, ethics, and leadership are practical traits we practiced daily on the Bugembe council.",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300",
-  },
-  {
-    name: "Dr. Aisha Namukwaya",
-    role: "Senior Agricultural Specialist",
-    org: "NARO Uganda",
-    classYear: "Class of 2004",
-    quote: "The focus on practical biology and organic farming on campus shaped my research career.",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300",
-  },
-];
-
-function AlumniScrollSection() {
+function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = React.useState(false);
   const [isDragging, setIsDragging] = React.useState(false);
   const isInteractingRef = React.useRef(false);
   const interactionTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
-  
+
   const dragStartXRef = React.useRef(0);
   const dragScrollLeftRef = React.useRef(0);
 
   // Triple the list to create a seamless infinite scrolling sequence
-  const tripledProfiles = [...alumniProfiles, ...alumniProfiles, ...alumniProfiles];
+  const tripledProfiles = [...profiles, ...profiles, ...profiles];
 
   // Helper to pause auto-scroll during/after user interaction (clicks, drags, touch)
   const triggerInteractionPause = () => {
@@ -135,6 +95,8 @@ function AlumniScrollSection() {
       }
     };
   }, [isPaused, isDragging]);
+
+  if (profiles.length === 0) return null;
 
   const scroll = (direction: "left" | "right") => {
     triggerInteractionPause();
@@ -271,16 +233,16 @@ function AlumniScrollSection() {
               >
                 <div>
                   <div className="text-amber-500/30 text-4xl font-serif leading-none mb-3 font-bold select-none">“</div>
-                  <p className="text-gray-300 text-xs sm:text-sm italic leading-relaxed mb-6 font-serif">
-                    {alumnus.quote}
+                  <p className="text-gray-300 text-xs sm:text-sm italic leading-relaxed mb-6 font-serif line-clamp-4">
+                    {alumnus.bio}
                   </p>
                 </div>
 
                 <div className="flex items-center space-x-4 border-t border-white/10 pt-4">
                   <div className="relative w-11 h-11 rounded-full overflow-hidden border-2 border-amber-500/30 shrink-0">
                     <Image
-                      src={alumnus.image}
-                      alt={alumnus.name}
+                      src={alumnus.photo}
+                      alt={alumnus.fullName}
                       fill
                       className="object-cover pointer-events-none"
                       sizes="44px"
@@ -288,10 +250,10 @@ function AlumniScrollSection() {
                     />
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-xs sm:text-sm font-bold text-white truncate">{alumnus.name}</h4>
-                    <p className="text-[9px] sm:text-[10px] text-amber-400 font-mono tracking-wider">{alumnus.classYear}</p>
+                    <h4 className="text-xs sm:text-sm font-bold text-white truncate">{alumnus.fullName}</h4>
+                    <p className="text-[9px] sm:text-[10px] text-amber-400 font-mono tracking-wider">Class of {alumnus.graduationYear}</p>
                     <p className="text-[9px] sm:text-[10px] text-gray-400 truncate mt-0.5">
-                      {alumnus.role} • <span className="font-medium text-gray-300">{alumnus.org}</span>
+                      {alumnus.profession} • <span className="font-medium text-gray-300">{alumnus.organization}</span>
                     </p>
                   </div>
                 </div>
@@ -324,6 +286,9 @@ interface HomeContentProps {
   statistics: Statistic[];
   advantages: Advantage[];
   achievements: Achievement[];
+  branding: Branding;
+  founder: FounderMessage;
+  featuredAlumni: AlumniProfile[];
 }
 
 export function HomeContent({
@@ -335,6 +300,9 @@ export function HomeContent({
   statistics,
   advantages,
   achievements,
+  branding,
+  founder,
+  featuredAlumni,
 }: HomeContentProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -397,12 +365,13 @@ export function HomeContent({
           >
             <div className="w-20 h-20 relative rounded-full bg-[#0c2340] border-2 border-[#d4af37]/40 p-1.5 shadow-2xl overflow-hidden mb-1 hover:scale-105 transition-transform duration-300">
               <Image
-                src={logoImg}
-                alt="Bugembe Islamic Institute Emblem"
+                src={branding.logoUrl || logoImg}
+                alt={`${branding.siteName} Emblem`}
                 fill
                 className="object-cover rounded-full"
                 sizes="80px"
                 referrerPolicy="no-referrer"
+                unoptimized={!!branding.logoUrl}
               />
             </div>
           </motion.div>
@@ -599,25 +568,21 @@ export function HomeContent({
         <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/[0.02] rounded-full blur-3xl pointer-events-none" />
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
+
             {/* Left Column: Founder's Image (Single) */}
             <div className="lg:col-span-5 space-y-4">
               <div className="relative w-full aspect-[4/5] max-w-[340px] mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white/90 ring-1 ring-gray-200">
                 <Image
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800"
-                  alt="Founder Sheikh Al-Hajj Jamil Al-Siddiqi"
+                  src={founder.photo}
+                  alt={founder.name}
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 340px"
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-5 text-white">
-                  <p className="text-[10px] text-amber-400 font-mono uppercase tracking-wider">
-                    First Principal
-                  </p>
-                  <p className="font-serif text-sm font-semibold">
-                    Sheikh Al-Hajj Jamil Al-Siddiqi
-                  </p>
+                  <p className="text-[10px] text-amber-400 font-mono uppercase tracking-wider">{founder.eyebrow}</p>
+                  <p className="font-serif text-sm font-semibold">{founder.name}</p>
                 </div>
               </div>
             </div>
@@ -625,35 +590,28 @@ export function HomeContent({
             {/* Right Column: Message & Signature */}
             <div className="lg:col-span-7 space-y-6">
               <div className="space-y-2">
-                <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold">
-                  The Spiritual Visionary
+                <p className="text-xs text-[#d4af37] font-mono uppercase tracking-widest font-bold flex items-center gap-2">
+                  {React.createElement(getIcon(founder.icon), { className: "h-3.5 w-3.5" })}
+                  {founder.eyebrow}
                 </p>
-                <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">
-                  A Message from Our Founder
-                </h3>
+                <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[#0c2340]">{founder.heading}</h3>
                 <div className="w-12 h-1 bg-[#d4af37] rounded-full" />
               </div>
 
               <div className="relative">
                 <span className="absolute -top-10 -left-6 text-7xl font-serif text-amber-500/10 select-none">“</span>
-                <p className="text-gray-600 text-sm sm:text-base leading-relaxed italic font-serif relative z-10">
-                  In 1974, amidst the hills of Jinja, we laid a single brick with a profound prayer: that this institute would become a sanctuary where divine revelation and modern academic sciences flourish hand-in-hand. Over fifty years later, our graduates stand tall across Uganda and the globe, carrying the noble legacy of ethical leadership, intellectual rigor, and spiritual integrity.
-                </p>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed italic font-serif relative z-10">{founder.message}</p>
               </div>
 
               <div className="border-t border-gray-200/80 pt-6 flex items-center justify-between">
                 <div>
-                  <h4 className="text-base font-serif font-bold text-[#0c2340]">
-                    Sheikh Al-Hajj Jamil Al-Siddiqi
-                  </h4>
-                  <p className="text-xs text-[#d4af37] font-mono tracking-wider mt-0.5">
-                    Founder & First Principal (Est. 1974)
-                  </p>
+                  <h4 className="text-base font-serif font-bold text-[#0c2340]">{founder.name}</h4>
+                  <p className="text-xs text-[#d4af37] font-mono tracking-wider mt-0.5">{founder.title}</p>
                 </div>
-                
+
                 {/* Vintage seal ornament */}
                 <div className="h-12 w-12 rounded-full border-2 border-dashed border-[#d4af37]/40 flex items-center justify-center text-[#d4af37] text-[10px] font-mono font-bold rotate-12">
-                  50 YRS
+                  {founder.badgeText}
                 </div>
               </div>
             </div>
@@ -663,7 +621,7 @@ export function HomeContent({
       </section>
 
       {/* ALUMNI SCROLL SECTION */}
-      <AlumniScrollSection />
+      <AlumniScrollSection profiles={featuredAlumni} />
 
       {/* 4. ACADEMIC PROGRAMS SECTION */}
       <section className="bg-[#0c2340] text-white py-20" id="programs-section">
