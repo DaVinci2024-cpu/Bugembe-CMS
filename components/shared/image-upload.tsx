@@ -5,7 +5,7 @@ import Image from "next/image";
 import { UploadCloud, X } from "lucide-react";
 import { uploadImage } from "@/lib/cloudinary";
 
-const MAX_BYTES = 5 * 1024 * 1024;
+const MAX_BYTES = 10 * 1024 * 1024;
 
 export function ImageUpload({
   value,
@@ -27,7 +27,7 @@ export function ImageUpload({
       return;
     }
     if (file.size > MAX_BYTES) {
-      setError("Image is too large — please keep it under 5MB.");
+      setError("Image is too large — please keep it under 10MB.");
       return;
     }
     setUploading(true);

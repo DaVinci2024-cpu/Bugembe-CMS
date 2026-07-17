@@ -160,6 +160,7 @@ function UsersList() {
             ) : filteredUsers.length === 0 ? (
               <div className="p-10 text-center text-xs text-slate-500">No users match this filter.</div>
             ) : (
+              <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200 uppercase font-bold tracking-wider text-slate-500 text-[10.5px]">
@@ -212,6 +213,7 @@ function UsersList() {
                   })}
                 </tbody>
               </table>
+              </div>
             )}
           </div>
         </>
@@ -224,6 +226,7 @@ function UsersList() {
           ) : logs.length === 0 ? (
             <div className="p-10 text-center text-xs text-slate-500">No admin actions logged yet.</div>
           ) : (
+            <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-200 uppercase font-bold tracking-wider text-slate-500 text-[10.5px]">
@@ -250,6 +253,7 @@ function UsersList() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       )}

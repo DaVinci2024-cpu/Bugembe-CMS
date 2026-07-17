@@ -101,6 +101,7 @@ function TestimonialsList() {
             </button>
           </div>
         ) : (
+          <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 uppercase font-bold tracking-wider text-slate-500 text-[10.5px]">
@@ -162,6 +163,7 @@ function TestimonialsList() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
     </div>
