@@ -161,8 +161,9 @@ export default function Footer({ branding, contact }: { branding: Branding; cont
         </div>
       </div>
 
-      {/* Bottom Legal Panel */}
-      <div className="bg-[#070d18] py-6 text-xs text-gray-500 border-t border-white/5">
+      {/* Bottom Legal Panel — extra bottom padding on mobile so the fixed
+          floating chat/WhatsApp launcher never sits on top of Staff Login */}
+      <div className="bg-[#070d18] pt-6 pb-24 sm:pb-6 text-xs text-gray-500 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p>© {currentYear} Bugembe Islamic Institute. All Rights Reserved.</p>
           <div className="flex items-center space-x-6">
