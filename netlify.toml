@@ -1,5 +1,10 @@
 [build]
   command = "npm run build"
+  # Must differ from the base directory or the Next.js Runtime plugin
+  # refuses to run ("Your publish directory cannot be the same as the base
+  # directory of your site"). The plugin reads Next's own build output from
+  # here and generates its Netlify Functions/edge bundles alongside it.
+  publish = ".next"
 
 # Without this, an explicit [build] command switches Netlify into "custom
 # build" mode and skips auto-attaching the Next.js Runtime — the plugin that
