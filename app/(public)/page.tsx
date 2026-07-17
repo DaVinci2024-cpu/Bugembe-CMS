@@ -14,6 +14,7 @@ import {
   defaultFounderMessage,
   defaultHighlights,
   resolveHomeSectionOrder,
+  defaultContactInfo,
 } from "@/lib/data";
 
 // Refresh from Firestore at most once an hour — keeps this off the
@@ -35,6 +36,7 @@ export default async function HomePage() {
     alumni,
     highlights,
     sectionOrder,
+    contact,
   ] = await Promise.all([
     programsRepository.listPublished(),
     newsRepository.listPublished(),
@@ -49,6 +51,7 @@ export default async function HomePage() {
     alumniRepository.list(),
     siteSettingsRepository.getHighlights(),
     siteSettingsRepository.getSectionOrder(),
+    siteSettingsRepository.getContact(),
   ]);
 
   // Cap at 5 — this is a small homepage highlight reel, not the full
@@ -74,6 +77,7 @@ export default async function HomePage() {
       featuredAlumni={featuredAlumni}
       highlights={highlights ?? defaultHighlights}
       sectionOrder={resolveHomeSectionOrder(sectionOrder)}
+      contact={contact ?? defaultContactInfo}
     />
   );
 }

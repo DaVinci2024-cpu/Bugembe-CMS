@@ -27,6 +27,7 @@ import {
   Highlight,
   HomeSectionKey,
   resolveHomeSectionOrder,
+  ContactInfo,
 } from "@/lib/data";
 import { TestimonialsGrid } from "@/components/testimonials/testimonials-grid";
 import { getIcon, getCardColor } from "@/lib/icon-options";
@@ -375,6 +376,7 @@ interface HomeContentProps {
   featuredAlumni: AlumniProfile[];
   highlights: Highlight[];
   sectionOrder: HomeSectionKey[];
+  contact: ContactInfo;
 }
 
 export function HomeContent({
@@ -391,8 +393,8 @@ export function HomeContent({
   featuredAlumni,
   highlights,
   sectionOrder,
+  contact,
 }: HomeContentProps) {
-  const [activeTab, setActiveTab] = useState<string>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
 
@@ -1041,7 +1043,7 @@ export function HomeContent({
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a
-              href="https://wa.me/256701000000?text=Assalamu%20Alaikum.%20I%20am%20inquiring%20about%20admissions%20at%20Bugembe%20Islamic%20Institute."
+              href={`https://wa.me/${contact.whatsappNumber}?text=Assalamu%20Alaikum.%20I%20am%20inquiring%20about%20admissions%20at%20Bugembe%20Islamic%20Institute.`}
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs tracking-wider uppercase rounded shadow-lg transition-colors flex items-center justify-center space-x-2"
