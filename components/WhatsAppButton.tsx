@@ -8,8 +8,7 @@ import {
   Check,
   ChevronRight,
   Minus,
-  Maximize2,
-  Minimize2
+  Maximize2
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { WhatsAppDepartment } from "@/lib/data";
@@ -22,8 +21,13 @@ const quickTemplates = [
   "I would like to schedule a physical visit to tour the school campus.",
 ];
 
-export default function WhatsAppButton({ departments }: { departments: WhatsAppDepartment[] }) {
-  const [isOpen, setIsOpen] = useState(false);
+interface WhatsAppButtonProps {
+  departments: WhatsAppDepartment[];
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export default function WhatsAppButton({ departments, open: isOpen, onOpenChange }: WhatsAppButtonProps) {
   const [isMinimized, setIsMinimized] = useState(false);
   const [selectedDeptId, setSelectedDeptId] = useState(() => departments[0]?.id ?? "");
   const [customMessage, setCustomMessage] = useState("");
@@ -46,33 +50,6 @@ export default function WhatsAppButton({ departments }: { departments: WhatsAppD
 
   return (
     <>
-      {/* Floating Trigger Button on bottom-right (Only visible when main dialog is closed) */}
-      <AnimatePresence>
-        {!isOpen && (
-          <motion.div
-            initial={{ scale: 0, opacity: 0, y: 20 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0, opacity: 0, y: 20 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="fixed bottom-6 right-6 z-40"
-            id="whatsapp-floating-trigger"
-          >
-            <button
-              onClick={() => {
-                setIsOpen(true);
-                setIsMinimized(false);
-              }}
-              className="flex items-center space-x-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 sm:px-5 py-3 rounded-full shadow-lg shadow-emerald-900/30 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-              aria-label="Open WhatsApp Support Desk"
-            >
-              <MessageSquare className="h-4 w-4 fill-white text-white shrink-0 animate-pulse" />
-              <span className="text-xs font-semibold tracking-wider uppercase hidden sm:inline">WhatsApp Chat</span>
-              <span className="text-xs font-semibold tracking-wider uppercase sm:hidden">WhatsApp</span>
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Slide-out Interactive Dialog */}
       <AnimatePresence>
         {isOpen && (
@@ -125,7 +102,10 @@ export default function WhatsAppButton({ departments }: { departments: WhatsAppD
                   )}
                 </button>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    onOpenChange(false);
+                    setIsMinimized(false);
+                  }}
                   className="p-1.5 rounded-lg text-gray-300 hover:text-white hover:bg-white/10 transition-colors"
                   aria-label="Close WhatsApp Desk"
                 >

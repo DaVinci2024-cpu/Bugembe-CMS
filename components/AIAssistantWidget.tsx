@@ -23,8 +23,12 @@ function makeUniqueId(prefix: string): string {
   return `${prefix}-${globalMsgIdCounter}`;
 }
 
-export default function AIAssistantWidget() {
-  const [isOpen, setIsOpen] = useState(false);
+interface AIAssistantWidgetProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export default function AIAssistantWidget({ open: isOpen, onOpenChange }: AIAssistantWidgetProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -98,25 +102,6 @@ export default function AIAssistantWidget() {
 
   return (
     <>
-      {/* Floating Trigger Button */}
-      <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1.5, type: "spring", stiffness: 260, damping: 20 }}
-        className="fixed bottom-[76px] right-6 z-40"
-        id="ai-floating-trigger"
-      >
-        <button
-          onClick={() => setIsOpen(true)}
-          className="flex items-center space-x-2 bg-gradient-to-r from-[var(--color-accent)] to-amber-600 hover:from-amber-500 hover:to-amber-600 text-[var(--color-primary)] font-bold px-4 sm:px-5 py-3 rounded-full shadow-lg shadow-amber-900/20 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-          aria-label="Open AI counselor"
-        >
-          <Sparkles className="h-4 w-4 animate-pulse text-[var(--color-primary)] shrink-0" />
-          <span className="text-xs font-semibold tracking-wider uppercase hidden sm:inline">Ask Al-Aleem (AI)</span>
-          <span className="text-xs font-semibold tracking-wider uppercase sm:hidden">Ask AI</span>
-        </button>
-      </motion.div>
-
       {/* Slide-out Chat Interface */}
       <AnimatePresence>
         {isOpen && (
@@ -140,7 +125,7 @@ export default function AIAssistantWidget() {
                 </div>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => onOpenChange(false)}
                 className="p-1 rounded-full text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
               >
                 <X className="h-5 w-5" />

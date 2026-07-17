@@ -1,7 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import WhatsAppButton from "@/components/WhatsAppButton";
-import AIAssistantWidget from "@/components/AIAssistantWidget";
+import FloatingWidgets from "@/components/FloatingWidgets";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
 import { defaultBranding, defaultHeaderAnnouncements, defaultContactInfo, defaultWhatsAppDepartments } from "@/lib/data";
 
@@ -40,8 +39,7 @@ export default async function PublicLayout({ children }: { children: React.React
       <Navbar branding={resolvedBranding} announcements={resolvedAnnouncements} contact={resolvedContact} />
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
       <Footer branding={resolvedBranding} contact={resolvedContact} />
-      <WhatsAppButton departments={resolvedWhatsAppDepartments} />
-      <AIAssistantWidget />
+      <FloatingWidgets departments={resolvedWhatsAppDepartments} />
     </div>
   );
 }
