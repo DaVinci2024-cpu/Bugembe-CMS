@@ -185,6 +185,68 @@ export interface FounderMessage {
   badgeText: string; // small seal text, e.g. "50 YRS"
 }
 
+export interface Highlight {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  date: string; // free-text badge, e.g. "Term 2, 2026" — not used for sorting
+  link: string; // optional CTA link; blank hides the button
+  linkText: string;
+}
+
+// The set of homepage content blocks the admin can reorder. The hero banner
+// and the closing admissions CTA are intentionally excluded — they anchor
+// the top and bottom of the page and aren't part of the reorderable list.
+export type HomeSectionKey =
+  | "statistics"
+  | "highlights"
+  | "advantages"
+  | "founder"
+  | "alumni"
+  | "programs"
+  | "gallery"
+  | "achievements"
+  | "testimonials"
+  | "news";
+
+export const HOME_SECTION_KEYS: HomeSectionKey[] = [
+  "statistics",
+  "highlights",
+  "advantages",
+  "founder",
+  "alumni",
+  "programs",
+  "gallery",
+  "achievements",
+  "testimonials",
+  "news",
+];
+
+export const HOME_SECTION_LABELS: Record<HomeSectionKey, string> = {
+  statistics: "Trust Statistics",
+  highlights: "Highlights & Announcements",
+  advantages: "The Bugembe Advantage",
+  founder: "Founder's Message",
+  alumni: "Alumni Network",
+  programs: "Academic Programs",
+  gallery: "Campus Life Gallery",
+  achievements: "Achievements & Results",
+  testimonials: "Testimonials",
+  news: "Latest News",
+};
+
+export const defaultSectionOrder: HomeSectionKey[] = [...HOME_SECTION_KEYS];
+
+// Merges a saved order with the canonical key list — drops any stale/unknown
+// keys and appends any newly-added section keys the saved order predates, so
+// the homepage never silently drops a section after a code update.
+export function resolveHomeSectionOrder(saved: HomeSectionKey[] | null | undefined): HomeSectionKey[] {
+  const valid = (saved ?? []).filter((key): key is HomeSectionKey => (HOME_SECTION_KEYS as string[]).includes(key));
+  const missing = HOME_SECTION_KEYS.filter((key) => !valid.includes(key));
+  return [...valid, ...missing];
+}
+
 // ==========================================
 // SEED / STATIC DATA (CMS Ready Architecture)
 // ==========================================
@@ -198,6 +260,10 @@ export const heroContent: Hero = {
   ctaSecondaryText: "Explore Academics",
   ctaSecondaryLink: "/academics",
 };
+
+// Empty by default — a brand-new feature with nothing to show until the
+// admin adds one; the homepage section hides itself when this is empty.
+export const defaultHighlights: Highlight[] = [];
 
 export const trustStatistics: Statistic[] = [
   {

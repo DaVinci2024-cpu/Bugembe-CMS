@@ -11,6 +11,8 @@ import {
   FounderMessage,
   AlumniSpotlight,
   CommunityGroup,
+  Highlight,
+  HomeSectionKey,
 } from "@/lib/data";
 import { revalidatePublicSite } from "@/lib/actions/revalidate";
 
@@ -25,6 +27,8 @@ const ACHIEVEMENTS_DOC = ["siteSettings", "achievements"] as const;
 const FOUNDER_MESSAGE_DOC = ["siteSettings", "founderMessage"] as const;
 const ALUMNI_SPOTLIGHT_DOC = ["siteSettings", "alumniSpotlight"] as const;
 const COMMUNITY_GROUPS_DOC = ["siteSettings", "communityGroups"] as const;
+const HIGHLIGHTS_DOC = ["siteSettings", "highlights"] as const;
+const SECTION_ORDER_DOC = ["siteSettings", "sectionOrder"] as const;
 
 // Single settings documents, not content lists — no draft/published status,
 // no per-item CRUD. Saving writes straight to the live doc.
@@ -136,6 +140,26 @@ export const siteSettingsRepository = {
 
   async saveCommunityGroups(items: CommunityGroup[]): Promise<void> {
     await setDoc(doc(db, ...COMMUNITY_GROUPS_DOC), { items });
+    await revalidatePublicSite();
+  },
+
+  async getHighlights(): Promise<Highlight[] | null> {
+    const snap = await getDoc(doc(db, ...HIGHLIGHTS_DOC));
+    return snap.exists() ? (snap.data().items as Highlight[]) : null;
+  },
+
+  async saveHighlights(items: Highlight[]): Promise<void> {
+    await setDoc(doc(db, ...HIGHLIGHTS_DOC), { items });
+    await revalidatePublicSite();
+  },
+
+  async getSectionOrder(): Promise<HomeSectionKey[] | null> {
+    const snap = await getDoc(doc(db, ...SECTION_ORDER_DOC));
+    return snap.exists() ? (snap.data().order as HomeSectionKey[]) : null;
+  },
+
+  async saveSectionOrder(order: HomeSectionKey[]): Promise<void> {
+    await setDoc(doc(db, ...SECTION_ORDER_DOC), { order });
     await revalidatePublicSite();
   },
 };

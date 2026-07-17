@@ -288,6 +288,10 @@ service cloud.firestore {
           && incoming().location is string)
         ||
         (docId == 'communityGroups' && incoming().keys().hasAll(['items']) && incoming().items is list)
+        ||
+        (docId == 'highlights' && incoming().keys().hasAll(['items']) && incoming().items is list)
+        ||
+        (docId == 'sectionOrder' && incoming().keys().hasAll(['order']) && incoming().order is list)
       );
       allow delete: if false;
     }

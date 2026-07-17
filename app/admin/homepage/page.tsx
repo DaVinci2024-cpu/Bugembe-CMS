@@ -10,6 +10,8 @@ import { WhatsAppDepartmentsForm } from "@/components/admin/homepage/whatsapp-de
 import { AdvantagesForm } from "@/components/admin/homepage/advantages-form";
 import { AchievementsForm } from "@/components/admin/homepage/achievements-form";
 import { FounderForm } from "@/components/admin/homepage/founder-form";
+import { HighlightsForm } from "@/components/admin/homepage/highlights-form";
+import { SectionOrderForm } from "@/components/admin/homepage/section-order-form";
 
 const TABS = [
   { id: "hero", label: "Hero & Statistics" },
@@ -20,6 +22,8 @@ const TABS = [
   { id: "advantages", label: "Why Choose Us" },
   { id: "founder", label: "Founder's Message" },
   { id: "achievements", label: "Achievements" },
+  { id: "highlights", label: "Highlights" },
+  { id: "sectionOrder", label: "Section Order" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -59,6 +63,8 @@ function AdminHomepageContent() {
       {tab === "advantages" && <AdvantagesForm />}
       {tab === "founder" && <FounderForm />}
       {tab === "achievements" && <AchievementsForm />}
+      {tab === "highlights" && <HighlightsForm />}
+      {tab === "sectionOrder" && <SectionOrderForm />}
     </div>
   );
 }

@@ -24,6 +24,9 @@ import {
   Branding,
   FounderMessage,
   AlumniProfile,
+  Highlight,
+  HomeSectionKey,
+  resolveHomeSectionOrder,
 } from "@/lib/data";
 import { TestimonialsGrid } from "@/components/testimonials/testimonials-grid";
 import { getIcon, getCardColor } from "@/lib/icon-options";
@@ -45,11 +48,11 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
   const triggerInteractionPause = () => {
     isInteractingRef.current = true;
     setIsPaused(true);
-    
+
     if (interactionTimeoutRef.current) {
       clearTimeout(interactionTimeoutRef.current);
     }
-    
+
     // Resume auto-scroll after 4 seconds of idle time
     interactionTimeoutRef.current = setTimeout(() => {
       isInteractingRef.current = false;
@@ -66,15 +69,15 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
       if (scrollRef.current && !isPaused && !isInteractingRef.current && !isDragging) {
         const el = scrollRef.current;
         const delta = now - lastTime;
-        
+
         // Very slow, soothing pace: ~30px per second (0.03px/ms)
         accumulatedScroll += delta * 0.03;
-        
+
         if (accumulatedScroll >= 1) {
           const pixelsToScroll = Math.floor(accumulatedScroll);
           el.scrollLeft += pixelsToScroll;
           accumulatedScroll -= pixelsToScroll;
-          
+
           // Seamless loop back when we cross 1/3 of the tripled width
           const setWidth = el.scrollWidth / 3;
           if (el.scrollLeft >= setWidth * 2) {
@@ -100,20 +103,20 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
 
   const scroll = (direction: "left" | "right") => {
     triggerInteractionPause();
-    
+
     if (scrollRef.current) {
       const el = scrollRef.current;
       const { scrollLeft, clientWidth } = el;
-      
+
       // Dynamic scroll amount based on screen size (about 80% of width or a single card)
-      const scrollAmount = Math.min(clientWidth * 0.85, 380); 
+      const scrollAmount = Math.min(clientWidth * 0.85, 380);
       const targetScroll = direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
-      
+
       el.scrollTo({
         left: targetScroll,
         behavior: "smooth",
       });
-      
+
       // Ensure infinite bounds are wrapped cleanly after transition
       setTimeout(() => {
         if (!el) return;
@@ -277,6 +280,87 @@ function AlumniScrollSection({ profiles }: { profiles: AlumniProfile[] }) {
   );
 }
 
+function HighlightsSection({ highlights }: { highlights: Highlight[] }) {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+
+  if (highlights.length === 0) return null;
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollRef.current) return;
+    const amount = Math.min(scrollRef.current.clientWidth * 0.85, 380);
+    scrollRef.current.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
+  };
+
+  return (
+    <section className="py-20 bg-gray-50" id="highlights-section">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+          <div className="space-y-3">
+            <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">Fresh Off Campus</p>
+            <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">Highlights &amp; Announcements</h3>
+            <p className="text-gray-500 text-xs sm:text-sm max-w-xl">
+              Results, events, and moments worth celebrating from around the institute.
+            </p>
+          </div>
+          <div className="hidden sm:flex items-center space-x-3">
+            <button
+              onClick={() => scroll("left")}
+              className="p-2.5 rounded-full border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-100 text-[var(--color-primary)] transition-all active:scale-95 cursor-pointer"
+              aria-label="Scroll Left"
+            >
+              <ArrowRight className="h-4 w-4 rotate-180" />
+            </button>
+            <button
+              onClick={() => scroll("right")}
+              className="p-2.5 rounded-full border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-100 text-[var(--color-primary)] transition-all active:scale-95 cursor-pointer"
+              aria-label="Scroll Right"
+            >
+              <ArrowRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        <div
+          ref={scrollRef}
+          className="flex gap-6 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-none"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {highlights.map((h) => (
+            <div
+              key={h.id}
+              className="w-[280px] sm:w-[340px] shrink-0 snap-start bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
+            >
+              <div className="relative h-44 w-full overflow-hidden bg-gray-100">
+                <Image src={h.image} alt={h.title} fill className="object-cover" sizes="340px" referrerPolicy="no-referrer" />
+                {h.date && (
+                  <span className="absolute top-3 left-3 bg-[var(--color-primary)] text-[var(--color-accent)] px-3 py-1 rounded text-[10px] font-semibold tracking-wider uppercase">
+                    {h.date}
+                  </span>
+                )}
+              </div>
+              <div className="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <h4 className="font-serif font-bold text-[var(--color-primary)] text-base mb-2">{h.title}</h4>
+                  <p className="text-gray-500 text-xs leading-relaxed line-clamp-3">{h.description}</p>
+                </div>
+                {h.link && (
+                  <Link
+                    href={h.link}
+                    className="mt-4 text-xs text-[var(--color-accent)] hover:text-[var(--color-primary)] font-bold tracking-wider uppercase inline-flex items-center space-x-1.5"
+                  >
+                    <span>{h.linkText || "Learn More"}</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 interface HomeContentProps {
   programs: Program[];
   newsArticles: NewsArticle[];
@@ -289,6 +373,8 @@ interface HomeContentProps {
   branding: Branding;
   founder: FounderMessage;
   featuredAlumni: AlumniProfile[];
+  highlights: Highlight[];
+  sectionOrder: HomeSectionKey[];
 }
 
 export function HomeContent({
@@ -303,6 +389,8 @@ export function HomeContent({
   branding,
   founder,
   featuredAlumni,
+  highlights,
+  sectionOrder,
 }: HomeContentProps) {
   const [activeTab, setActiveTab] = useState<string>("all");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -335,6 +423,510 @@ export function HomeContent({
 
     return () => clearInterval(interval);
   }, [statistics]);
+
+  // The reorderable homepage content blocks, keyed by section id. The hero
+  // banner (above) and admissions CTA (below) are intentionally not part of
+  // this map — they always anchor the top/bottom of the page. Order of
+  // rendering comes from `sectionOrder` (admin-configurable), not object
+  // key order.
+  const sectionMap: Record<HomeSectionKey, React.ReactNode> = {
+    statistics: (
+      <section className="relative z-30 -mt-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" id="stats-section">
+        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 border border-amber-500/10 grid grid-cols-2 lg:grid-cols-5 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
+          {statistics.map((stat, i) => {
+            const StatIcon = getIcon(stat.icon);
+            const displayValue = Number.isInteger(stat.value)
+              ? Math.round(animatedValues[i] ?? 0)
+              : (animatedValues[i] ?? 0).toFixed(1);
+            return (
+              <div key={stat.id} className={`text-center p-4 ${i > 0 ? "pt-6 lg:pt-4" : ""}`}>
+                <StatIcon className="h-5 w-5 text-[var(--color-accent)] mx-auto mb-2" />
+                <p className="text-3xl md:text-4xl font-serif font-bold text-[var(--color-primary)]">
+                  {displayValue}
+                  {stat.suffix}
+                </p>
+                <p className="text-[var(--color-accent)] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">{stat.label}</p>
+                <p className="text-gray-400 text-xs mt-1">{stat.description}</p>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+    ),
+
+    highlights: <HighlightsSection highlights={highlights} />,
+
+    advantages: (
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="why-choose-us-section">
+        <div className="text-center space-y-3 mb-16">
+          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
+            The Bugembe Advantage
+          </p>
+          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
+            Pioneering Academic and Spiritual Success
+          </h3>
+          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
+          <p className="text-gray-500 max-w-2xl mx-auto text-sm leading-relaxed">
+            Our curriculum integrates the rigorous national curriculum with profound theology, ensuring our graduates lead in corporate and ethical landscapes.
+          </p>
+        </div>
+
+        {/* Framer motion wrapper for staggered viewport animation */}
+        <motion.div
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+          }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {advantages.map((adv) => {
+            const Icon = getIcon(adv.icon);
+            const cardColor = getCardColor(adv.color);
+            const isExpanded = !!expandedCards[adv.id];
+
+            return (
+              <motion.div
+                key={adv.id}
+                layout
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
+                }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className="bg-white p-5 sm:p-6 md:p-8 rounded-xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex justify-between items-start mb-6">
+                    {/* Responsive Icon: shrinks/grows beautifully */}
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg ${cardColor.bg} flex items-center justify-center group-hover:bg-[var(--color-primary)] transition-colors duration-300`}>
+                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 ${cardColor.text} group-hover:text-[var(--color-accent)] transition-colors`} />
+                    </div>
+
+                    <button
+                      onClick={() => toggleCard(adv.id)}
+                      className="text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] border border-gray-200 hover:border-amber-300 bg-gray-50/50 hover:bg-amber-50 px-2.5 py-1.5 rounded flex items-center space-x-1 transition-all"
+                      title={isExpanded ? "Collapse Details" : "Expand Details"}
+                    >
+                      <span className="font-mono text-[10px] uppercase font-semibold">
+                        {isExpanded ? "Minimize" : "Maximize"}
+                      </span>
+                      {isExpanded ? (
+                        <ChevronUp className="h-3 w-3" />
+                      ) : (
+                        <ChevronDown className="h-3 w-3" />
+                      )}
+                    </button>
+                  </div>
+
+                  <h4 className="text-base sm:text-lg font-serif font-semibold text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors">
+                    {adv.title}
+                  </h4>
+
+                  <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-4">
+                    {adv.description}
+                  </p>
+
+                  {/* Dynamic Expandable Sublist Details */}
+                  <AnimatePresence initial={false}>
+                    {isExpanded && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden mt-4 pt-4 border-t border-gray-50 space-y-2.5"
+                      >
+                        <p className="text-[10px] font-mono uppercase text-[var(--color-accent)] font-semibold tracking-wider">
+                          Key Offerings:
+                        </p>
+                        <ul className="space-y-1.5">
+                          {adv.details.map((detail, idx) => (
+                            <li key={idx} className="flex items-start text-xs text-gray-600 space-x-2">
+                              <span className="text-[var(--color-accent)] mt-1 shrink-0">✓</span>
+                              <span>{detail}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                <div className="mt-4 border-t border-gray-50 pt-3 flex justify-between items-center">
+                  <span className="text-[10px] font-mono text-gray-400">
+                    Dual Curriculum Advantage
+                  </span>
+                  <button
+                    onClick={() => toggleCard(adv.id)}
+                    className="text-xs text-[var(--color-accent)] hover:text-[var(--color-primary)] font-semibold flex items-center space-x-1"
+                  >
+                    <span className="hover:underline">
+                      {isExpanded ? "Hide details" : "Show details"}
+                    </span>
+                    <ArrowRight className={`h-3 w-3 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
+                  </button>
+                </div>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </section>
+    ),
+
+    founder: (
+      <section className="py-24 bg-[#fbfaf7] border-y border-gray-200/50 relative overflow-hidden" id="founder-section">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/[0.02] rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+
+            {/* Left Column: Founder's Image (Single) */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="relative w-full aspect-[4/5] max-w-[340px] mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white/90 ring-1 ring-gray-200">
+                <Image
+                  src={founder.photo}
+                  alt={founder.name}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 340px"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-5 text-white">
+                  <p className="text-[10px] text-amber-400 font-mono uppercase tracking-wider">{founder.eyebrow}</p>
+                  <p className="font-serif text-sm font-semibold">{founder.name}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Message & Signature */}
+            <div className="lg:col-span-7 space-y-6">
+              <div className="space-y-2">
+                <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold flex items-center gap-2">
+                  {React.createElement(getIcon(founder.icon), { className: "h-3.5 w-3.5" })}
+                  {founder.eyebrow}
+                </p>
+                <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">{founder.heading}</h3>
+                <div className="w-12 h-1 bg-[var(--color-accent)] rounded-full" />
+              </div>
+
+              <div className="relative">
+                <span className="absolute -top-10 -left-6 text-7xl font-serif text-amber-500/10 select-none">“</span>
+                <p className="text-gray-600 text-sm sm:text-base leading-relaxed italic font-serif relative z-10">{founder.message}</p>
+              </div>
+
+              <div className="border-t border-gray-200/80 pt-6 flex items-center justify-between">
+                <div>
+                  <h4 className="text-base font-serif font-bold text-[var(--color-primary)]">{founder.name}</h4>
+                  <p className="text-xs text-[var(--color-accent)] font-mono tracking-wider mt-0.5">{founder.title}</p>
+                </div>
+
+                {/* Vintage seal ornament */}
+                <div className="h-12 w-12 rounded-full border-2 border-dashed border-[var(--color-accent)]/40 flex items-center justify-center text-[var(--color-accent)] text-[10px] font-mono font-bold rotate-12">
+                  {founder.badgeText}
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    ),
+
+    alumni: <AlumniScrollSection profiles={featuredAlumni} />,
+
+    programs: (
+      <section className="bg-[var(--color-primary)] text-white py-20" id="programs-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-4">
+            <div>
+              <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
+                Our Pathways
+              </p>
+              <h3 className="text-3xl sm:text-4xl font-serif font-bold mt-2">
+                Nurturing Excellence Across All Levels
+              </h3>
+            </div>
+            <Link
+              href="/academics"
+              className="px-6 py-3 bg-[var(--color-accent)] hover:bg-amber-400 text-[var(--color-primary)] font-bold text-xs tracking-wider uppercase rounded transition-all flex items-center space-x-2"
+            >
+              <span>Explore Curriculum Details</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <motion.div
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+            }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {programs.map((program) => (
+              <motion.div
+                key={program.id}
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
+                }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className="bg-[#0c1c35] rounded-xl overflow-hidden border border-white/5 shadow-lg group hover:border-[var(--color-accent)]/30 transition-all duration-300 flex flex-col h-full"
+              >
+                {/* Program image container */}
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Image
+                    src={program.image}
+                    alt={program.title}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute top-4 left-4 bg-[var(--color-primary)]/90 text-[var(--color-accent)] px-3.5 py-1.5 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-[var(--color-accent)]/30">
+                    {program.level}
+                  </div>
+                </div>
+
+                {/* Card body */}
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h4 className="text-lg font-serif font-bold text-white mb-3 group-hover:text-[var(--color-accent)] transition-colors">
+                      {program.title}
+                    </h4>
+                    <p className="text-gray-400 text-xs sm:text-sm leading-relaxed mb-6">
+                      {program.shortDescription}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/academics#${program.id}`}
+                    className="text-xs text-[var(--color-accent)] hover:text-amber-400 font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform"
+                  >
+                    <span>Read Requirements</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+    ),
+
+    gallery: (
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="campus-life-section">
+        <div className="text-center space-y-3 mb-16">
+          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
+            Life on Campus
+          </p>
+          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
+            Our Facilities & Dynamic Activities
+          </h3>
+          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
+        </div>
+
+        {/* Masonry-like Grid */}
+        <motion.div
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+          }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {filteredGallery.map((item, index) => (
+            <motion.div
+              key={item.id}
+              variants={{
+                hidden: { opacity: 0, scale: 0.95, y: 20 },
+                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
+              }}
+              whileHover={{ y: -4, scale: 1.01 }}
+              onClick={() => setLightboxIndex(index)}
+              className="relative h-64 rounded-xl overflow-hidden shadow-md group cursor-pointer border border-gray-100"
+            >
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                referrerPolicy="no-referrer"
+              />
+              {/* Overlay on hover */}
+              <div className="absolute inset-0 bg-[var(--color-primary)]/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 z-10">
+                <span className="text-[10px] text-[var(--color-accent)] font-mono uppercase tracking-widest mb-1.5">
+                  {item.category}
+                </span>
+                <h4 className="text-white font-serif font-semibold text-base mb-1">
+                  {item.title}
+                </h4>
+                <p className="text-gray-300 text-xs line-clamp-2 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <div className="text-center pt-10">
+          <Link
+            href="/gallery"
+            className="inline-flex items-center space-x-2 text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] font-bold tracking-wider uppercase border-b-2 border-[var(--color-primary)] hover:border-[var(--color-accent)] pb-1.5 transition-colors"
+          >
+            <span>Explore Campus Gallery</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </section>
+    ),
+
+    achievements: (
+      <section className="bg-gray-50 py-20" id="achievements-section">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center space-y-3 mb-16">
+            <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
+              Legacy of Success
+            </p>
+            <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
+              Milestones & National UNEB Results
+            </h3>
+            <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
+          </div>
+
+          <div className="relative border-l border-gray-300 pl-6 sm:pl-8 space-y-12">
+            {achievements.map((ach) => (
+              <div key={ach.id} className="relative group">
+                {/* Dot marker */}
+                <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 bg-[var(--color-accent)] rounded-full border-4 border-white group-hover:bg-[var(--color-primary)] group-hover:scale-120 transition-all duration-300 shadow-md" />
+
+                {/* Achievement Block */}
+                <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group-hover:shadow-lg transition-shadow">
+                  <div>
+                    <div className="flex items-center space-x-3 mb-2">
+                      <span className="bg-[var(--color-primary)] text-white px-3 py-1 rounded text-[11px] font-mono font-bold">
+                        {ach.year}
+                      </span>
+                      <span className="text-xs text-[var(--color-accent)] font-semibold uppercase tracking-wider">
+                        {ach.category}
+                      </span>
+                    </div>
+                    <h4 className="text-lg font-serif font-semibold text-[var(--color-primary)] mb-2">
+                      {ach.title}
+                    </h4>
+                    <p className="text-gray-500 text-xs sm:text-sm leading-relaxed max-w-2xl">
+                      {ach.description}
+                    </p>
+                  </div>
+                  {ach.metric && (
+                    <div className="shrink-0 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded text-[var(--color-accent)] font-mono text-xs font-semibold tracking-wider uppercase">
+                      {ach.metric}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    ),
+
+    testimonials: (
+      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="testimonials-section">
+        <div className="text-center space-y-3 mb-16">
+          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
+            Voices of Trust
+          </p>
+          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
+            What Our Community Says About Us
+          </h3>
+          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
+        </div>
+
+        <TestimonialsGrid testimonials={testimonials} />
+      </section>
+    ),
+
+    news: (
+      <section className="bg-gray-50 py-20" id="news-section">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-16 gap-4">
+            <div>
+              <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
+                News & Dispatches
+              </p>
+              <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
+                Latest Institutional Announcements
+              </h3>
+            </div>
+            <Link
+              href="/news"
+              className="px-6 py-3 border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white text-[var(--color-primary)] font-bold text-xs tracking-wider uppercase rounded transition-all"
+            >
+              View All News
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {newsArticles.slice(0, 3).map((article) => (
+              <div
+                key={article.id}
+                className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-md group hover:shadow-xl transition-all duration-300 flex flex-col h-full"
+              >
+                {/* Image */}
+                <div className="relative h-48 w-full overflow-hidden bg-gray-100">
+                  <Image
+                    src={article.image}
+                    alt={article.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    referrerPolicy="no-referrer"
+                  />
+                  <span className="absolute top-4 left-4 bg-[var(--color-primary)] text-[var(--color-accent)] px-3 py-1 rounded text-[10px] font-semibold tracking-wider uppercase">
+                    {article.category}
+                  </span>
+                </div>
+
+                {/* Body */}
+                <div className="p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center space-x-4 text-[11px] text-gray-400 font-mono mb-3">
+                      <span className="flex items-center">
+                        <Clock className="h-3.5 w-3.5 mr-1" />
+                        {article.date}
+                      </span>
+                      <span>•</span>
+                      <span>{article.readTime}</span>
+                    </div>
+                    <h4 className="text-base font-serif font-bold text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors line-clamp-2">
+                      {article.title}
+                    </h4>
+                    <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-6 line-clamp-3">
+                      {article.excerpt}
+                    </p>
+                  </div>
+                  <Link
+                    href={`/news/${article.id}`}
+                    className="text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 transition-colors"
+                  >
+                    <span>Read Article</span>
+                    <ArrowRight className="h-3 w-3" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    ),
+  };
 
   return (
     <div className="relative min-h-screen bg-[#fcfbf9]" id="home-page-root">
@@ -425,495 +1017,10 @@ export function HomeContent({
         <div className="absolute bottom-1/4 right-1/10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none z-10" />
       </section>
 
-      {/* 2. TRUST STATISTICS WITH ANIMATED COUNTERS */}
-      <section className="relative z-30 -mt-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" id="stats-section">
-        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-10 border border-amber-500/10 grid grid-cols-2 lg:grid-cols-5 gap-6 divide-y lg:divide-y-0 lg:divide-x divide-gray-100">
-          {statistics.map((stat, i) => {
-            const StatIcon = getIcon(stat.icon);
-            const displayValue = Number.isInteger(stat.value)
-              ? Math.round(animatedValues[i] ?? 0)
-              : (animatedValues[i] ?? 0).toFixed(1);
-            return (
-              <div key={stat.id} className={`text-center p-4 ${i > 0 ? "pt-6 lg:pt-4" : ""}`}>
-                <StatIcon className="h-5 w-5 text-[var(--color-accent)] mx-auto mb-2" />
-                <p className="text-3xl md:text-4xl font-serif font-bold text-[var(--color-primary)]">
-                  {displayValue}
-                  {stat.suffix}
-                </p>
-                <p className="text-[var(--color-accent)] text-[10px] uppercase tracking-wider font-mono font-bold mt-1">{stat.label}</p>
-                <p className="text-gray-400 text-xs mt-1">{stat.description}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 3. WHY CHOOSE US - PREMIUM GRID CARDS */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="why-choose-us-section">
-        <div className="text-center space-y-3 mb-16">
-          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
-            The Bugembe Advantage
-          </p>
-          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
-            Pioneering Academic and Spiritual Success
-          </h3>
-          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
-          <p className="text-gray-500 max-w-2xl mx-auto text-sm leading-relaxed">
-            Our curriculum integrates the rigorous national curriculum with profound theology, ensuring our graduates lead in corporate and ethical landscapes.
-          </p>
-        </div>
-
-        {/* Framer motion wrapper for staggered viewport animation */}
-        <motion.div
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-          }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-        >
-          {advantages.map((adv) => {
-            const Icon = getIcon(adv.icon);
-            const cardColor = getCardColor(adv.color);
-            const isExpanded = !!expandedCards[adv.id];
-
-            return (
-              <motion.div
-                key={adv.id}
-                layout
-                variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
-                }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className="bg-white p-5 sm:p-6 md:p-8 rounded-xl border border-gray-100 shadow-md hover:shadow-xl transition-all duration-300 group flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex justify-between items-start mb-6">
-                    {/* Responsive Icon: shrinks/grows beautifully */}
-                    <div className={`w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-lg ${cardColor.bg} flex items-center justify-center group-hover:bg-[var(--color-primary)] transition-colors duration-300`}>
-                      <Icon className={`h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 ${cardColor.text} group-hover:text-[var(--color-accent)] transition-colors`} />
-                    </div>
-
-                    <button
-                      onClick={() => toggleCard(adv.id)}
-                      className="text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] border border-gray-200 hover:border-amber-300 bg-gray-50/50 hover:bg-amber-50 px-2.5 py-1.5 rounded flex items-center space-x-1 transition-all"
-                      title={isExpanded ? "Collapse Details" : "Expand Details"}
-                    >
-                      <span className="font-mono text-[10px] uppercase font-semibold">
-                        {isExpanded ? "Minimize" : "Maximize"}
-                      </span>
-                      {isExpanded ? (
-                        <ChevronUp className="h-3 w-3" />
-                      ) : (
-                        <ChevronDown className="h-3 w-3" />
-                      )}
-                    </button>
-                  </div>
-
-                  <h4 className="text-base sm:text-lg font-serif font-semibold text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors">
-                    {adv.title}
-                  </h4>
-                  
-                  <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-4">
-                    {adv.description}
-                  </p>
-
-                  {/* Dynamic Expandable Sublist Details */}
-                  <AnimatePresence initial={false}>
-                    {isExpanded && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                        className="overflow-hidden mt-4 pt-4 border-t border-gray-50 space-y-2.5"
-                      >
-                        <p className="text-[10px] font-mono uppercase text-[var(--color-accent)] font-semibold tracking-wider">
-                          Key Offerings:
-                        </p>
-                        <ul className="space-y-1.5">
-                          {adv.details.map((detail, idx) => (
-                            <li key={idx} className="flex items-start text-xs text-gray-600 space-x-2">
-                              <span className="text-[var(--color-accent)] mt-1 shrink-0">✓</span>
-                              <span>{detail}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                <div className="mt-4 border-t border-gray-50 pt-3 flex justify-between items-center">
-                  <span className="text-[10px] font-mono text-gray-400">
-                    Dual Curriculum Advantage
-                  </span>
-                  <button
-                    onClick={() => toggleCard(adv.id)}
-                    className="text-xs text-[var(--color-accent)] hover:text-[var(--color-primary)] font-semibold flex items-center space-x-1"
-                  >
-                    <span className="hover:underline">
-                      {isExpanded ? "Hide details" : "Show details"}
-                    </span>
-                    <ArrowRight className={`h-3 w-3 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
-                  </button>
-                </div>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </section>
-
-      {/* FOUNDER MESSAGE SECTION */}
-      <section className="py-24 bg-[#fbfaf7] border-y border-gray-200/50 relative overflow-hidden" id="founder-section">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-amber-500/[0.02] rounded-full blur-3xl pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-
-            {/* Left Column: Founder's Image (Single) */}
-            <div className="lg:col-span-5 space-y-4">
-              <div className="relative w-full aspect-[4/5] max-w-[340px] mx-auto rounded-2xl overflow-hidden shadow-2xl border-4 border-white/90 ring-1 ring-gray-200">
-                <Image
-                  src={founder.photo}
-                  alt={founder.name}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 340px"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent p-5 text-white">
-                  <p className="text-[10px] text-amber-400 font-mono uppercase tracking-wider">{founder.eyebrow}</p>
-                  <p className="font-serif text-sm font-semibold">{founder.name}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Message & Signature */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="space-y-2">
-                <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold flex items-center gap-2">
-                  {React.createElement(getIcon(founder.icon), { className: "h-3.5 w-3.5" })}
-                  {founder.eyebrow}
-                </p>
-                <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">{founder.heading}</h3>
-                <div className="w-12 h-1 bg-[var(--color-accent)] rounded-full" />
-              </div>
-
-              <div className="relative">
-                <span className="absolute -top-10 -left-6 text-7xl font-serif text-amber-500/10 select-none">“</span>
-                <p className="text-gray-600 text-sm sm:text-base leading-relaxed italic font-serif relative z-10">{founder.message}</p>
-              </div>
-
-              <div className="border-t border-gray-200/80 pt-6 flex items-center justify-between">
-                <div>
-                  <h4 className="text-base font-serif font-bold text-[var(--color-primary)]">{founder.name}</h4>
-                  <p className="text-xs text-[var(--color-accent)] font-mono tracking-wider mt-0.5">{founder.title}</p>
-                </div>
-
-                {/* Vintage seal ornament */}
-                <div className="h-12 w-12 rounded-full border-2 border-dashed border-[var(--color-accent)]/40 flex items-center justify-center text-[var(--color-accent)] text-[10px] font-mono font-bold rotate-12">
-                  {founder.badgeText}
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ALUMNI SCROLL SECTION */}
-      <AlumniScrollSection profiles={featuredAlumni} />
-
-      {/* 4. ACADEMIC PROGRAMS SECTION */}
-      <section className="bg-[var(--color-primary)] text-white py-20" id="programs-section">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-16 gap-4">
-            <div>
-              <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
-                Our Pathways
-              </p>
-              <h3 className="text-3xl sm:text-4xl font-serif font-bold mt-2">
-                Nurturing Excellence Across All Levels
-              </h3>
-            </div>
-            <Link
-              href="/academics"
-              className="px-6 py-3 bg-[var(--color-accent)] hover:bg-amber-400 text-[var(--color-primary)] font-bold text-xs tracking-wider uppercase rounded transition-all flex items-center space-x-2"
-            >
-              <span>Explore Curriculum Details</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <motion.div
-            variants={{
-              hidden: { opacity: 0 },
-              visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-            }}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {programs.map((program) => (
-              <motion.div
-                key={program.id}
-                variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
-                }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className="bg-[#0c1c35] rounded-xl overflow-hidden border border-white/5 shadow-lg group hover:border-[var(--color-accent)]/30 transition-all duration-300 flex flex-col h-full"
-              >
-                {/* Program image container */}
-                <div className="relative h-48 w-full overflow-hidden">
-                  <Image
-                    src={program.image}
-                    alt={program.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute top-4 left-4 bg-[var(--color-primary)]/90 text-[var(--color-accent)] px-3.5 py-1.5 rounded-full text-[10px] font-semibold tracking-wider uppercase border border-[var(--color-accent)]/30">
-                    {program.level}
-                  </div>
-                </div>
-
-                {/* Card body */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h4 className="text-lg font-serif font-bold text-white mb-3 group-hover:text-[var(--color-accent)] transition-colors">
-                      {program.title}
-                    </h4>
-                    <p className="text-gray-400 text-xs sm:text-sm leading-relaxed mb-6">
-                      {program.shortDescription}
-                    </p>
-                  </div>
-                  <Link
-                    href={`/academics#${program.id}`}
-                    className="text-xs text-[var(--color-accent)] hover:text-amber-400 font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 group-hover:translate-x-1 transition-transform"
-                  >
-                    <span>Read Requirements</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* 5. CAMPUS LIFE SHOWCASE (MIGRATED LIGHTBOX READY IMAGES) */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="campus-life-section">
-        <div className="text-center space-y-3 mb-16">
-          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
-            Life on Campus
-          </p>
-          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
-            Our Facilities & Dynamic Activities
-          </h3>
-          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
-        </div>
-
-        {/* Masonry-like Grid */}
-        <motion.div
-          variants={{
-            hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
-          }}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {filteredGallery.map((item, index) => (
-            <motion.div
-              key={item.id}
-              variants={{
-                hidden: { opacity: 0, scale: 0.95, y: 20 },
-                visible: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
-              }}
-              whileHover={{ y: -4, scale: 1.01 }}
-              onClick={() => setLightboxIndex(index)}
-              className="relative h-64 rounded-xl overflow-hidden shadow-md group cursor-pointer border border-gray-100"
-            >
-              <Image
-                src={item.image}
-                alt={item.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                referrerPolicy="no-referrer"
-              />
-              {/* Overlay on hover */}
-              <div className="absolute inset-0 bg-[var(--color-primary)]/85 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 z-10">
-                <span className="text-[10px] text-[var(--color-accent)] font-mono uppercase tracking-widest mb-1.5">
-                  {item.category}
-                </span>
-                <h4 className="text-white font-serif font-semibold text-base mb-1">
-                  {item.title}
-                </h4>
-                <p className="text-gray-300 text-xs line-clamp-2 leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <div className="text-center pt-10">
-          <Link
-            href="/gallery"
-            className="inline-flex items-center space-x-2 text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] font-bold tracking-wider uppercase border-b-2 border-[var(--color-primary)] hover:border-[var(--color-accent)] pb-1.5 transition-colors"
-          >
-            <span>Explore Campus Gallery</span>
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
-
-      {/* 6. RESULTS & ACHIEVEMENTS TIMELINE */}
-      <section className="bg-gray-50 py-20" id="achievements-section">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center space-y-3 mb-16">
-            <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
-              Legacy of Success
-            </p>
-            <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
-              Milestones & National UNEB Results
-            </h3>
-            <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
-          </div>
-
-          <div className="relative border-l border-gray-300 pl-6 sm:pl-8 space-y-12">
-            {achievements.map((ach) => (
-              <div key={ach.id} className="relative group">
-                {/* Dot marker */}
-                <div className="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 bg-[var(--color-accent)] rounded-full border-4 border-white group-hover:bg-[var(--color-primary)] group-hover:scale-120 transition-all duration-300 shadow-md" />
-
-                {/* Achievement Block */}
-                <div className="bg-white p-6 sm:p-8 rounded-xl shadow-md border border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 group-hover:shadow-lg transition-shadow">
-                  <div>
-                    <div className="flex items-center space-x-3 mb-2">
-                      <span className="bg-[var(--color-primary)] text-white px-3 py-1 rounded text-[11px] font-mono font-bold">
-                        {ach.year}
-                      </span>
-                      <span className="text-xs text-[var(--color-accent)] font-semibold uppercase tracking-wider">
-                        {ach.category}
-                      </span>
-                    </div>
-                    <h4 className="text-lg font-serif font-semibold text-[var(--color-primary)] mb-2">
-                      {ach.title}
-                    </h4>
-                    <p className="text-gray-500 text-xs sm:text-sm leading-relaxed max-w-2xl">
-                      {ach.description}
-                    </p>
-                  </div>
-                  {ach.metric && (
-                    <div className="shrink-0 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded text-[var(--color-accent)] font-mono text-xs font-semibold tracking-wider uppercase">
-                      {ach.metric}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-
-      {/* 7. TESTIMONIALS & SUCCESS STORIES */}
-      <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="testimonials-section">
-        <div className="text-center space-y-3 mb-16">
-          <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
-            Voices of Trust
-          </p>
-          <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
-            What Our Community Says About Us
-          </h3>
-          <div className="w-16 h-1 bg-[var(--color-accent)] mx-auto rounded-full" />
-        </div>
-
-        <TestimonialsGrid testimonials={testimonials} />
-      </section>
-
-      {/* 8. NEWS PREVIEW (LATEST DISPATCHES) */}
-      <section className="bg-gray-50 py-20" id="news-section">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-16 gap-4">
-            <div>
-              <p className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold">
-                News & Dispatches
-              </p>
-              <h3 className="text-3xl sm:text-4xl font-serif font-semibold text-[var(--color-primary)]">
-                Latest Institutional Announcements
-              </h3>
-            </div>
-            <Link
-              href="/news"
-              className="px-6 py-3 border-2 border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white text-[var(--color-primary)] font-bold text-xs tracking-wider uppercase rounded transition-all"
-            >
-              View All News
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {newsArticles.slice(0, 3).map((article) => (
-              <div
-                key={article.id}
-                className="bg-white rounded-xl overflow-hidden border border-gray-100 shadow-md group hover:shadow-xl transition-all duration-300 flex flex-col h-full"
-              >
-                {/* Image */}
-                <div className="relative h-48 w-full overflow-hidden bg-gray-100">
-                  <Image
-                    src={article.image}
-                    alt={article.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    referrerPolicy="no-referrer"
-                  />
-                  <span className="absolute top-4 left-4 bg-[var(--color-primary)] text-[var(--color-accent)] px-3 py-1 rounded text-[10px] font-semibold tracking-wider uppercase">
-                    {article.category}
-                  </span>
-                </div>
-
-                {/* Body */}
-                <div className="p-6 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center space-x-4 text-[11px] text-gray-400 font-mono mb-3">
-                      <span className="flex items-center">
-                        <Clock className="h-3.5 w-3.5 mr-1" />
-                        {article.date}
-                      </span>
-                      <span>•</span>
-                      <span>{article.readTime}</span>
-                    </div>
-                    <h4 className="text-base font-serif font-bold text-[var(--color-primary)] mb-3 group-hover:text-[var(--color-accent)] transition-colors line-clamp-2">
-                      {article.title}
-                    </h4>
-                    <p className="text-gray-500 text-xs sm:text-sm leading-relaxed mb-6 line-clamp-3">
-                      {article.excerpt}
-                    </p>
-                  </div>
-                  <Link
-                    href={`/news/${article.id}`}
-                    className="text-xs text-[var(--color-primary)] hover:text-[var(--color-accent)] font-bold tracking-wider uppercase inline-flex items-center space-x-1.5 transition-colors"
-                  >
-                    <span>Read Article</span>
-                    <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Reorderable content blocks — order comes from the admin's Section Order settings */}
+      {resolveHomeSectionOrder(sectionOrder).map((key) => (
+        <React.Fragment key={key}>{sectionMap[key]}</React.Fragment>
+      ))}
 
       {/* 9. ADMISSIONS CALL-TO-ACTION (CTA) */}
       <section className="bg-[var(--color-primary-hover)] text-white py-16 relative overflow-hidden" id="admissions-cta">

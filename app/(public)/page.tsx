@@ -5,27 +5,51 @@ import { testimonialsRepository } from "@/lib/firebase/testimonialsRepository";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
 import { HomeContent } from "@/components/home/home-content";
-import { heroContent, trustStatistics, defaultAdvantages, premiumAchievements, defaultBranding, defaultFounderMessage } from "@/lib/data";
+import {
+  heroContent,
+  trustStatistics,
+  defaultAdvantages,
+  premiumAchievements,
+  defaultBranding,
+  defaultFounderMessage,
+  defaultHighlights,
+  resolveHomeSectionOrder,
+} from "@/lib/data";
 
 // Refresh from Firestore at most once an hour — keeps this off the
 // per-visitor read path so we stay well within the Spark (free) plan quota.
 export const revalidate = 3600;
 
 export default async function HomePage() {
-  const [programs, newsArticles, galleryItems, testimonials, hero, statistics, advantages, achievements, branding, founder, alumni] =
-    await Promise.all([
-      programsRepository.listPublished(),
-      newsRepository.listPublished(),
-      galleryRepository.listPublished(),
-      testimonialsRepository.listPublished(),
-      siteSettingsRepository.getHero(),
-      siteSettingsRepository.getStatistics(),
-      siteSettingsRepository.getAdvantages(),
-      siteSettingsRepository.getAchievements(),
-      siteSettingsRepository.getBranding(),
-      siteSettingsRepository.getFounderMessage(),
-      alumniRepository.list(),
-    ]);
+  const [
+    programs,
+    newsArticles,
+    galleryItems,
+    testimonials,
+    hero,
+    statistics,
+    advantages,
+    achievements,
+    branding,
+    founder,
+    alumni,
+    highlights,
+    sectionOrder,
+  ] = await Promise.all([
+    programsRepository.listPublished(),
+    newsRepository.listPublished(),
+    galleryRepository.listPublished(),
+    testimonialsRepository.listPublished(),
+    siteSettingsRepository.getHero(),
+    siteSettingsRepository.getStatistics(),
+    siteSettingsRepository.getAdvantages(),
+    siteSettingsRepository.getAchievements(),
+    siteSettingsRepository.getBranding(),
+    siteSettingsRepository.getFounderMessage(),
+    alumniRepository.list(),
+    siteSettingsRepository.getHighlights(),
+    siteSettingsRepository.getSectionOrder(),
+  ]);
 
   // Cap at 5 — this is a small homepage highlight reel, not the full
   // directory (that's what the "View All Alumni" link on this section is
@@ -48,6 +72,8 @@ export default async function HomePage() {
       branding={branding ?? defaultBranding}
       founder={founder ?? defaultFounderMessage}
       featuredAlumni={featuredAlumni}
+      highlights={highlights ?? defaultHighlights}
+      sectionOrder={resolveHomeSectionOrder(sectionOrder)}
     />
   );
 }

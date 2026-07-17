@@ -4,10 +4,10 @@ import React from "react";
 import Image from "next/image";
 import { Shield, Target, Compass, Quote } from "lucide-react";
 import { motion } from "motion/react";
-import { AboutContent } from "@/lib/data";
+import { AboutContent, Branding } from "@/lib/data";
 import logoImg from "@/src/assets/images/bugembe_islamic_institute_logo_1783765351760.jpg";
 
-export function AboutPageContent({ content }: { content: AboutContent }) {
+export function AboutPageContent({ content, branding }: { content: AboutContent; branding: Branding }) {
   return (
     <div className="relative min-h-screen bg-[#fcfbf9] py-16 sm:py-24" id="about-page-root">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -21,12 +21,13 @@ export function AboutPageContent({ content }: { content: AboutContent }) {
         >
           <div className="w-16 h-16 relative rounded-full bg-white border border-[var(--color-accent)]/30 p-1 shadow-md overflow-hidden mb-2">
             <Image
-              src={logoImg}
-              alt="Bugembe Islamic Institute Emblem"
+              src={branding.logoUrl || logoImg}
+              alt={`${branding.siteName} Emblem`}
               fill
               className="object-cover rounded-full"
               sizes="64px"
               referrerPolicy="no-referrer"
+              unoptimized={!!branding.logoUrl}
             />
           </div>
           <span className="text-xs text-[var(--color-accent)] font-mono uppercase tracking-widest font-bold bg-amber-500/5 px-3.5 py-1.5 rounded-full border border-amber-500/10">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { aboutRepository } from "@/lib/firebase/aboutRepository";
-import { defaultAboutContent } from "@/lib/data";
+import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
+import { defaultAboutContent, defaultBranding } from "@/lib/data";
 import { AboutPageContent } from "@/components/about/about-content";
 
 export const revalidate = 3600;
@@ -17,6 +18,6 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const content = await aboutRepository.get();
-  return <AboutPageContent content={content ?? defaultAboutContent} />;
+  const [content, branding] = await Promise.all([aboutRepository.get(), siteSettingsRepository.getBranding()]);
+  return <AboutPageContent content={content ?? defaultAboutContent} branding={branding ?? defaultBranding} />;
 }
