@@ -351,8 +351,12 @@ export function HomeContent({
             sizes="100vw"
             referrerPolicy="no-referrer"
           />
-          {/* Deep Navy/Black Overlays for maximum text contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)] via-[var(--color-primary)]/60 to-[#0c192d]/80 z-10" />
+          {/* Neutral dark scrim carries the text contrast — independent of
+              whatever brand color is set, so the photo never gets washed
+              out by a light/bright primary color choice. */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/45 to-black/30 z-10" />
+          {/* Faint brand-color wash on top, just for identity — kept low so it tints rather than clouds the photo. */}
+          <div className="absolute inset-0 bg-[var(--color-primary)]/20 z-10" />
         </div>
 
         {/* Hero Content */}
@@ -380,7 +384,7 @@ export function HomeContent({
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.15 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white leading-tight tracking-tight"
+            className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold text-white leading-tight tracking-tight [text-shadow:0_2px_16px_rgba(0,0,0,0.5)]"
           >
             {heroContent.headline}
           </motion.h2>
@@ -389,7 +393,7 @@ export function HomeContent({
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-gray-300 text-base sm:text-lg md:text-xl max-w-3xl mx-auto font-sans leading-relaxed"
+            className="text-gray-200 text-base sm:text-lg md:text-xl max-w-3xl mx-auto font-sans leading-relaxed [text-shadow:0_1px_10px_rgba(0,0,0,0.6)]"
           >
             {heroContent.subheadline}
           </motion.p>
@@ -409,7 +413,7 @@ export function HomeContent({
             </Link>
             <Link
               href={heroContent.ctaSecondaryLink}
-              className="w-full sm:w-auto px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold text-sm tracking-wider uppercase rounded border border-white/20 hover:border-white/40 transition-all flex items-center justify-center"
+              className="w-full sm:w-auto px-8 py-4 bg-black/20 hover:bg-black/30 text-white font-bold text-sm tracking-wider uppercase rounded border border-white/40 hover:border-white/60 transition-all flex items-center justify-center backdrop-blur-sm"
             >
               {heroContent.ctaSecondaryText}
             </Link>
