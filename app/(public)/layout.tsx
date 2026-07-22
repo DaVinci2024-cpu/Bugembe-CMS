@@ -1,8 +1,11 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import FloatingWidgets from "@/components/FloatingWidgets";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { siteSettingsRepository } from "@/lib/firebase/siteSettingsRepository";
 import { defaultBranding, defaultHeaderAnnouncements, defaultContactInfo, defaultWhatsAppDepartments } from "@/lib/data";
+
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 
 // Refresh from Firestore at most once an hour — this layout wraps every
 // public page, so keeping it off the per-visitor read path matters even
@@ -40,6 +43,7 @@ export default async function PublicLayout({ children }: { children: React.React
       <main className="flex-1 w-full overflow-x-hidden">{children}</main>
       <Footer branding={resolvedBranding} contact={resolvedContact} />
       <FloatingWidgets departments={resolvedWhatsAppDepartments} />
+      {GA_MEASUREMENT_ID && <GoogleAnalytics measurementId={GA_MEASUREMENT_ID} />}
     </div>
   );
 }
