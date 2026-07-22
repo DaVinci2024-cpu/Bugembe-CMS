@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { programsRepository } from "@/lib/firebase/programsRepository";
 import { newsRepository } from "@/lib/firebase/newsRepository";
 import { galleryRepository } from "@/lib/firebase/galleryRepository";
@@ -20,6 +21,19 @@ import {
 // Refresh from Firestore at most once an hour — keeps this off the
 // per-visitor read path so we stay well within the Spark (free) plan quota.
 export const revalidate = 3600;
+
+// The campus hero photo reads far better as a share-link preview than the
+// small square logo — every other public page also shows its own content
+// photo rather than the logo (see app/(public)/layout.tsx, which still
+// handles the favicon/tab icon using the logo — a different, correct use).
+export async function generateMetadata(): Promise<Metadata> {
+  const hero = await siteSettingsRepository.getHero();
+  const image = hero?.bgImage || heroContent.bgImage;
+  return {
+    openGraph: { images: [{ url: image }] },
+    twitter: { images: [image] },
+  };
+}
 
 export default async function HomePage() {
   const [

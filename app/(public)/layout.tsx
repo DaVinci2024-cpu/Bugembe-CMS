@@ -13,25 +13,24 @@ const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
 // more here than on an individual page.
 export const revalidate = 3600;
 
-// Points the public site's favicon AND social share preview image at
-// whatever logo is currently set in Branding, instead of the fixed seal
-// image/stock photo baked in at build time. Falls back to the defaults
-// (static app/icon.jpg convention, static Unsplash photo in the root
-// layout) when no custom logo is set. Cloudinary gives every upload a
-// unique URL, so a new logo upload naturally produces new favicon/OG image
-// URLs too — browsers and link-preview crawlers treat that as a different
-// resource and fetch it fresh, sidestepping the usual caching problem
-// instead of fighting it. The admin console intentionally keeps the fixed
-// defaults (same reasoning as admin keeping fixed colors regardless of
-// Branding — see brandColorVars comment below).
+// Points the public site's favicon at whatever logo is currently set in
+// Branding, instead of the fixed seal image baked in at build time. Falls
+// back to the default static app/icon.jpg convention when no custom logo is
+// set. Cloudinary gives every upload a unique URL, so a new logo upload
+// naturally produces a new favicon URL too — browsers treat that as a
+// different resource and fetch it fresh, sidestepping the usual favicon
+// caching problem instead of fighting it. The admin console intentionally
+// keeps the fixed default icon (same reasoning as admin keeping fixed
+// colors regardless of Branding — see brandColorVars comment below).
+//
+// Note: this deliberately does NOT set a fallback openGraph/twitter image
+// here — every individual public page now sets its own contextual share
+// image (its own photo, not the logo — see each page.tsx's generateMetadata),
+// so a logo-based fallback here would never actually be used and would risk
+// showing the logo as a share preview if a future page forgot to set one.
 export async function generateMetadata(): Promise<Metadata> {
   const branding = await siteSettingsRepository.getBranding();
-  if (!branding?.logoUrl) return {};
-  return {
-    icons: { icon: branding.logoUrl },
-    openGraph: { images: [{ url: branding.logoUrl }] },
-    twitter: { images: [branding.logoUrl] },
-  };
+  return branding?.logoUrl ? { icons: { icon: branding.logoUrl } } : {};
 }
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {

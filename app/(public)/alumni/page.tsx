@@ -10,16 +10,20 @@ import { defaultAlumniSpotlight, defaultCommunityGroups } from "@/lib/data";
 // optimistic client-side update; this cache just affects other visitors.
 export const revalidate = 3600;
 
-export const metadata: Metadata = {
-  title: "Alumni Network",
-  description:
-    "Reconnect with the Bugembe Islamic Institute alumni community — browse the graduate directory and join the official alumni network.",
-  openGraph: {
-    title: "Alumni Network | Bugembe Islamic Institute",
-    description:
-      "Reconnect with the Bugembe Islamic Institute alumni community — browse the graduate directory and join the official alumni network.",
-  },
-};
+const TITLE = "Alumni Network";
+const DESCRIPTION =
+  "Reconnect with the Bugembe Islamic Institute alumni community — browse the graduate directory and join the official alumni network.";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const spotlight = await siteSettingsRepository.getAlumniSpotlight();
+  const image = spotlight?.photo || defaultAlumniSpotlight.photo;
+  return {
+    title: TITLE,
+    description: DESCRIPTION,
+    openGraph: { title: `${TITLE} | Bugembe Islamic Institute`, description: DESCRIPTION, images: [{ url: image }] },
+    twitter: { images: [image] },
+  };
+}
 
 export default async function AlumniPage() {
   const [alumni, spotlight, communityGroups] = await Promise.all([
