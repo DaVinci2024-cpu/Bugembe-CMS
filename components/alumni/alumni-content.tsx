@@ -13,7 +13,7 @@ import {
   Zap,
 } from "lucide-react";
 import { motion } from "motion/react";
-import { AlumniProfile, CommunityGroup, AlumniSpotlight } from "@/lib/data";
+import { AlumniProfile, CommunityGroup, AlumniSpotlight, ALUMNI_SECTIONS, AlumniSection } from "@/lib/data";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
 import { ImageUpload } from "@/components/shared/image-upload";
 
@@ -37,11 +37,13 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
   const [alumniList, setAlumniList] = useState<AlumniProfile[]>(initialAlumni);
   const [searchName, setSearchName] = useState("");
   const [filterYear, setFilterYear] = useState("all");
+  const [filterSection, setFilterSection] = useState("all");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // Registration Form states
   const [fullName, setFullName] = useState("");
-  const [gradYear, setGradYear] = useState("2018");
+  const [gradYear, setGradYear] = useState("");
+  const [section, setSection] = useState<AlumniSection>("Secondary");
   const [profession, setProfession] = useState("Technology");
   const [org, setOrg] = useState("");
   const [country, setCountry] = useState("Uganda");
@@ -66,12 +68,19 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
       return;
     }
 
+    const year = Number(gradYear.trim());
+    if (!gradYear.trim() || !Number.isInteger(year) || year < 1974 || year > new Date().getFullYear()) {
+      setFormError("Please enter a valid graduation year (e.g. 2015).");
+      return;
+    }
+
     setSubmitting(true);
     try {
       const userPhoto = photo.trim() || `https://picsum.photos/seed/${fullName.replace(/\s+/g, "")}/300/300`;
       const fields = {
         fullName,
-        graduationYear: Number(gradYear),
+        graduationYear: year,
+        section,
         profession,
         organization: org || "Independent Consultant",
         country,
@@ -94,6 +103,7 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
       setAlumniList((prev) => [...prev, newProfile]);
 
       setFullName("");
+      setGradYear("");
       setOrg("");
       setPhone("");
       setWhatsapp("");
@@ -143,8 +153,9 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
         a.profession.toLowerCase().includes(query) ||
         a.organization.toLowerCase().includes(query);
       const matchesYear = filterYear === "all" || String(a.graduationYear) === filterYear;
+      const matchesSection = filterSection === "all" || a.section === filterSection;
 
-      return matchesSearch && matchesYear;
+      return matchesSearch && matchesYear && matchesSection;
     })
     // Most recent cohort first, like flipping through a yearbook.
     .sort((a, b) => b.graduationYear - a.graduationYear);
@@ -279,7 +290,7 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
             viewport={{ once: true }}
             className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 sm:p-8 mb-8 space-y-4"
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="relative">
                 <Search className="absolute left-3 top-3 w-4.5 h-4.5 text-gray-400" />
                 <input
@@ -307,6 +318,24 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
                   {availableYears.map((year) => (
                     <option key={year} value={String(year)}>
                       Class of {year}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <select
+                  value={filterSection}
+                  onChange={(e) => {
+                    setFilterSection(e.target.value);
+                    setVisibleCount(PAGE_SIZE);
+                  }}
+                  className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] rounded-lg px-3.5 py-2.5 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/10 cursor-pointer"
+                >
+                  <option value="all">All Sections</option>
+                  {ALUMNI_SECTIONS.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
                     </option>
                   ))}
                 </select>
@@ -350,7 +379,7 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
                         <h4 className="font-serif font-bold text-[var(--color-primary)] text-sm sm:text-base group-hover:text-amber-500 transition-colors">
                           {alum.fullName}
                         </h4>
-                        <span className="text-[10px] text-gray-400 font-mono">Graduated {alum.graduationYear} (P/S)</span>
+                        <span className="text-[10px] text-gray-400 font-mono">Graduated {alum.graduationYear} · {alum.section}</span>
                       </div>
                     </div>
                     <div className="text-xs text-gray-400 space-y-1">
@@ -419,22 +448,34 @@ export function AlumniPageContent({ initialAlumni, spotlight, communityGroups }:
                 </div>
                 <div className="space-y-1">
                   <label className="block text-gray-600 font-medium">Graduation Year *</label>
-                  <select
+                  <input
+                    type="number"
                     value={gradYear}
                     onChange={(e) => setGradYear(e.target.value)}
-                    className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] rounded px-3.5 py-2.5 focus:outline-none transition-all"
-                  >
-                    <option value="2022">2022</option>
-                    <option value="2020">2020</option>
-                    <option value="2018">2018</option>
-                    <option value="2016">2016</option>
-                    <option value="2012">2012</option>
-                    <option value="2004">2004</option>
-                  </select>
+                    placeholder="e.g. 2015"
+                    min={1974}
+                    max={new Date().getFullYear()}
+                    className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] focus:bg-white rounded px-3.5 py-2.5 focus:outline-none transition-all placeholder:text-gray-400"
+                    required
+                  />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <label className="block text-gray-600 font-medium">Section You Studied *</label>
+                  <select
+                    value={section}
+                    onChange={(e) => setSection(e.target.value as AlumniSection)}
+                    className="w-full bg-gray-50 border border-gray-200 focus:border-[var(--color-accent)] rounded px-3.5 py-2.5 focus:outline-none transition-all"
+                  >
+                    {ALUMNI_SECTIONS.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="space-y-1">
                   <label className="block text-gray-600 font-medium">Current Profession *</label>
                   <select

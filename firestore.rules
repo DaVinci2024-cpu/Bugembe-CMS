@@ -199,9 +199,10 @@ service cloud.firestore {
     match /alumni/{profileId} {
       allow read: if true;
       allow create: if isValidId(profileId) && (
-        incoming().keys().hasAll(['fullName', 'graduationYear', 'profession', 'organization', 'country', 'city', 'phone', 'email', 'photo', 'bio', 'featured', 'status'])
+        incoming().keys().hasAll(['fullName', 'graduationYear', 'section', 'profession', 'organization', 'country', 'city', 'phone', 'email', 'photo', 'bio', 'featured', 'status'])
         && incoming().fullName is string
         && incoming().graduationYear is number
+        && incoming().section in ['Tehfiz', 'Madrassa', 'Primary', 'Secondary']
         && incoming().profession is string
         && incoming().organization is string
         && incoming().country is string

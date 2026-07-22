@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { AlumniProfile } from "@/lib/data";
+import { AlumniProfile, ALUMNI_SECTIONS, AlumniSection } from "@/lib/data";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
 import { ImageUpload } from "@/components/shared/image-upload";
 
@@ -25,6 +25,7 @@ export function AlumniForm({ existing }: { existing?: AlumniProfile }) {
 
   const [fullName, setFullName] = useState(existing?.fullName ?? "");
   const [graduationYear, setGraduationYear] = useState(existing?.graduationYear?.toString() ?? "");
+  const [section, setSection] = useState<AlumniSection>(existing?.section ?? "Secondary");
   const [profession, setProfession] = useState(existing?.profession ?? "");
   const [organization, setOrganization] = useState(existing?.organization ?? "");
   const [country, setCountry] = useState(existing?.country ?? "Uganda");
@@ -49,6 +50,7 @@ export function AlumniForm({ existing }: { existing?: AlumniProfile }) {
       const fields = {
         fullName,
         graduationYear: year,
+        section,
         profession,
         organization,
         country,
@@ -120,7 +122,17 @@ export function AlumniForm({ existing }: { existing?: AlumniProfile }) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
+        <div>
+          <label className={labelClass}>Section</label>
+          <select className={inputClass} value={section} onChange={(e) => setSection(e.target.value as AlumniSection)}>
+            {ALUMNI_SECTIONS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
         <div>
           <label className={labelClass}>Profession</label>
           <input required className={inputClass} value={profession} onChange={(e) => setProfession(e.target.value)} />

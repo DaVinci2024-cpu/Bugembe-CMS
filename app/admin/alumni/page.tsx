@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Plus, Pencil, Trash2, UploadCloud, Check, Star, Search, StarOff } from "lucide-react";
 import { ModuleGate } from "@/components/admin/module-gate";
 import { alumniRepository } from "@/lib/firebase/alumniRepository";
-import { initialAlumniProfiles as staticAlumni, AlumniProfile } from "@/lib/data";
+import { initialAlumniProfiles as staticAlumni, AlumniProfile, ALUMNI_SECTIONS } from "@/lib/data";
 import { SpotlightForm } from "@/components/admin/alumni/spotlight-form";
 import { CommunityGroupsForm } from "@/components/admin/alumni/community-groups-form";
 
@@ -28,6 +28,7 @@ function AlumniList() {
   const [tab, setTab] = useState<"pending" | "approved" | "featured">("pending");
   const [search, setSearch] = useState("");
   const [yearFilter, setYearFilter] = useState("all");
+  const [sectionFilter, setSectionFilter] = useState("all");
 
   const load = async () => {
     try {
@@ -63,9 +64,10 @@ function AlumniList() {
         p.organization.toLowerCase().includes(query) ||
         p.email.toLowerCase().includes(query);
       const matchesYear = yearFilter === "all" || String(p.graduationYear) === yearFilter;
-      return matchesSearch && matchesYear;
+      const matchesSection = sectionFilter === "all" || p.section === sectionFilter;
+      return matchesSearch && matchesYear && matchesSection;
     });
-  }, [profiles, search, yearFilter]);
+  }, [profiles, search, yearFilter, sectionFilter]);
 
   const pending = useMemo(() => filteredProfiles.filter((p) => p.status === "pending"), [filteredProfiles]);
   const approved = useMemo(() => filteredProfiles.filter((p) => p.status === "approved"), [filteredProfiles]);
@@ -200,6 +202,18 @@ function AlumniList() {
               </option>
             ))}
           </select>
+          <select
+            value={sectionFilter}
+            onChange={(e) => setSectionFilter(e.target.value)}
+            className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-[#0c2340] focus:ring-2 focus:ring-[#0c2340]/10 cursor-pointer"
+          >
+            <option value="all">All Sections</option>
+            {ALUMNI_SECTIONS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
         </div>
       )}
 
@@ -291,6 +305,7 @@ function AlumniList() {
                   <th className="p-3">Name</th>
                   <th className="p-3">Profession</th>
                   <th className="p-3">Year</th>
+                  <th className="p-3">Section</th>
                   <th className="p-3"></th>
                   <th className="p-3 text-right">Actions</th>
                 </tr>
@@ -306,6 +321,7 @@ function AlumniList() {
                     <td className="p-3 font-bold text-slate-900 max-w-xs truncate">{p.fullName}</td>
                     <td className="p-3 text-slate-500">{p.profession}</td>
                     <td className="p-3 text-slate-500">{p.graduationYear}</td>
+                    <td className="p-3 text-slate-500">{p.section}</td>
                     <td className="p-3">{p.featured && <Star className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />}</td>
                     <td className="p-3">
                       <div className="flex justify-end gap-2">

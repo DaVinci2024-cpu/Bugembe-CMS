@@ -80,10 +80,14 @@ export interface Achievement {
   metric?: string;
 }
 
+export const ALUMNI_SECTIONS = ["Tehfiz", "Madrassa", "Primary", "Secondary"] as const;
+export type AlumniSection = (typeof ALUMNI_SECTIONS)[number];
+
 export interface AlumniProfile {
   id: string;
   fullName: string;
   graduationYear: number;
+  section: AlumniSection;
   profession: string;
   organization: string;
   country: string;
@@ -797,6 +801,7 @@ export const initialAlumniProfiles: AlumniProfile[] = [
     id: "alum-1",
     fullName: "Sheikh Dr. Anas Lwanga",
     graduationYear: 2004,
+    section: "Tehfiz",
     profession: "Professor of Islamic Law",
     organization: "Islamic University in Uganda (IUIU)",
     country: "Uganda",
@@ -812,6 +817,7 @@ export const initialAlumniProfiles: AlumniProfile[] = [
     id: "alum-2",
     fullName: "Mariam Namaganda",
     graduationYear: 2012,
+    section: "Secondary",
     profession: "Chief Medical Doctor",
     organization: "Mulago Referral Hospital",
     country: "Uganda",
@@ -827,6 +833,7 @@ export const initialAlumniProfiles: AlumniProfile[] = [
     id: "alum-3",
     fullName: "Eng. Kassim Juma",
     graduationYear: 2016,
+    section: "Secondary",
     profession: "Lead Infrastructure Engineer",
     organization: "Tech-African Architects",
     country: "Kenya",
